@@ -14,16 +14,16 @@ namespace ExtensibleMarkupAtLarge
 
         private string szDocPath = @"D:\_notTemp\Proj\MSota\sms-20220711200832.xml";
 
-		public void BeginGetXMLValues()
+		public void BeginGetXMLValues(ref List<X_XMLProperties> x_prop)
         {
-			InitialitzeStuff();
-            BeginRetrivingXMLFileAndGettingValues();
+			xx_InitialitzeStuff();
+			xx_BeginRetrivingXMLFileAndGettingValues(ref x_prop);
         }
 
-        private void BeginRetrivingXMLFileAndGettingValues()
+        public void xx_BeginRetrivingXMLFileAndGettingValues(ref List<X_XMLProperties> x_prop)
         {
 			List<X_XMLProperties> lsMessages = MessageListFromXML();
-			List<X_XMLProperties> x_prop = new List<X_XMLProperties>();
+			x_prop = new List<X_XMLProperties>();
 
 
 			foreach (X_XMLProperties lsMessage in lsMessages)
@@ -40,11 +40,9 @@ namespace ExtensibleMarkupAtLarge
                     xfts.BeginKCBFormatToString(lsMessage);
                     //x_prop.Add(lsMessage);
                 }
-
-
 			}
 		}
-		private void InitialitzeStuff()
+		private void xx_InitialitzeStuff()
         {
 			xml_doc = new System.Xml.XmlDocument();
 			sr = new System.IO.StreamReader(szDocPath);

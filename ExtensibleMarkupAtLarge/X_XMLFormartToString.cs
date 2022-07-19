@@ -63,8 +63,6 @@ namespace ExtensibleMarkupAtLarge
 
                 if (wordsArray[6] == "Paybill")
                 {
-                    //}
-
                     szID = "Paybill";
 
                     status[0] = "Confirmed";
@@ -73,21 +71,10 @@ namespace ExtensibleMarkupAtLarge
 
                     break;
                 }
-                //if (wordsArray[5] == "EASYFLOAT")
-                //{
-                //    szID = "airtime";
-
-                //    status[0] = "Confirmed";//{ "Confirmed", "sent", "to"};
-                //    status[1] = "sent";
-                //    status[2] = "to";
-
-                //    break;
-                //}
                 if (wordsArray[5] == "airtime")
                 {
                     szID = "airtime";
 
-                    //string[] status = { "bought", "of", "airtime" };
                     status[0] = "bought";
                     status[1] = "of";
                     status[2] = "airtime";
@@ -98,7 +85,6 @@ namespace ExtensibleMarkupAtLarge
                 {
                     szID = "paid";
 
-                    //string[] status = { "Confirmed", "paid", "to" };
                     status[0] = "Confirmed";
                     status[1] = "paid";
                     status[2] = "to";
@@ -113,18 +99,16 @@ namespace ExtensibleMarkupAtLarge
                         szID = "airtime";
                     }
 
-                    //string[] status = { "Confirmed", "sent", "to" };
                     status[0] = "Confirmed";
                     status[1] = "sent";
                     status[2] = "to";
 
                     break;
                 }
-                /////////TEST
                 if (wordsArray[4] == "received" || wordsArray[3] == "received")
                 {
                     szID = "received";
-                    //string[] status = { "received", "from", "from" };
+
                     status[0] = "received";
                     status[1] = "from";
                     status[2] = "from";
@@ -133,63 +117,22 @@ namespace ExtensibleMarkupAtLarge
                 }
                 if (wordsArray[5] == "PMWithdraw" || wordsArray[5] == "AMWithdraw")
                 {
-                    DicedBalance = sentencesArray[2];
-                    DicedTransactionCost = sentencesArray[4];
+                    szID = "Withdraw";
 
-                    string[] dicedWordsPrice = DicedBalance.Split(' ');
-                    string[] dicedWordTransactPrice = DicedTransactionCost.Split(' ');
-
-                    bCheck = dicedWordsPrice.Count().Equals(15);
-                    bECheck = dicedWordsPrice.Count().Equals(14);
-                    bEeCheck = dicedWordsPrice.Count().Equals(16);
-                    bool bEeeCheck = dicedWordsPrice.Count().Equals(18);
-
-                    message.Code = wordsArray[0];
-                    message.TransactionStatus = wordsArray[5];
-                    message.CashAmount = wordsArray[6];
-                    message.RAccNo = wordsArray[8];
-                    message.RName = wordsArray[10] + " " + wordsArray[11] + " " + wordsArray[12];
-                    message.TransactionCost = dicedWordTransactPrice[3];
-                    if (!bCheck && dicedWordsPrice[11] != "balance" && !bEeCheck)
+                    status[0] = "PMWithdraw";
+                    if (wordsArray[5] == "AMWithdraw")
                     {
-                        message.Balance = dicedWordsPrice[16];
+                        status[0] = "AMWithdraw";
                     }
-                    if(!bCheck && !bECheck && !bEeCheck && dicedWordsPrice[16] == "balance")
-                    {
-                        message.Balance = dicedWordsPrice[18];
-                    }
-                    if(bCheck)
-                    {
-                        message.Balance = dicedWordsPrice[14];
-                    }
-                    if (!bCheck && dicedWordsPrice[11] == "balance" && !bEeCheck)
-                    {
-                        message.Balance = dicedWordsPrice[13];
-                    }
-                    if (bEeCheck)
-                    {
-                        message.Balance = dicedWordsPrice[15];
-                    }
-                    if (bEeeCheck)
-                    {
-                        message.Balance = dicedWordsPrice[17];
-                    }
-
-
-                    Debug.WriteLine(message.Code
-                            + " = " + message.CashAmount
-                            + " = " + message.TransactionStatus
-                            + " = " + message.RAccNo
-                            + " = " + message.RName
-                            + " = " + message.Balance
-                            + " = " + message.TransactionCost);
+                    status[1] = "from";
+                    status[2] = "from";
 
                     break;
                 }
                 if (wordsArray[15] == "Fuliza" || wordsArray[2] == "Fuliza")
                 {
                     szID = "borrowed";
-                    //string[] status = { "received", "from", "from" };
+
                     status[0] = "Confirmed";
                     status[1] = "from";
                     status[2] = "outstanding";
@@ -199,18 +142,6 @@ namespace ExtensibleMarkupAtLarge
 
                     break;
                 }
-                //if (wordsArray[2] == "Fuliza")
-                //{
-                //    szID = "borrowed";
-                //    //string[] status = { "received", "from", "from" };
-                //    status[0] = "Confirmed";
-                //    status[1] = "from";
-                //    status[2] = "outstanding";
-
-                //    break;
-                //}
-
-
 
                 //message.Code = wordsArray[0];
                 //message.TransactionStatus = wordsArray[3];
@@ -232,204 +163,230 @@ namespace ExtensibleMarkupAtLarge
             }
             if (!bWrongData)
             {
-                RegexFilter(szBody,
+                xx_RegexFilter(szBody,
                             message,
                             wordsArray,
                             status,
                             szID);
 
                 Debug.WriteLine(message.Code
-                            + " = " + message.RAccNo
-                            + " = " + message.RName
-                            + " = " + message.RDate
-                            + " = " + message.TransactionStatus
-                            + " = " + message.CashAmount
-                            + " = " + message.Balance
-                            + " = " + message.TransactionCost);
+                                + " = " + message.TransactionStatus
+                                + " = " + message.RAccNo
+                                + " = " + message.RName
+                                + " = " + message.RDate
+                                + " = " + message.CashAmount
+                                + " = " + message.Balance
+                                + " = " + message.TransactionCost);
             }
             if (bFuliza)
             {
-                FulizaLoanFormater(szBody,
+                xx_FulizaLoanFormater(szBody,
                                     message,
                                     wordsArray,
                                     status,
                                     szID);
 
                 Debug.WriteLine(message.Code
-                            + " = " + message.RAccNo
-                            + " = " + message.RName
-                            + " = " + message.RDate
-                            + " = " + message.TransactionStatus
-                            + " = " + message.CashAmount
-                            + " = " + message.Balance
-                            + " = " + message.TransactionCost);
+                                + " = " + message.TransactionStatus
+                                + " = " + message.FulizaAmount
+                                + " = " + message.FulizaCharge
+                                + " = " + message.FulizaBorrowed);
             }
             return message;
         }
 
-        public string RegexFilter(string szvBody, 
+        private string xx_RegexFilter(string szvBody, 
                                     X_XMLProperties vmessage, 
                                     string[] wordsArray, 
                                     string [] vStatus,
                                     string szvID)
         {
-            string? cashAmountAfter = null;
-            string? rNameAfter = null;
-            string? cashBalanceAfter = null;
-            string? dateAfter = null;
-            string[]? SzACashAmount = null;
-            string[]? SzACashBalance = null;
-            string[]? SzADate = null;
-            string[]? SzARName = null;
+                                                                                                string? cashAmountAfter = null;
+                                                                                                string? rNameAfter = null;
+                                                                                                string? cashBalanceAfter = null;
+                                                                                                string? dateAfter = null;
+                                                                                                string[]? SzACashAmount = null;
+                                                                                                string[]? SzACashBalance = null;
+                                                                                                string[]? SzADate = null;
+                                                                                                string[]? SzARName = null;
 
             List<X_XMLProperties> xml_prop = new List<X_XMLProperties>();
 
-            ////////////////////////////--Received
-            //var regCash = new Regex(@"received(\b(.*)(\s+from))");
-            var regCash = new Regex(string.Format(@"{0}(\b(.*)(\s+{1}))", vStatus[0], vStatus[1]));
-            var regBalance = new Regex(@"balance is(\s\b(.*)\D)");
-            var regDate = new Regex(@"on(\b(.*)(\s+at))");
-            var regRName = new Regex(string.Format(@"{0}(\b(.*)(\s)\b(on|in)(\s.*\w\s))", vStatus[2]));
-
-            var regPayPall = new Regex(@"via(\b(.*)(\s)\b(on|in)(\s.*\w\s))");
-
-            var cashAmountBefore = regCash.Matches(szvBody);
-            var cashBalanceBefore = regBalance.Matches(szvBody);
-            var dateBefore = regDate.Matches(szvBody);
-            var rNameBefore = regRName.Matches(szvBody);
-
-            var rPayPallBefore = regPayPall.Matches(szvBody);
-            bool bPayPall = rPayPallBefore.Count.Equals(0);
-
-            cashAmountAfter = cashAmountBefore[0].Value;
-            SzACashAmount = cashAmountAfter.Split(' ');
-
-            cashBalanceAfter = cashBalanceBefore[0].Value;
-            SzACashBalance = cashBalanceAfter.Split(' ');
-
             try
             {
-                dateAfter = dateBefore[0].Value;
-            }
-            catch (Exception ex)
-            {
+                //var regCash = new Regex(@"received(\b(.*)(\s+from))");
+                var regCash = new Regex(string.Format(@"{0}(\b(.*)(\s+{1}))", vStatus[0], vStatus[1]));
+                var regBalance = new Regex(@"balance is(\s\b(.*)\D)");
+                var regDate = new Regex(@"on(\b(.*)(\s+at))");
+                var regRName = new Regex(string.Format(@"{0}(\b(.*)(\s)\b(on|in)(\s.*\w\s))", vStatus[2]));
 
-                dateAfter = "on 01/1/97 at";
-            }
+                var regPayPall = new Regex(@"via(\b(.*)(\s)\b(on|in)(\s.*\w\s))");
 
-            try
-            {
-                rNameAfter = rNameBefore[0].Value;
-            }
-            catch (Exception ex)
-            {
+                var cashAmountBefore = regCash.Matches(szvBody);
+                var cashBalanceBefore = regBalance.Matches(szvBody);
+                var dateBefore = regDate.Matches(szvBody);
+                var rNameBefore = regRName.Matches(szvBody);
 
-                rNameAfter = "Null Null Null Null";
-            }
-            SzADate = dateAfter.Split(' ');
+                var rPayPallBefore = regPayPall.Matches(szvBody);
+                bool bPayPall = rPayPallBefore.Count.Equals(0);
 
-            
-            SzARName = rNameAfter.Split(' ');
+                cashAmountAfter = cashAmountBefore[0].Value;
+                SzACashAmount = cashAmountAfter.Split(' ');
 
-            vmessage.RName = SzARName[1] + " " + SzARName[2] + " " + SzARName[3];
-            vmessage.Balance = SzACashBalance[2];
-            vmessage.Code = wordsArray[0];
-            vmessage.TransactionStatus = szvID;
-            vmessage.RDate = SzADate[1];
-            vmessage.CashAmount = SzACashAmount[1];
-            
+                cashBalanceAfter = cashBalanceBefore[0].Value;
+                SzACashBalance = cashBalanceAfter.Split(' ');
 
-            switch (szvID)
-            {
-                case "Paybill":
-                    vmessage.RAccNo = SzARName[1];
-                    break;
-                case "airtime":
-                    if (SzARName[1] == "on")
-                    {
-                        vmessage.RName = "airtime";
-                    }
-                    break;
-                case "sent":
-                    break;
-                case "received":
-                    if (bPayPall)
-                    {
+                try
+                {
+                    dateAfter = dateBefore[0].Value;
+                }
+                catch (Exception ex)
+                {
+
+                    dateAfter = "on 01/1/97 at";
+                }
+
+                try
+                {
+                    rNameAfter = rNameBefore[0].Value;
+                }
+                catch (Exception ex)
+                {
+
+                    rNameAfter = "Null Null Null Null";
+                }
+                SzADate = dateAfter.Split(' ');
+
+
+                SzARName = rNameAfter.Split(' ');
+
+                vmessage.RName = SzARName[1] + " " + SzARName[2] + " " + SzARName[3];
+                vmessage.Balance = SzACashBalance[2];
+                vmessage.Code = wordsArray[0];
+                vmessage.TransactionStatus = szvID;
+                vmessage.RDate = SzADate[1];
+                vmessage.CashAmount = SzACashAmount[1];
+
+
+                switch (szvID)
+                {
+                    case "Paybill":
+                        vmessage.RAccNo = SzARName[1];
                         break;
-                    }
-                    vmessage.Quota = wordsArray[13];
+                    case "airtime":
+                        if (SzARName[1] == "on")
+                        {
+                            vmessage.RName = "airtime";
+                        }
+                        break;
+                    case "sent":
+                        break;
+                    case "received":
+                        if (bPayPall)
+                        {
+                            break;
+                        }
+                        vmessage.Quota = wordsArray[13];
 
-                    break;
+                        break;
+                    case "Withdraw":
+                        vmessage.RName = SzARName[1] + " " + SzARName[2] + " " + SzARName[3] + " " + SzARName[4] + " " + SzARName[5] + " " + SzARName[6];
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                var erro = ex.Message;
+                throw new Exception(erro);
             }
 
             xml_prop.Add(vmessage);
 
             return vStatus[0];
         }
-        private string FulizaLoanFormater(string szvBody,
+        private string xx_FulizaLoanFormater(string szvBody,
                                     X_XMLProperties vmessage,
                                     string[] wordsArray,
                                     string[] vStatus,
                                     string szvID)
         {
+                                                                                        string cashFulizaAmountAfter = string.Empty;
                                                                                         string[]? SzAFulizaAmount = null;
                                                                                         string[]? SzAFulizaCharge = null;
                                                                                         string[]? SzAFulizaDebt = null;
                                                                                         string[]? SzAFulizaLimit = null;
+                                                                                        bool extraCheck = false;
 
             List<X_XMLProperties> xml_prop = new List<X_XMLProperties>();
+
+            try
+            {
+                var regt = new Regex(@"Confirmed(\b(.*)(\s)\b(from))");
+                var caBefore = regt.Matches(szvBody);
+                extraCheck = caBefore[0].Success;
+            }
+            catch
+            {
+                extraCheck = false;
+            }
+            try
+            {
+                if (!extraCheck)
+                {
+                    var regFulizaAmount = new Regex(@"Ksh(\b(.*)(\s)\b(Fee))");
+                    var regFulizaCharge = new Regex(@"charged (\b(.*)(\s)\b(Total))");
+                    var regFulizaDebt = new Regex(@"outstanding amount is (\b(.*)(\s)\b(due))");
+
+                    var cashFulizaAmountBefore = regFulizaAmount.Matches(szvBody);
+                    var cashFulizaChargeBefore = regFulizaCharge.Matches(szvBody);
+                    var cashFulizaDebtBefore = regFulizaDebt.Matches(szvBody);
+
+                
+                    cashFulizaAmountAfter = cashFulizaAmountBefore[0].Value;
+                    
+                    
+                    SzAFulizaAmount = cashFulizaAmountAfter.Split(' ');
+
+                    string cashFulizaChargeAfter = cashFulizaChargeBefore[0].Value;
+                    SzAFulizaCharge = cashFulizaChargeAfter.Split(' ');
+
+                    string cashFulizaDebtAfter = cashFulizaDebtBefore[0].Value;
+                    SzAFulizaDebt = cashFulizaDebtAfter.Split(' ');
+
+                    vmessage.Code = wordsArray[0];
+                    vmessage.TransactionStatus = szvID;
+                    vmessage.FulizaAmount = SzAFulizaAmount[1];
+                    vmessage.FulizaCharge = SzAFulizaCharge[2];
+                    vmessage.FulizaBorrowed = SzAFulizaDebt[4];
+                }
+                if (extraCheck)
+                {
+                    var regFulizaLimit = new Regex(@"M-PESA limit is (\b(.*)(\s)\b(M-PESA))");
+                    var regFulizaAmount = new Regex(@"Confirmed(\b(.*)(\s)\b(from))");
+
+                    var cashFulizaAmountBefore = regFulizaAmount.Matches(szvBody);
+                    var cashFulizaLimitBefore = regFulizaLimit.Matches(szvBody);
+
+                    cashFulizaAmountAfter = cashFulizaAmountBefore[0].Value;
+                    SzAFulizaAmount = cashFulizaAmountAfter.Split(' ');
+
+                    string cashFulizaLimitAfter = cashFulizaLimitBefore[0].Value;
+                    SzAFulizaLimit = cashFulizaLimitAfter.Split(' ');
+
+
+                    vmessage.Code = wordsArray[0];
+                    vmessage.TransactionStatus = szvID;
+                    vmessage.FulizaLimit = SzAFulizaLimit[4];
+                    vmessage.FulizaAmount = SzAFulizaAmount[2];
+                }
+                xml_prop.Add(vmessage);
+            }
+            catch (Exception ex)
+            {
+                var erro = ex.Message;
+                throw new Exception(erro);
+            }
             
-            //bool bFulizaCheck = wordsArray[0].StartsWith(szvID);
-
-            bool extraCheck = new Regex(@"Ksh(\b(.*)(\s)\b(Fee))").ToString().Contains("Ksh");
-
-            if (extraCheck)
-            {
-                var regFulizaAmount = new Regex(@"Ksh(\b(.*)(\s)\b(Fee))");
-                var regFulizaCharge = new Regex(@"charged (\b(.*)(\s)\b(Total))");
-                var regFulizaDebt = new Regex(@"outstanding amount is (\b(.*)(\s)\b(due))");
-
-                var cashFulizaAmountBefore = regFulizaAmount.Matches(szvBody);
-                var cashFulizaChargeBefore = regFulizaCharge.Matches(szvBody);
-                var cashFulizaDebtBefore = regFulizaDebt.Matches(szvBody);
-
-                string cashFulizaAmountAfter = cashFulizaAmountBefore[0].Value;
-                SzAFulizaAmount = cashFulizaAmountAfter.Split(' ');
-
-                string cashFulizaChargeAfter = cashFulizaChargeBefore[0].Value;
-                SzAFulizaCharge = cashFulizaChargeAfter.Split(' ');
-
-                string cashFulizaDebtAfter = cashFulizaDebtBefore[0].Value;
-                SzAFulizaDebt = cashFulizaDebtAfter.Split(' ');
-
-                vmessage.Code = wordsArray[0];
-                vmessage.TransactionStatus = szvID;
-                vmessage.FulizaAmount = SzAFulizaAmount[0];
-                vmessage.FulizaCharge = SzAFulizaCharge[0];
-                vmessage.FulizaBorrowed = SzAFulizaDebt[0];
-            }
-            if (!extraCheck)
-            {
-                var regFulizaLimit = new Regex(@"M-PESA limit is (\b(.*)(\s)\b(M-PESA))");
-                var regFulizaAmount = new Regex(@"Confirmed(\b(.*)(\s)\b(from))");
-
-                var cashFulizaAmountBefore = regFulizaAmount.Matches(szvBody);
-                var cashFulizaLimitBefore = regFulizaLimit.Matches(szvBody);
-
-                string cashFulizaAmountAfter = cashFulizaAmountBefore[0].Value;
-                SzAFulizaAmount = cashFulizaAmountAfter.Split(' ');
-
-                string cashFulizaLimitAfter = cashFulizaLimitBefore[0].Value;
-                SzAFulizaLimit = cashFulizaLimitAfter.Split(' ');
-
-
-                vmessage.Code = wordsArray[0];
-                vmessage.TransactionStatus = szvID;
-                vmessage.FulizaLimit = SzAFulizaLimit[4];
-                vmessage.FulizaAmount = SzAFulizaAmount[2];
-            }
-
-            xml_prop.Add(vmessage);
 
             return vStatus[0];
         }

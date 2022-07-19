@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExtensibleMarkupAtLarge
 {
-    class X_XMLProperties
+    public class X_XMLProperties
     {
         public string szProtocol { get; set; }
         public string szAddress { get; set; }
@@ -37,7 +37,6 @@ namespace ExtensibleMarkupAtLarge
         public string FulizaLimit { get; set; }
         public string FulizaBorrowed { get; set; }
         public string FulizaCharge { get; set; }
-
         public string FulizaAmount { get; set; }
     }
 }

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DBConnection\DBConnection.csproj" />
     <ProjectReference Include="..\ExtensibleMarkupAtLarge\ExtensibleMarkupAtLarge.csproj" />
   </ItemGroup>
 

@@ -1,18 +1,20 @@
-﻿namespace DBConnection
+﻿using ExtensibleMarkupAtLarge;
+
+namespace DBConnection
 {
-    public static class EnumFormsota
+    public class DatabaseConnection
     {
-        enum MyEnum
+        //private X_XMLProperties xml_prop = null;
+        public void BeginDBConnection(List<X_XMLProperties> x_vprop)
         {
+            //xml_prop = new ExtensibleMarkupAtLarge.X_XMLProperties();
 
+            xx_StartConnection(x_vprop);
         }
-
-        public enum EnumMessageOrigin
+        private void xx_StartConnection(List<X_XMLProperties> x_vprop)
         {
-            MPESA = 0,
-            KCB,
-
+            List<X_XMLProperties> x_prop = new List<X_XMLProperties>();
+            x_prop = x_vprop;
         }
-
     }
 }
