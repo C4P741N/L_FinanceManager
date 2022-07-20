@@ -193,6 +193,7 @@ namespace ExtensibleMarkupAtLarge
                                 + " = " + message.FulizaBorrowed);
             }
             return message;
+            
         }
 
         private string xx_RegexFilter(string szvBody, 

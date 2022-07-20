@@ -12,7 +12,7 @@ namespace ExtensibleMarkupAtLarge
         private X_ExtensibleMarkupStructure xml_stru = null;
         private X_XMLFormartToString xfts = null;
 
-        private string szDocPath = @"D:\_notTemp\Proj\MSota\sms-20220711200832.xml";
+        private string szDocPath = @"F:\_notTemp\Proj\MSota\sms-20220711200832.xml";
 
 		public void BeginGetXMLValues(ref List<X_XMLProperties> x_prop)
         {
@@ -33,7 +33,11 @@ namespace ExtensibleMarkupAtLarge
                 {
 					//X_XMLProperties messageUpdate = _ExtractBodyForMPESA(lsMessage);
 					xfts.BeginMPESAFormatToString(lsMessage);
-					x_prop.Add(lsMessage);
+
+                    if (lsMessage.Code != null)
+                    {
+						x_prop.Add(lsMessage);
+					}
 				}
 				if (lsMessage.szAddress == "KCB")
 				{
