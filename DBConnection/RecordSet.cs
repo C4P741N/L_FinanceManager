@@ -20,23 +20,23 @@ namespace DBConnection
 
             x_prop = x_vprop;
 
-            xx_StartConnection();
+            xx_StartConnectionAndDataInsert();
         }
-        private void xx_StartConnection()
+        private void xx_StartConnectionAndDataInsert()
         {
                                                                                         string StrQuery = string.Empty;
                                                                                         bool conFailed = false;
 
-            while (!conFailed)
+            while (true)
             {
                 foreach (X_XMLProperties prop in x_prop)
                 {
                     try
                     {
-                            StrQuery = "INSERT INTO Ms_Collection VALUES"
+                        StrQuery = "INSERT INTO Ms_Collection VALUES"
                                         + "( "
                                         + "' " + prop.Code + "' ,"
-                                        + "' " + prop.Balance + "' ,"
+                                        + "' " + prop.szDate + "' ,"
                                         + "' " + prop.RName + "' ,"
                                         + "' " + prop.RPhoneNo + "' ,"
                                         + "' " + prop.RDate + "' ,"
@@ -67,12 +67,10 @@ namespace DBConnection
                                         + "' " + prop.FulizaAmount + "'  "
                                         + ") ";
 
-
                         using (con = new SqlConnection(@"Data Source=DESKTOP-53D0IES\MSTEST;Initial Catalog=MSota;User ID=sa;Password=manager;Encrypt=False"))
                         using (var cmd = new SqlDataAdapter())
                         using (SqlCommand comm = new SqlCommand(StrQuery))
                         {
-
                             comm.Connection = con;
                             cmd.InsertCommand = comm; 
 
@@ -83,7 +81,6 @@ namespace DBConnection
                     catch (Exception ex)
                     {
                         Exception exe = exception;
-                        conFailed = true;
 
                         throw exe;
                     }
