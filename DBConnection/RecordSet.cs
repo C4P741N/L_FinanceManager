@@ -33,8 +33,8 @@ namespace DBConnection
                 {
                     try
                     {
-                        StrQuery = "INSERT INTO Ms_Collection VALUES"
-                                        + "( "
+                        StrQuery = "EXECUTE Ms_DuplicateChecker "
+
                                         + "' " + prop.Code + "' ,"
                                         + "' " + prop.szDate + "' ,"
                                         + "' " + prop.RName + "' ,"
@@ -65,7 +65,8 @@ namespace DBConnection
                                         + "' " + prop.FulizaBorrowed + "' ,"
                                         + "' " + prop.FulizaCharge + "' ,"
                                         + "' " + prop.FulizaAmount + "'  "
-                                        + ") ";
+
+                                        ;
 
                         using (con = new SqlConnection(@"Data Source=DESKTOP-53D0IES\MSTEST;Initial Catalog=MSota;User ID=sa;Password=manager;Encrypt=False"))
                         using (var cmd = new SqlDataAdapter())
