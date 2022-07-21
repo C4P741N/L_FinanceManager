@@ -7,11 +7,17 @@ namespace MSota.Controllers
     public class ButtonClick : Controller
     {
         private B_BaseCommands bc = null;
-        public void HandleButtonClick()
+        public void ExtractAndAddDataOnClick()
         {
             bc = new B_BaseCommands();
 
-            bc.BeginLaunchOfStuff();
+            bc.BeginLaunchOfXMLStuff();
+        }
+        public void RetriveDataOnClick()
+        {
+            bc = new B_BaseCommands();
+
+            bc.BeginLaunchOfStuffToGetData();
         }
 
     }

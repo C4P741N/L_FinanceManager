@@ -20,9 +20,9 @@ namespace ExtensibleMarkupAtLarge
 			xx_BeginRetrivingXMLFileAndGettingValues(ref x_prop);
         }
 
-        public void xx_BeginRetrivingXMLFileAndGettingValues(ref List<X_XMLProperties> x_prop)
+        private void xx_BeginRetrivingXMLFileAndGettingValues(ref List<X_XMLProperties> x_prop)
         {
-			List<X_XMLProperties> lsMessages = MessageListFromXML();
+			List<X_XMLProperties> lsMessages = xx_MessageListFromXML();
 			x_prop = new List<X_XMLProperties>();
 
 
@@ -55,7 +55,7 @@ namespace ExtensibleMarkupAtLarge
 			//xml_prop = new X_XMLProperties();
 
 		}
-		private List<X_XMLProperties>  MessageListFromXML()
+		private List<X_XMLProperties>  xx_MessageListFromXML()
 		{
 																						string szXmlString = string.Empty;
 																						string szName = string.Empty;

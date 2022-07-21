@@ -187,6 +187,7 @@ namespace ExtensibleMarkupAtLarge
                                     szID);
 
                 Debug.WriteLine(message.Code
+                                + " = " + message.RName
                                 + " = " + message.TransactionStatus
                                 + " = " + message.FulizaAmount
                                 + " = " + message.FulizaCharge
@@ -380,6 +381,8 @@ namespace ExtensibleMarkupAtLarge
                     vmessage.FulizaLimit = SzAFulizaLimit[4];
                     vmessage.FulizaAmount = SzAFulizaAmount[2];
                 }
+                vmessage.RName = "Fuliza";
+
                 xml_prop.Add(vmessage);
             }
             catch (Exception ex)

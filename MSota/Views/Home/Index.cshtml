@@ -4,13 +4,10 @@
 
 <div class="text-center">
     <h1 class="display-4">MSota</h1>
-    <p>Confirm how Broke you are</p>
 
-    <input type="button" value="Create" onclick="location.href='@Url.Action("HandleButtonClick", "ButtonClick")'" />
-    @*@using (Html.BeginForm("HandleButtonClick"))
+    <input type="button" value="Extract From XML" onclick="location.href='@Url.Action("ExtractAndAddDataOnClick", "ButtonClick")'" />
 
-    {
-    <button onclick="" type="submit" name="bClick">Begin</button>
-    }*@
+    <input type="button" value="Show Statistics" onclick="location.href='@Url.Action("RetriveDataOnClick", "ButtonClick")'" />
 
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
