@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBConnection", "DBConnectio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtensibleMarkupAtLarge", "ExtensibleMarkupAtLarge\ExtensibleMarkupAtLarge.csproj", "{C45E38F3-6E92-42C1-8ED3-F9E8EA5C67EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAndStatistics", "DataAndStatistics\DataAndStatistics.csproj", "{1B1F5CEC-87AB-49FB-A93D-62D55F1A7DAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C45E38F3-6E92-42C1-8ED3-F9E8EA5C67EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C45E38F3-6E92-42C1-8ED3-F9E8EA5C67EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C45E38F3-6E92-42C1-8ED3-F9E8EA5C67EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B1F5CEC-87AB-49FB-A93D-62D55F1A7DAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B1F5CEC-87AB-49FB-A93D-62D55F1A7DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B1F5CEC-87AB-49FB-A93D-62D55F1A7DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B1F5CEC-87AB-49FB-A93D-62D55F1A7DAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

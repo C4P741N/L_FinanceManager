@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[Ms_DuplicateChecker]
+ALTER PROCEDURE [dbo].[Ms_DuplicateChecker]
 (
 @szCode						nvarchar(250),
 @szDate						nvarchar(250),
@@ -111,8 +111,8 @@ X(
 
 	ON
   (
-		[Ms_Collection].[Code]				  = @dCode 
-	AND [Ms_Collection].[M_TransactionStatus] = @dM_TransactionStatus 
+		[Ms_Collection].[Code]				  = @szCode 
+	AND [Ms_Collection].[M_TransactionStatus] = @szTransactionStatus 
   )											  
 	 
 WHEN NOT MATCHED BY TARGET THEN

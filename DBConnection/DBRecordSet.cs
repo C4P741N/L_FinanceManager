@@ -1,19 +1,18 @@
 ﻿using ExtensibleMarkupAtLarge;
+using Microsoft.Data.SqlClient;
 using System.Web.Http;
 //using Microsoft.Data.SqlClient;
 
 namespace DBConnection
 {
-    public class RecordSet
+    public class DBRecordSet
     {
         private DBCommunicator dbc = null;
 
         List<X_XMLProperties> x_prop = null;
-        //SqlConnection con = null;
-        //SqlCommand comm = null;
-        //SqlDataAdapter cmd = null;
         HttpResponseMessage response = null;
         HttpResponseException exception = null;
+        private SqlDataReader oReader = null;
 
         public void BeginDBConnectionAndDataInsert(List<X_XMLProperties> x_vprop)
         {
@@ -28,7 +27,7 @@ namespace DBConnection
         }
         private void xx_StartConnectionAndDataInsert()
         {
-                                                                                        string StrQuery = string.Empty;
+                                                                                        string strQuery = string.Empty;
                                                                                         bool conFailed = false;
 
             while (true)
@@ -37,7 +36,7 @@ namespace DBConnection
                 {
                     try
                     {
-                        StrQuery = "EXECUTE Ms_DuplicateChecker " //This part gives me joy
+                        strQuery = "EXECUTE Ms_DuplicateChecker " //This part gives me joy
 
                                         + "' " + prop.Code + "' ,"
                                         + "' " + prop.szDate + "' ,"
@@ -72,17 +71,8 @@ namespace DBConnection
 
                                         ;
 
-                        dbc.BeginCommunicator(StrQuery);
-                        //using (con = new SqlConnection(@"Data Source=DESKTOP-53D0IES\MSTEST;Initial Catalog=MSota;User ID=sa;Password=manager;Encrypt=False"))
-                        //using (var cmd = new SqlDataAdapter())
-                        //using (SqlCommand comm = new SqlCommand(StrQuery))
-                        //{
-                        //    comm.Connection = con;
-                        //    cmd.InsertCommand = comm; 
-
-                        //    con.Open();
-                        //    comm.ExecuteNonQuery();
-                        //}
+                        dbc.BeginCommunicator(strQuery);
+                       
                     }
                     catch (Exception ex)
                     {

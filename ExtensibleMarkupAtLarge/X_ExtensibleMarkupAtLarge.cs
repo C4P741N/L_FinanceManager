@@ -9,10 +9,11 @@ namespace ExtensibleMarkupAtLarge
 		private System.IO.StreamReader sr = null;
 		private XmlAttributeCollection xmlatt = null;
         private X_XMLProperties xml_prop = null;
-        private X_ExtensibleMarkupStructure xml_stru = null;
+        //private X_ExtensibleMarkupStructure xml_stru = null;
         private X_XMLFormartToString xfts = null;
 
         private string szDocPath = @"F:\_notTemp\Proj\MSota\sms-20220711200832.xml";
+		private string szDocPath2 = @"D:\_notTemp\Proj\MSota\sms-20220711200832.xml";
 
 		public void BeginGetXMLValues(ref List<X_XMLProperties> x_prop)
         {
@@ -49,8 +50,16 @@ namespace ExtensibleMarkupAtLarge
 		private void xx_InitialitzeStuff()
         {
 			xml_doc = new System.Xml.XmlDocument();
-			sr = new System.IO.StreamReader(szDocPath);
-			xml_stru = new X_ExtensibleMarkupStructure();
+            try
+            {
+                sr = new System.IO.StreamReader(szDocPath);
+            }
+            catch (Exception)
+            {
+
+				sr = new System.IO.StreamReader(szDocPath2);
+            }
+			//xml_stru = new X_ExtensibleMarkupStructure();
             xfts = new X_XMLFormartToString();
 			//xml_prop = new X_XMLProperties();
 
