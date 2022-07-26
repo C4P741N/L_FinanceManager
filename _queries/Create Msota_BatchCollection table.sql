@@ -1,16 +1,18 @@
 CREATE TABLE Ms_Collection
 (
-		Code				varchar(255),
+		ID					INT NOT NULL IDENTITY (1, 1),
+		Code				varchar(255) NOT NULL,
+		Code_ID				AS RIGHT('000000000' + CAST(ID as varchar(10)), 6) + Code,
 		M_Date				varchar(255),
 		M_RecepientName		varchar(255),
         M_RecepientPhoneNo	varchar(255),
         M_RecepientDate		varchar(255),
         M_RecepientAccNo	varchar(255),
-		M_CashAmount		varchar(255),
-		M_Balance			varchar(255),
+		M_CashAmount		FLOAT(53),
+		M_Balance			FLOAT(53),
 		M_szProtocol		varchar(255),
 		M_TransactionStatus	varchar(255) NOT NULL,
-		M_TransactionCost	varchar(255),
+		M_TransactionCost	FLOAT(53),
         M_Address			varchar(255),
         M_Type				varchar(255),
         M_Subject			varchar(255),
@@ -26,8 +28,8 @@ CREATE TABLE Ms_Collection
         M_Readable_date		varchar(255),
         M_szContact_name	varchar(255),
         M_Quota				varchar(255),
-        M_FulizaLimit		varchar(255),
-        M_FulizaBorrowed	varchar(255),
-        M_FulizaCharge		varchar(255),
-        M_FulizaAmount		varchar(255)
+        M_FulizaLimit		FLOAT(53),
+        M_FulizaBorrowed	FLOAT(53),
+        M_FulizaCharge		FLOAT(53),
+        M_FulizaAmount		FLOAT(53)
 );

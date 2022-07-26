@@ -26,17 +26,17 @@ namespace ExtensibleMarkupAtLarge
         public string szContact_name { get; set; }
         public string Code { get; set; }
         public string TransactionStatus { get; set; }
-        public string CashAmount { get; set; }
+        public double CashAmount { get; set; }
         public string RName { get; set; }
         public string RPhoneNo { get; set; }
-        public string Balance { get; set; }
+        public double Balance { get; set; }
         public string RDate { get; set; }
         public string RAccNo { get; set; }
         public string TransactionCost { get; set; }
         public string Quota { get; set; }
-        public string FulizaLimit { get; set; }
-        public string FulizaBorrowed { get; set; }
-        public string FulizaCharge { get; set; }
-        public string FulizaAmount { get; set; }
+        public double FulizaLimit { get; set; }
+        public double FulizaBorrowed { get; set; }
+        public double FulizaCharge { get; set; }
+        public double FulizaAmount { get; set; }
     }
 }

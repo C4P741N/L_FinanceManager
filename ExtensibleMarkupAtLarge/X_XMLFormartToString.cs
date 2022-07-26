@@ -224,29 +224,10 @@ namespace ExtensibleMarkupAtLarge
 
                 var regPayPall = new Regex(@"via(\b(.*)(\s)\b(on|in)(\s.*\w\s))");
 
-                var cashAmountBefore = regCash.Matches(szvBody);
-                var cashBalanceBefore = regBalance.Matches(szvBody);
-                var dateBefore = regDate.Matches(szvBody);
                 var rNameBefore = regRName.Matches(szvBody);
 
                 var rPayPallBefore = regPayPall.Matches(szvBody);
                 bool bPayPall = rPayPallBefore.Count.Equals(0);
-
-                cashAmountAfter = cashAmountBefore[0].Value;
-                SzACashAmount = cashAmountAfter.Split(' ');
-
-                cashBalanceAfter = cashBalanceBefore[0].Value;
-                SzACashBalance = cashBalanceAfter.Split(' ');
-
-                try
-                {
-                    dateAfter = dateBefore[0].Value;
-                }
-                catch (Exception ex)
-                {
-
-                    dateAfter = "on 01/1/97 at";
-                }
 
                 try
                 {
@@ -257,17 +238,18 @@ namespace ExtensibleMarkupAtLarge
 
                     rNameAfter = "Null Null Null Null";
                 }
-                SzADate = dateAfter.Split(' ');
-
 
                 SzARName = rNameAfter.Split(' ');
 
-                vmessage.RName = SzARName[1] + " " + SzARName[2] + " " + SzARName[3];
-                vmessage.Balance = SzACashBalance[2];
+                //Regex r = new Regex("\\s+");
+                //SzARName[1] = r.Replace(SzARName[1], "");
+
+                vmessage.RName = BodyToValueArray(szvBody, regRName)[1] + " " + BodyToValueArray(szvBody, regRName)[2] + " " + BodyToValueArray(szvBody, regRName)[3];
+                vmessage.Balance = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regBalance)[2]));
                 vmessage.Code = wordsArray[0];
                 vmessage.TransactionStatus = szvID;
-                vmessage.RDate = SzADate[1];
-                vmessage.CashAmount = SzACashAmount[1];
+                vmessage.RDate = BodyToValueArray(szvBody, regDate)[1];
+                vmessage.CashAmount = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regCash)[1]));
 
 
                 switch (szvID)
@@ -280,10 +262,22 @@ namespace ExtensibleMarkupAtLarge
                         {
                             vmessage.RName = "airtime";
                         }
+                        if (SzARName[1] == "EASYFLOAT")
+                        {
+                            vmessage.Quota = SzARName[1];
+                        }
                         break;
                     case "sent":
+                        if (SzARName[1] == "SIDIAN")
+                        {
+                            vmessage.Quota = SzARName[1];
+                        }
                         break;
                     case "received":
+                        if (SzARName[1] == "SIDIAN")
+                        {
+                            vmessage.Quota = SzARName[1];
+                        }
                         if (bPayPall)
                         {
                             break;
@@ -339,49 +333,21 @@ namespace ExtensibleMarkupAtLarge
                     var regFulizaCharge = new Regex(@"charged (\b(.*)(\s)\b(Total))");
                     var regFulizaDebt = new Regex(@"outstanding amount is (\b(.*)(\s)\b(due))");
 
-                    var cashFulizaAmountBefore = regFulizaAmount.Matches(szvBody);
-                    var cashFulizaChargeBefore = regFulizaCharge.Matches(szvBody);
-                    var cashFulizaDebtBefore = regFulizaDebt.Matches(szvBody);
-
-                
-                    cashFulizaAmountAfter = cashFulizaAmountBefore[0].Value;
-                    
-                    
-                    SzAFulizaAmount = cashFulizaAmountAfter.Split(' ');
-
-                    string cashFulizaChargeAfter = cashFulizaChargeBefore[0].Value;
-                    SzAFulizaCharge = cashFulizaChargeAfter.Split(' ');
-
-                    string cashFulizaDebtAfter = cashFulizaDebtBefore[0].Value;
-                    SzAFulizaDebt = cashFulizaDebtAfter.Split(' ');
-
-                    vmessage.Code = wordsArray[0];
-                    vmessage.TransactionStatus = szvID;
-                    vmessage.FulizaAmount = SzAFulizaAmount[1];
-                    vmessage.FulizaCharge = SzAFulizaCharge[2];
-                    vmessage.FulizaBorrowed = SzAFulizaDebt[4];
+                    vmessage.FulizaAmount = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaAmount)[1]));
+                    vmessage.FulizaCharge = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaCharge)[2]));
+                    vmessage.FulizaBorrowed = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaDebt)[4]));
                 }
                 if (extraCheck)
                 {
                     var regFulizaLimit = new Regex(@"M-PESA limit is (\b(.*)(\s)\b(M-PESA))");
                     var regFulizaAmount = new Regex(@"Confirmed(\b(.*)(\s)\b(from))");
 
-                    var cashFulizaAmountBefore = regFulizaAmount.Matches(szvBody);
-                    var cashFulizaLimitBefore = regFulizaLimit.Matches(szvBody);
-
-                    cashFulizaAmountAfter = cashFulizaAmountBefore[0].Value;
-                    SzAFulizaAmount = cashFulizaAmountAfter.Split(' ');
-
-                    string cashFulizaLimitAfter = cashFulizaLimitBefore[0].Value;
-                    SzAFulizaLimit = cashFulizaLimitAfter.Split(' ');
-
-
-                    vmessage.Code = wordsArray[0];
-                    vmessage.TransactionStatus = szvID;
-                    vmessage.FulizaLimit = SzAFulizaLimit[4];
-                    vmessage.FulizaAmount = SzAFulizaAmount[2];
+                    vmessage.FulizaLimit = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody,regFulizaLimit)[4]));
+                    vmessage.FulizaAmount = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaAmount)[2]));
                 }
-                vmessage.RName = "Fuliza";
+                vmessage.Code = wordsArray[0];
+                vmessage.TransactionStatus = szvID;
+                vmessage.RName = vmessage.Quota = "Fuliza";
 
                 xml_prop.Add(vmessage);
             }
@@ -393,6 +359,47 @@ namespace ExtensibleMarkupAtLarge
             
 
             return vStatus[0];
+        }
+
+        public string[] BodyToValueArray(string szvBody, Regex RBody)
+        {
+            string szAmountAfter = string.Empty;
+
+            var AmountBefore = RBody.Matches(szvBody);
+            try
+            {
+                szAmountAfter = AmountBefore[0].Value;
+            }
+            catch
+            {
+                szAmountAfter = "Null Null";
+            }
+            string[] SzAmount = szAmountAfter.Split(' ');
+
+            return SzAmount;
+        }
+
+        public string CashConverter(string vValue)
+        {
+
+                                                                                        string strFinValue = string.Empty;
+                                                                                        string strFiValue = string.Empty;
+            if (vValue.StartsWith("Ksh"))
+            {
+                string strNoKsh = vValue.Remove(0, 3);
+                string[] staNoSecondDot = strNoKsh.Split(".");
+                string strComValue = staNoSecondDot[0] + "." + staNoSecondDot[1];
+                strFinValue = strComValue.Replace(",", "");
+            }
+            else
+            {
+                string[] staNoSecondDot = vValue.Split(".");
+                string strComValue = staNoSecondDot[0] + "." + staNoSecondDot[1];
+                strFinValue = strComValue.Replace(",", "");
+            }
+            strFiValue = strFinValue;
+
+            return strFiValue;
         }
     }
 }
