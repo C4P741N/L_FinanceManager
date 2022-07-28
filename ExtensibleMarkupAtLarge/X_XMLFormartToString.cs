@@ -363,7 +363,7 @@ namespace ExtensibleMarkupAtLarge
 
         public string[] BodyToValueArray(string szvBody, Regex RBody)
         {
-            string szAmountAfter = string.Empty;
+                                                                                        string szAmountAfter = string.Empty;
 
             var AmountBefore = RBody.Matches(szvBody);
             try

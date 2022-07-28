@@ -12,12 +12,21 @@ namespace MSota.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
+            //client.Getmessage
+
             return View();
         }
 
+        //[HttpPost]
+        public ActionResult ExtractAndAddDataOnClick()
+        {
+
+            return View();
+
+        }
+        //[HttpPost]
         public IActionResult Privacy()
         {
             return View();
