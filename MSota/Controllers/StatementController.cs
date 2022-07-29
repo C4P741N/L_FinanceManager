@@ -7,6 +7,7 @@ namespace MSota.Controllers
 {
     public class StatementController : Controller
     {
+        private DataAndStatistics.DataAndStatisticsProp dsprop = null;
         private Statement st = null;
         public IActionResult Index()
         {
@@ -16,9 +17,9 @@ namespace MSota.Controllers
         {
             st = new Statement();
 
-            st.AmountSpent = 70;
-            st.AmountBorrrowed = 60;
-            st.AmountReceived = 90;
+            st.AmountSpent = 56;
+            st.AmountBorrrowed = 57;
+            st.AmountReceived = 98;
 
             //ViewBag.StatementDetails = st;
 

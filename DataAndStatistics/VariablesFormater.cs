@@ -14,10 +14,12 @@ namespace DataAndStatistics
         private DataAndStatisticsProp oDsp = null;
         private DBRecordGet oDbget = null;
         private SqlDataReader oReader = null;
+        private DataMazematics math = null;
         public void BeginFormatingVariables()
         {
             oDbget = new DBRecordGet();
             oDsp = new DataAndStatisticsProp();
+            math = new DataMazematics();
 
             xx_StartGettingStufToFormater();
             
@@ -25,15 +27,33 @@ namespace DataAndStatistics
 
         private void xx_StartGettingStufToFormater()
         {
+                                                                                        double dBalance = 0;
+                                                                                        double dvBalance = 0;
+                                                                                        double dvCashBalance = 0;
+                                                                                        double dCashBalance = 0;
+                                                                                        double dvFulizaAmount = 0;
+                                                                                        double dFulizaAmount = 0;
+                                                                                        double dvFulizaCharge = 0;
+                                                                                        double dFulizaCharge = 0;
+                                                                                        double dvFulizaAmountPaid = 0;
+                                                                                        double dFulizaAmountPaid = 0;
+
             List<DataAndStatisticsProp> oStuffs = xx_Stuf();
 
             foreach (DataAndStatisticsProp stuff in oStuffs)
             {
-                if (stuff.TransactionStatus == " sent")
-                {
-                    
-                }
+                math.BeginMazematics(stuff,
+                                    ref dvBalance,
+                                    ref dvCashBalance,
+                                    ref dvFulizaAmount,
+                                    ref dvFulizaCharge,
+                                    ref dvFulizaAmountPaid);
 
+                dBalance            +=  math.RoundingOf(dvBalance);
+                dCashBalance        +=  math.RoundingOf(dvCashBalance);
+                dFulizaAmount       +=  math.RoundingOf(dvFulizaAmount);
+                dFulizaCharge       +=  math.RoundingOf(dvFulizaCharge);
+                dFulizaAmountPaid   +=  math.RoundingOf(dvFulizaAmountPaid);
             }
 
         }

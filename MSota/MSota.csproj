@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BaseComands\BaseCommands.csproj" />
+    <ProjectReference Include="..\DataAndStatistics\DataAndStatistics.csproj" />
   </ItemGroup>
 
 </Project>
