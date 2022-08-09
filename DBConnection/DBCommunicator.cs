@@ -13,8 +13,8 @@ namespace DBConnection
         SqlConnection oCon = null;
         SqlCommand oCmd = null;
         SqlDataAdapter oAdap = null;
-        //string strConAd = @"Data Source=DESKTOP-19HJDEM;Initial Catalog=MSota;Integrated Security=True;Encrypt=False";
-        string strConAd = @"Data Source=DESKTOP-53D0IES\MSTEST;Initial Catalog=MSota;User ID=sa;Password=manager;Encrypt=False";
+        string strConAd = @"Data Source=DESKTOP-19HJDEM;Initial Catalog=MSota;Integrated Security=True;Encrypt=False";
+        //string strConAd = @"Data Source=DESKTOP-53D0IES\MSTEST;Initial Catalog=MSota;User ID=sa;Password=manager;Encrypt=False";
         public void BeginCommunicator(string strvQuery)
         {
             using (oCon = new SqlConnection(strConAd))

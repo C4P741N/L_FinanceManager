@@ -15,20 +15,22 @@ namespace DataAndStatistics
         private DBRecordGet oDbget = null;
         private SqlDataReader oReader = null;
         private DataMazematics math = null;
-        public void BeginFormatingVariables()
+        private U_StatisticsProp uisprop = null;
+        public void BeginFormatingVariables(ref U_StatisticsProp uisprop)
         {
             oDbget = new DBRecordGet();
             oDsp = new DataAndStatisticsProp();
             math = new DataMazematics();
+            uisprop = new U_StatisticsProp();
 
-            xx_StartGettingStufToFormater();
+            xx_StartGettingStufToFormater(uisprop);
             
         }
 
-        private void xx_StartGettingStufToFormater()
+        private void xx_StartGettingStufToFormater(U_StatisticsProp uisprop)
         {
-                                                                                        double dBalance = 0;
-                                                                                        double dvBalance = 0;
+                                                                                        double dCashSpent = 0;
+                                                                                        double dCashReceived = 0;
                                                                                         double dvCashBalance = 0;
                                                                                         double dCashBalance = 0;
                                                                                         double dvFulizaAmount = 0;
@@ -38,23 +40,37 @@ namespace DataAndStatistics
                                                                                         double dvFulizaAmountPaid = 0;
                                                                                         double dFulizaAmountPaid = 0;
 
+            bool bSpent = false;
+
             List<DataAndStatisticsProp> oStuffs = xx_Stuf();
 
             foreach (DataAndStatisticsProp stuff in oStuffs)
             {
                 math.BeginMazematics(stuff,
-                                    ref dvBalance,
                                     ref dvCashBalance,
                                     ref dvFulizaAmount,
                                     ref dvFulizaCharge,
                                     ref dvFulizaAmountPaid);
 
-                dBalance            +=  math.RoundingOf(dvBalance);
-                dCashBalance        +=  math.RoundingOf(dvCashBalance);
-                dFulizaAmount       +=  math.RoundingOf(dvFulizaAmount);
-                dFulizaCharge       +=  math.RoundingOf(dvFulizaCharge);
-                dFulizaAmountPaid   +=  math.RoundingOf(dvFulizaAmountPaid);
+                bSpent = stuff.TransactionStatus != "received";
+              
+                if (bSpent) 
+                {
+                    dCashSpent += dvCashBalance;
+                }
+                if (!bSpent)
+                {
+                    dCashReceived += dvCashBalance;
+                }
+                dFulizaAmount       +=  dvFulizaAmount;
+                dFulizaCharge       +=  dvFulizaCharge;
+                dFulizaAmountPaid   +=  dvFulizaAmountPaid;
             }
+            uisprop.CashReceived        = math.RoundingOf(dCashSpent);
+            uisprop.CashSpent           = math.RoundingOf(dCashReceived);
+            uisprop.FulizaAmount        = math.RoundingOf(dFulizaAmount);
+            uisprop.FulizaCharge        = math.RoundingOf(dFulizaCharge);
+            uisprop.FulizaAmountPaid    = math.RoundingOf(dFulizaAmountPaid);
 
         }
         private List<DataAndStatisticsProp> xx_Stuf()

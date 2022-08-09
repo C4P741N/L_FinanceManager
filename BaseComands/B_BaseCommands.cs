@@ -25,16 +25,16 @@ namespace BaseCommands
 
         }
 
-        public void BeginLaunchOfStuffToGetData()
+        public void BeginLaunchOfStuffToGetData(ref U_StatisticsProp uisprop)
         {
-            xx_GetDataAndStuff();
+            xx_GetDataAndStuff(ref uisprop);
         }
 
-        private void xx_GetDataAndStuff()
+        private void xx_GetDataAndStuff(ref U_StatisticsProp uisprop)
         {
             vf = new VariablesFormater();
 
-            vf.BeginFormatingVariables();
+            vf.BeginFormatingVariables(ref uisprop);
 
         }
     }

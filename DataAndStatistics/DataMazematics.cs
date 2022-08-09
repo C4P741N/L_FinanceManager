@@ -10,21 +10,18 @@ namespace DataAndStatistics
     public class DataMazematics
     {
         public void BeginMazematics(DataAndStatisticsProp vstuff,
-                                    ref double dvBalance,
                                     ref double dvCashBalance,
                                     ref double dvFulizaAmount,
                                     ref double dvFulizaCharge,
                                     ref double dvFulizaAmountPaid)
         {
             xx_StartDataMazematics(vstuff,
-                                    ref dvBalance,
                                     ref dvCashBalance,
                                     ref dvFulizaAmount,
                                     ref dvFulizaCharge,
                                     ref dvFulizaAmountPaid);
         }
-        private void xx_StartDataMazematics(DataAndStatisticsProp vstuff, 
-                                            ref double dvBalance,
+        private void xx_StartDataMazematics(DataAndStatisticsProp vstuff,
                                             ref double dvCashBalance,
                                             ref double dvFulizaAmount,
                                             ref double dvFulizaCharge,
@@ -38,8 +35,7 @@ namespace DataAndStatistics
                 case "airtime":
                 case "Withdraw":
                 case "received":
-                    xx_AmountSpent(vstuff,
-                                    ref dvBalance,
+                    xx_AmountSpentAndReceived(vstuff,
                                     ref dvCashBalance);
                     break;
                 case "borrowed":
@@ -51,20 +47,14 @@ namespace DataAndStatistics
             }
         }
 
-        private DataAndStatisticsProp xx_AmountSpent(DataAndStatisticsProp val, 
-                                                    ref double dvBalance,
+        private DataAndStatisticsProp xx_AmountSpentAndReceived(DataAndStatisticsProp val,
                                                     ref double dvCashBalance)
         {
-            string StrBalance = val.Balance;
             string StrCashAmount = val.CashAmount;
-
-            double dBalance = Convert.ToDouble(StrBalance);
             double dCashBalance = Convert.ToDouble(StrCashAmount);
-
-            dvBalance = dBalance;
             dvCashBalance = dCashBalance;
 
-            Debug.WriteLine(dvBalance+" = "+dvCashBalance);
+                Debug.WriteLine(" = "+dvCashBalance);
 
             return val;
         }

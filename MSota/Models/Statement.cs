@@ -2,8 +2,10 @@
 {
     public class Statement
     {
-        public int AmountReceived { get; set; }
-        public int AmountBorrrowed { get; set; }
-        public int AmountSpent { get; set; }
+        public double AmountReceived { get; set; }
+        public double AmountSpent { get; set; }
+        public double FulizaAmount { get; set; }
+        public double FulizaCharge { get; set; }
+        public double FulizaAmountPaid { get; set; }
     }
 }
