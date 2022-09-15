@@ -36,7 +36,7 @@ namespace ExtensibleMarkupAtLarge
         public string Quota { get; set; }
         public double FulizaLimit { get; set; }
         public double FulizaBorrowed { get; set; }
-        public double FulizaCharge { get; set; }
+        public double Charges { get; set; }
         public double FulizaAmount { get; set; }
     }
 }

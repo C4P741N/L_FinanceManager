@@ -36,8 +36,8 @@ namespace DataAndStatistics
                                                                                         double dCashBalance = 0;
                                                                                         double dvFulizaAmount = 0;
                                                                                         double dFulizaAmount = 0;
-                                                                                        double dvFulizaCharge = 0;
-                                                                                        double dFulizaCharge = 0;
+                                                                                        double dvCharges = 0;
+                                                                                        double dCharges = 0;
                                                                                         double dvFulizaAmountPaid = 0;
                                                                                         double dFulizaAmountPaid = 0;
 
@@ -50,7 +50,7 @@ namespace DataAndStatistics
                 math.BeginMazematics(stuff,
                                     ref dvCashBalance,
                                     ref dvFulizaAmount,
-                                    ref dvFulizaCharge,
+                                    ref dvCharges,
                                     ref dvFulizaAmountPaid);
 
                 bSpent = stuff.TransactionStatus != "received";
@@ -64,13 +64,13 @@ namespace DataAndStatistics
                     dCashReceived += dvCashBalance;
                 }
                 dFulizaAmount       +=  dvFulizaAmount;
-                dFulizaCharge       +=  dvFulizaCharge;
+                dCharges            += dvCharges;
                 dFulizaAmountPaid   +=  dvFulizaAmountPaid;
             }
-            uisprop.CashReceived        = math.RoundingOf(dCashSpent);
-            uisprop.CashSpent           = math.RoundingOf(dCashReceived);
+            uisprop.CashSpent           = math.RoundingOf(dCashSpent);
+            uisprop.CashReceived        = math.RoundingOf(dCashReceived);
             uisprop.FulizaAmount        = math.RoundingOf(dFulizaAmount);
-            uisprop.FulizaCharge        = math.RoundingOf(dFulizaCharge);
+            uisprop.FulizaCharge        = math.RoundingOf(dCharges);
             uisprop.FulizaAmountPaid    = math.RoundingOf(dFulizaAmountPaid);
 
         }
@@ -82,10 +82,12 @@ namespace DataAndStatistics
 
             if (Stats != null)
             {
-                var prop = new DataAndStatisticsProp();
+                //var prop = new DataAndStatisticsProp();
 
                 foreach (var stat in Stats)
                 {
+                    var prop = new DataAndStatisticsProp();
+
                     prop.Code = stat.Code;
                     prop.Date = stat.Date;
                     prop.RecepientName = stat.RecepientName;

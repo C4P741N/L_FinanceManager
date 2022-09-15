@@ -190,7 +190,7 @@ namespace ExtensibleMarkupAtLarge
                                 + " = " + message.RName
                                 + " = " + message.TransactionStatus
                                 + " = " + message.FulizaAmount
-                                + " = " + message.FulizaCharge
+                                + " = " + message.Charges
                                 + " = " + message.FulizaBorrowed);
             }
             return message;
@@ -219,6 +219,7 @@ namespace ExtensibleMarkupAtLarge
                 //var regCash = new Regex(@"received(\b(.*)(\s+from))");
                 var regCash = new Regex(string.Format(@"{0}(\b(.*)(\s+{1}))", vStatus[0], vStatus[1]));
                 var regBalance = new Regex(@"balance is(\s\b(.*)\D)");
+                var regCostings = new Regex(@"Transaction cost,(\s\b(.*)\D)");
                 var regDate = new Regex(@"on(\b(.*)(\s+at))");
                 var regRName = new Regex(string.Format(@"{0}(\b(.*)(\s)\b(on|in)(\s.*\w\s))", vStatus[2]));
 
@@ -246,6 +247,15 @@ namespace ExtensibleMarkupAtLarge
 
                 vmessage.RName = BodyToValueArray(szvBody, regRName)[1] + " " + BodyToValueArray(szvBody, regRName)[2] + " " + BodyToValueArray(szvBody, regRName)[3];
                 vmessage.Balance = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regBalance)[2]));
+                if (szvID != "received")
+                {
+                    if (vmessage.Charges > 0)
+                    {
+
+                    }
+
+                    vmessage.Charges = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regCostings)[2]));
+                }
                 vmessage.Code = wordsArray[0];
                 vmessage.TransactionStatus = szvID;
                 vmessage.RDate = BodyToValueArray(szvBody, regDate)[1];
@@ -334,7 +344,7 @@ namespace ExtensibleMarkupAtLarge
                     var regFulizaDebt = new Regex(@"outstanding amount is (\b(.*)(\s)\b(due))");
 
                     vmessage.FulizaAmount = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaAmount)[1]));
-                    vmessage.FulizaCharge = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaCharge)[2]));
+                    vmessage.Charges = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaCharge)[2]));
                     vmessage.FulizaBorrowed = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaDebt)[4]));
                 }
                 if (extraCheck)

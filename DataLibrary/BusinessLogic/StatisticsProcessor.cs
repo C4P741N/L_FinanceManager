@@ -55,7 +55,7 @@ namespace DataLibrary.BusinessLogic
                                     + "'" + prop.Quota + "',"
                                     + "'" + prop.FulizaLimit + "',"
                                     + "'" + prop.FulizaBorrowed + "',"
-                                    + "'" + prop.FulizaCharge + "',"
+                                    + "'" + prop.Charges + "',"
                                     + "'" + prop.FulizaAmount + "'"
 
                                     ;

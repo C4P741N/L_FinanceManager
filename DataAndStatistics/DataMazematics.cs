@@ -12,19 +12,19 @@ namespace DataAndStatistics
         public void BeginMazematics(DataAndStatisticsProp vstuff,
                                     ref double dvCashBalance,
                                     ref double dvFulizaAmount,
-                                    ref double dvFulizaCharge,
+                                    ref double dvCharges,
                                     ref double dvFulizaAmountPaid)
         {
             xx_StartDataMazematics(vstuff,
                                     ref dvCashBalance,
                                     ref dvFulizaAmount,
-                                    ref dvFulizaCharge,
+                                    ref dvCharges,
                                     ref dvFulizaAmountPaid);
         }
         private void xx_StartDataMazematics(DataAndStatisticsProp vstuff,
                                             ref double dvCashBalance,
                                             ref double dvFulizaAmount,
-                                            ref double dvFulizaCharge,
+                                            ref double dvCharges,
                                             ref double dvFulizaAmountPaid)
         {
             switch (vstuff.TransactionStatus)
@@ -41,7 +41,7 @@ namespace DataAndStatistics
                 case "borrowed":
                     xx_AmountBorrowed(vstuff,
                                       ref dvFulizaAmount,
-                                      ref dvFulizaCharge,
+                                      ref dvCharges,
                                       ref dvFulizaAmountPaid);
                     break;
             }
@@ -53,8 +53,6 @@ namespace DataAndStatistics
             string StrCashAmount = val.CashAmount;
             double dCashBalance = Convert.ToDouble(StrCashAmount);
             dvCashBalance = dCashBalance;
-
-                Debug.WriteLine(" = "+dvCashBalance);
 
             return val;
         }
@@ -90,7 +88,7 @@ namespace DataAndStatistics
 
                 dvFulizaAmountPaid = dFulizaAmountPaid;
             }
-            Debug.WriteLine(dvFulizaAmount + " = " + dvFulizaCharge +" = "+ dvFulizaAmountPaid);
+            //Debug.WriteLine(dvFulizaAmount + " = " + dvFulizaCharge +" = "+ dvFulizaAmountPaid);
 
             return val;
         }
