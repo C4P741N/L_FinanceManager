@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MSota.Models;
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using DataLibrary;
+using static DataLibrary.BusinessLogic.StatisticsProcessor;
+using static BaseCommands.B_BaseCommands;
+using DataAndStatistics;
 
 namespace MSota.Controllers
 {
@@ -12,24 +17,62 @@ namespace MSota.Controllers
         {
             _logger = logger;
         }
+
         public IActionResult Index()
         {
-            //client.Getmessage
+            //AddStatisticsToDb();
 
             return View();
         }
 
-        //[HttpPost]
-        public ActionResult ExtractAndAddDataOnClick()
-        {
-
-            return View();
-
-        }
-        //[HttpPost]
         public IActionResult Privacy()
         {
+
             return View();
+        }
+
+        public IActionResult DataAndStatistics()
+        {
+
+            return View();
+        }
+
+        public IActionResult InsertDataAndStatisticsIf()
+        {
+            BeginDataInsertIf();
+
+            return ViewDataAndStatistics();
+        }
+        public IActionResult ViewDataAndStatistics()
+        {
+            ViewBag.Message = "Statistics List";
+
+            U_StatisticsProp statprop = null;
+
+            BeginLaunchOfStuffToGetData(ref statprop);
+
+            var statistics = new List<StatisticsModel>();
+
+            statistics.Add(new StatisticsModel
+            {
+                AmountBorrowed = statprop.FulizaAmount,
+                AmountCharged = statprop.FulizaCharge,
+                AmountReceived = statprop.CashReceived,
+                AmountSpent = statprop.CashSpent
+            });
+
+            //foreach (var row in data)
+            //{
+            //    statistics.Add(new StatisticsModel
+            //    {
+            //        AmountBorrowed = row.AmountBorrowed,
+            //        AmountCharged = row.AmountCharged,
+            //        AmountReceived = row.AmountReceived,
+            //        AmountSpent = row.AmountSpent
+            //    });
+            //}
+
+            return View(statistics);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

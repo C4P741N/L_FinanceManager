@@ -4,21 +4,22 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DBConnection;
+//using DBConnection;
 using Microsoft.Data.SqlClient;
+using static DataLibrary.BusinessLogic.StatisticsProcessor;
 
 namespace DataAndStatistics
 {
     public class VariablesFormater
     {
         private DataAndStatisticsProp oDsp = null;
-        private DBRecordGet oDbget = null;
-        private SqlDataReader oReader = null;
+        //private DBRecordGet oDbget = null;
+        //private SqlDataReader oReader = null;
         private DataMazematics math = null;
         private U_StatisticsProp uisprop = null;
         public void BeginFormatingVariables(ref U_StatisticsProp uisprop)
         {
-            oDbget = new DBRecordGet();
+            //oDbget = new DBRecordGet();
             oDsp = new DataAndStatisticsProp();
             math = new DataMazematics();
             uisprop = new U_StatisticsProp();
@@ -75,46 +76,46 @@ namespace DataAndStatistics
         }
         private List<DataAndStatisticsProp> xx_Stuf()
         {
-            List<DataAndStatisticsProp> oDataVal = new List<DataAndStatisticsProp>();
+            var oDataVal = new List<DataAndStatisticsProp>();
 
-            oDbget.BeginGetDataAndStuff(ref oReader);
+            var Stats = LoadStatistics();
 
-            if (oReader.HasRows)
+            if (Stats != null)
             {
-                while (oReader.Read())
-                {
-                    DataAndStatisticsProp prop = new DataAndStatisticsProp();
+                var prop = new DataAndStatisticsProp();
 
-                    prop.Code               =   oReader["Code"].ToString();
-                    prop.Date               =   oReader["M_Date"].ToString();
-                    prop.RecepientName      =   oReader["M_RecepientName"].ToString();
-                    prop.RecepientPhoneNo   =   oReader["M_RecepientPhoneNo"].ToString();
-                    prop.RecepientDate      =   oReader["M_RecepientDate"].ToString();
-                    prop.RecepientAccNo     =   oReader["M_RecepientAccNo"].ToString();
-                    prop.CashAmount         =   oReader["M_CashAmount"].ToString();
-                    prop.Balance            =   oReader["M_Balance"].ToString();
-                    prop.szProtocol         =   oReader["M_szProtocol"].ToString();
-                    prop.TransactionStatus  =   oReader["M_TransactionStatus"].ToString();
-                    prop.TransactionCost    =   oReader["M_TransactionCost"].ToString();
-                    prop.Address            =   oReader["M_Address"].ToString();
-                    prop.Type               =   oReader["M_Type"].ToString();
-                    prop.Subject            =   oReader["M_Subject"].ToString();
-                    prop.Body               =   oReader["M_Body"].ToString();
-                    prop.Toa                =   oReader["M_Toa"].ToString();
-                    prop.Sc_toa             =   oReader["M_Sc_toa"].ToString();
-                    prop.Service_center     =   oReader["M_Service_center"].ToString();
-                    prop.Read               =   oReader["M_Read"].ToString();
-                    prop.Locked             =   oReader["M_Locked"].ToString();
-                    prop.Date_sent          =   oReader["M_Date_sent"].ToString();
-                    prop.Status             =   oReader["M_Status"].ToString();
-                    prop.Sub_id             =   oReader["M_Sub_id"].ToString();
-                    prop.Readable_date      =   oReader["M_Readable_date"].ToString();
-                    prop.szContact_name     =   oReader["M_szContact_name"].ToString();
-                    prop.Quota              =   oReader["M_Quota"].ToString();
-                    prop.FulizaLimit        =   oReader["M_FulizaLimit"].ToString();
-                    prop.FulizaBorrowed     =   oReader["M_FulizaBorrowed"].ToString();
-                    prop.FulizaCharge       =   oReader["M_FulizaCharge"].ToString();
-                    prop.FulizaAmount       =   oReader["M_FulizaAmount"].ToString();
+                foreach (var stat in Stats)
+                {
+                    prop.Code = stat.Code;
+                    prop.Date = stat.Date;
+                    prop.RecepientName = stat.RecepientName;
+                    prop.RecepientPhoneNo = stat.RecepientPhoneNo;
+                    prop.RecepientDate = stat.RecepientDate;
+                    prop.RecepientAccNo = stat.RecepientAccNo;
+                    prop.CashAmount = stat.CashAmount;
+                    prop.Balance = stat.Balance;
+                    prop.szProtocol = stat.szProtocol;
+                    prop.TransactionStatus = stat.TransactionStatus;
+                    prop.TransactionCost = stat.TransactionCost;
+                    prop.Address = stat.Address;
+                    prop.Type = stat.Type;
+                    prop.Subject = stat.Subject;
+                    prop.Body = stat.Body;
+                    prop.Toa = stat.Toa;
+                    prop.Sc_toa = stat.Sc_toa;
+                    prop.Service_center = stat.Service_center;
+                    prop.Read = stat.M_Read;
+                    prop.Locked = stat.Locked;
+                    prop.Date_sent = stat.Date_sent;
+                    prop.Status = stat.Status;
+                    prop.Sub_id = stat.Sub_id;
+                    prop.Readable_date = stat.Readable_date;
+                    prop.szContact_name = stat.szContact_name;
+                    prop.Quota = stat.Quota;
+                    prop.FulizaLimit = stat.FulizaLimit;
+                    prop.FulizaBorrowed = stat.FulizaBorrowed;
+                    prop.FulizaCharge = stat.FulizaCharge;
+                    prop.FulizaAmount = stat.FulizaAmount;
 
                     oDataVal.Add(prop);
                 }

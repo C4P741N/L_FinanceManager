@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[Ms_DuplicateChecker]
+﻿CREATE PROCEDURE [dbo].[Ms_DuplicateChecker]
 (
 @szCode						nvarchar(250),
 @szDate						nvarchar(250),
@@ -39,7 +39,7 @@ BEGIN
 	DECLARE @dCode					NVARCHAR(253)
 	DECLARE @dM_TransactionStatus	NVARCHAR(253)
 
-MERGE INTO [MSota].[dbo].[Ms_Collection]
+MERGE INTO [DB_MSota].[dbo].[Ms_Collection]
 
 USING
 (values(

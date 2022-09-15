@@ -8,7 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAndStatistics\DataAndStatistics.csproj" />
-    <ProjectReference Include="..\DBConnection\DBConnection.csproj" />
+    <ProjectReference Include="..\DataLibrary\DataLibrary.csproj" />
+    <!--<ProjectReference Include="..\DBConnection\DBConnection.csproj" />-->
     <ProjectReference Include="..\ExtensibleMarkupAtLarge\ExtensibleMarkupAtLarge.csproj" />
   </ItemGroup>
 
