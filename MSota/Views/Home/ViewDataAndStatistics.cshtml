@@ -30,16 +30,16 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td id="number1">
                 @Html.DisplayFor(modelItem => item.AmountSpent)
             </td>
-            <td>
+            <td id="number2">
                 @Html.DisplayFor(modelItem => item.AmountReceived)
             </td>
-            <td>
+            <td id="number3">
                 @Html.DisplayFor(modelItem => item.AmountBorrowed)
             </td>
-            <td>
+            <td id="number4">
                 @Html.DisplayFor(modelItem => item.AmountCharged)
             </td>
             @*<td>
