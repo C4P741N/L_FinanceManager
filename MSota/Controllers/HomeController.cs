@@ -61,7 +61,7 @@ namespace MSota.Controllers
                 AmountSpent = statprop.CashSpent
             });
 
-            //foreach (var row in data)
+            //foreach (var row in data) //Useful for list row
             //{
             //    statistics.Add(new StatisticsModel
             //    {
