@@ -3,13 +3,16 @@
 @{
     ViewData["Title"] = "ViewDataAndStatistics";
 }
-
-<h1>Statistics</h1>
+@*<script src="~/js/site.js" asp-append-version="true"></script>*@
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<h1 class="p-5">Statistics</h1>
 
 @*<p>
     <a asp-action="Create">Create New</a>
 </p>*@
-<table class="table">
+
+
+@*<table class="container">
     <thead>
         <tr>
             <th>
@@ -30,6 +33,8 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+
+
             <td id="number1">
                 @Html.DisplayFor(modelItem => item.AmountSpent)
             </td>
@@ -47,7 +52,73 @@
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>*@
-        </tr>
+@*        </tr>
 }
     </tbody>
-</table>
+</table>*@
+
+
+
+
+<div class="container text-center position-absolute start-50 translate-middle p-3">
+
+    <div class="d-flex flex-nowrap bd-highlight fs-3">
+            <div class="order-1 mx-auto">
+                @Html.DisplayNameFor(model => model.AmountSpent)
+            </div>
+            <div class="order-2 mx-auto">
+                @Html.DisplayNameFor(model => model.AmountReceived)
+            </div>
+            <div class="order-3 mx-auto">
+                @Html.DisplayNameFor(model => model.AmountBorrowed)
+            </div>
+            <div class="order-4 mx-auto">
+                @Html.DisplayNameFor(model => model.AmountCharged)
+            </div>
+    </div>
+
+@foreach (var item in Model) {
+        <div class="d-flex flex-nowrap bd-highlight fs-4 fw-light">
+
+            <div id="number1" class="mx-auto">
+                @Html.DisplayFor(modelItem => item.AmountSpent)
+            </div>
+            <div id="number2" class="mx-auto">
+                @Html.DisplayFor(modelItem => item.AmountReceived)
+            </div>
+            <div id="number3" class="mx-auto">
+                @Html.DisplayFor(modelItem => item.AmountBorrowed)
+            </div>
+            <div id="number4" class="mx-auto">
+                @Html.DisplayFor(modelItem => item.AmountCharged)
+            </div>
+            @*<td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>*@
+        </div>
+}
+   
+</div>
+
+@*<p class="container position-absolute start-50 align-middle p-5 m-5">Your Monthly Expenditure</p>
+*@
+
+<h3 class="p-5 d-flex">Previous Month's Expenditure</h3>
+
+@*@foreach (var item in Model) {
+        <div class="d-flex flex-nowrap bd-highlight fs-4 fw-light">
+
+            <div id="number1" class="mx-auto">
+                @Html.DisplayFor(modelItem => item.ReceipientNames)
+            </div>
+            <div id="number2" class="mx-auto">
+                @Html.DisplayFor(modelItem => item.AmountSpentOnReceipient)
+            </div>
+            <div id="number3" class="mx-auto">
+                @Html.DisplayFor(modelItem => item.DateAmountWasSpentOnReceipient)
+            </div>
+
+        </div>
+}*@

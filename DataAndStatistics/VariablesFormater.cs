@@ -53,6 +53,8 @@ namespace DataAndStatistics
                                     ref dvCharges,
                                     ref dvFulizaAmountPaid);
 
+                xx_GetListOfRecepientsAndData(stuff);
+
                 bSpent = stuff.TransactionStatus != "received";
               
                 if (bSpent) 
@@ -72,6 +74,11 @@ namespace DataAndStatistics
             uisprop.FulizaAmount        = math.RoundingOf(dFulizaAmount);
             uisprop.FulizaCharge        = math.RoundingOf(dCharges);
             uisprop.FulizaAmountPaid    = math.RoundingOf(dFulizaAmountPaid);
+
+        }
+
+        private void xx_GetListOfRecepientsAndData(DataAndStatisticsProp stuff)
+        {
 
         }
         private List<DataAndStatisticsProp> xx_Stuf()
