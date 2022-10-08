@@ -3,10 +3,10 @@
 
 // Write your JavaScript code.
 
-var spent = setInterval(AmountSpent, 10)
-var received = setInterval(AmountReceived, 10)
-var borrow = setInterval(AmountBorrowed, 1)
-var charged = setInterval(AmountCharged, 1)
+var spent = setInterval(AmountSpent, 2000)
+var received = setInterval(AmountReceived, 200)
+var borrow = setInterval(AmountBorrowed, 500)
+var charged = setInterval(AmountCharged, 1/1000000)
 
 
 

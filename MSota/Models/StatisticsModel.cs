@@ -4,16 +4,23 @@ namespace MSota.Models
 {
     public class StatisticsModel
     {
-        [Display(Name = "Amount Spent")]
+        [Display(Name = "Spent")]
         public double AmountSpent { get; set; }
 
-        [Display(Name = "Amount Received")]
+        [Display(Name = "Received")]
         public double AmountReceived { get; set; }
 
-        [Display(Name = "Amount Borrowed")]
+        [Display(Name = "Borrowed")]
         public double AmountBorrowed { get; set; }
 
-        [Display(Name = "Amount Charged")]
+        [Display(Name = "Charged")]
         public double AmountCharged { get; set; }
+
+        [Display(Name = "Receipient Names")]
+        public double ListReceipientNames { get; set; }
+        [Display(Name = "Amount Spent On Receipient")]
+        public double ListAmountSpentOnReceipient { get; set; }
+        [Display(Name = "Date Amount WasSpent On Receipient")]
+        public double ListDateAmountWasSpentOnReceipient { get; set; }
     }
 }

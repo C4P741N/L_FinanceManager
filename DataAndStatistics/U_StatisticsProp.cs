@@ -13,5 +13,7 @@ namespace DataAndStatistics
         public double FulizaAmount { get; set; }
         public double FulizaCharge { get; set; }
         public double FulizaAmountPaid { get; set; }
+
+        public double lReceipient { get; set; }
     }
 }
