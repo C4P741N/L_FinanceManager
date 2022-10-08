@@ -48,11 +48,11 @@ namespace DataAndStatistics
         }
 
         private DataAndStatisticsProp xx_AmountSpentAndReceived(DataAndStatisticsProp val,
-                                                    ref double dvCashBalance)
+                                                    ref double drCashBalance)
         {
             string StrCashAmount = val.CashAmount;
             double dCashBalance = Convert.ToDouble(StrCashAmount);
-            dvCashBalance = dCashBalance;
+            drCashBalance = dCashBalance;
 
             return val;
         }

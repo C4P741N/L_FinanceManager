@@ -40,8 +40,7 @@ namespace DataAndStatistics
                                                                                         double dCharges = 0;
                                                                                         double dvFulizaAmountPaid = 0;
                                                                                         double dFulizaAmountPaid = 0;
-
-            bool bSpent = false;
+                                                                                        bool bSpent = false;
 
             List<DataAndStatisticsProp> oStuffs = xx_Stuf();
 
@@ -64,7 +63,7 @@ namespace DataAndStatistics
                     dCashReceived += dvCashBalance;
                 }
                 dFulizaAmount       +=  dvFulizaAmount;
-                dCharges            += dvCharges;
+                dCharges            +=  dvCharges;
                 dFulizaAmountPaid   +=  dvFulizaAmountPaid;
             }
             uisprop.CashSpent           = math.RoundingOf(dCashSpent);
