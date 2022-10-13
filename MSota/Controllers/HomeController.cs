@@ -41,7 +41,7 @@ namespace MSota.Controllers
         {
             BeginDataInsertIf();
 
-            return ViewDataAndStatistics();
+            return View();
         }
         public IActionResult ViewDataAndStatistics()
         {
