@@ -203,14 +203,16 @@ namespace ExtensibleMarkupAtLarge
                                     string [] vStatus,
                                     string szvID)
         {
-                                                                                                string? cashAmountAfter = null;
-                                                                                                string? rNameAfter = null;
-                                                                                                string? cashBalanceAfter = null;
-                                                                                                string? dateAfter = null;
+                                                                                                string szCashAmountAfter = string.Empty;
+                                                                                                string szNameAfter = string.Empty;
+                                                                                                string szCashBalanceAfter = string.Empty;
+                                                                                                string szDateAfter = string.Empty;
+                                                                                                string szPhoneNoAfter = string.Empty;
                                                                                                 string[]? SzACashAmount = null;
                                                                                                 string[]? SzACashBalance = null;
                                                                                                 string[]? SzADate = null;
                                                                                                 string[]? SzARName = null;
+                                                                                                string[]? SzAPhoneNo = null;
 
             List<X_XMLProperties> xml_prop = new List<X_XMLProperties>();
 
@@ -222,8 +224,11 @@ namespace ExtensibleMarkupAtLarge
                 var regCostings = new Regex(@"Transaction cost,(\s\b(.*)\D)");
                 var regDate = new Regex(@"on(\b(.*)(\s+at))");
                 var regRName = new Regex(string.Format(@"{0}(\b(.*)(\s)\b(on|in)(\s.*\w\s))", vStatus[2]));
-
                 var regPayPall = new Regex(@"via(\b(.*)(\s)\b(on|in)(\s.*\w\s))");
+
+                var regRPhoneNo254 = new Regex(@"254((.*)(\s+)on(.*)(\s+)at)");
+                var regRPhoneNo07 = new Regex(@"07((.*)(\s+on))");
+                var regRAccountNo = new Regex(@"account((.*)(\s+)on)");
 
                 var rNameBefore = regRName.Matches(szvBody);
 
@@ -232,15 +237,27 @@ namespace ExtensibleMarkupAtLarge
 
                 try
                 {
-                    rNameAfter = rNameBefore[0].Value;
+                    try
+                    {
+                        var rRPhoneNo07 = regRPhoneNo07.Matches(szvBody);
+                        szPhoneNoAfter = rRPhoneNo07[0].Value;
+                        szNameAfter = rNameBefore[0].Value;
+                    }
+                    catch (Exception ex)
+                    {
+                        var rRPhoneNo254 = regRPhoneNo254.Matches(szvBody);
+                        szPhoneNoAfter = rRPhoneNo254[0].Value;
+                        szNameAfter = "Null Null Null Null";
+                    }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-
-                    rNameAfter = "Null Null Null Null";
+                    var rRAccountNo = regRAccountNo.Matches(szvBody);
+                    szPhoneNoAfter = rRAccountNo[0].Value;
                 }
 
-                SzARName = rNameAfter.Split(' ');
+                SzARName = szNameAfter.Split(' ');
+                SzAPhoneNo = szPhoneNoAfter.Split(' ');
 
                 //Regex r = new Regex("\\s+");
                 //SzARName[1] = r.Replace(SzARName[1], "");
@@ -260,12 +277,14 @@ namespace ExtensibleMarkupAtLarge
                 vmessage.TransactionStatus = szvID;
                 vmessage.RDate = BodyToValueArray(szvBody, regDate)[1];
                 vmessage.CashAmount = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regCash)[1]));
+                vmessage.RPhoneNo = SzAPhoneNo[0];
 
 
                 switch (szvID)
                 {
                     case "Paybill":
                         vmessage.RAccNo = SzARName[1];
+                        vmessage.RPhoneNo = SzAPhoneNo[1];
                         break;
                     case "airtime":
                         if (SzARName[1] == "on")
