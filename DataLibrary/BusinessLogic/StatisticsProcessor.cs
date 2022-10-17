@@ -65,7 +65,7 @@ namespace DataLibrary.BusinessLogic
                 }
                 catch (Exception ex)
                 {
-                    Exception exe = exception;
+                    Exception exe = ex;
 
                     throw exe;
                 }

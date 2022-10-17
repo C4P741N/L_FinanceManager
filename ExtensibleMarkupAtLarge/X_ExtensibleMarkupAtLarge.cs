@@ -15,8 +15,9 @@ namespace ExtensibleMarkupAtLarge
         private string szDocPath = @"F:\_notTemp\Proj\MSota\sms-20220711200832.xml";
 		private string szDocPath2 = @"D:\_notTemp\Proj\MSota\sms-20220711200832.xml";
 		private string szDocPath3 = @"C:\Users\danco\source\repos\MSota\sms-20220711200832.xml";
+        private string szDocPath4 = @"G:\_notTemp\Proj\MSota\sms-20220711200832.xml";
 
-		public void BeginGetXMLValues(ref List<X_XMLProperties> x_prop)
+        public void BeginGetXMLValues(ref List<X_XMLProperties> x_prop)
         {
 			xx_InitialitzeStuff();
 			xx_BeginRetrivingXMLFileAndGettingValues(ref x_prop);
@@ -62,16 +63,24 @@ namespace ExtensibleMarkupAtLarge
 			{
 				try
 				{
-					sr = new System.IO.StreamReader(szDocPath);
+					try
+					{
+						sr = new System.IO.StreamReader(szDocPath);
+					}
+					catch (Exception)
+					{
+						sr = new System.IO.StreamReader(szDocPath2);
+					}
 				}
 				catch (Exception)
 				{
-					sr = new System.IO.StreamReader(szDocPath2);
+					sr = new System.IO.StreamReader(szDocPath3);
 				}
 			}
 			catch (Exception)
 			{
-				sr = new System.IO.StreamReader(szDocPath3);
+
+                sr = new System.IO.StreamReader(szDocPath4); ;
 			}
 		}
 		private List<X_XMLProperties>  xx_MessageListFromXML()
