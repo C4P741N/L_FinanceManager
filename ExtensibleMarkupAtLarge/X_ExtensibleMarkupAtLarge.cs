@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Diagnostics;
+using System.Xml;
 //using StringFormaterAtLarge;
 
 namespace ExtensibleMarkupAtLarge
@@ -42,11 +43,13 @@ namespace ExtensibleMarkupAtLarge
 						x_prop.Add(lsMessage);
 					}
 				}
+
 				if (lsMessage.szAddress == "KCB")
 				{
                     xfts.BeginKCBFormatToString(lsMessage);
-                    //x_prop.Add(lsMessage);
-                }
+
+					//x_prop.Add(lsMessage);
+				}
 			}
 		}
 		private void xx_InitialitzeStuff()

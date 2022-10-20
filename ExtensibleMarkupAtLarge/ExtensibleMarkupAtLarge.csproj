@@ -14,4 +14,8 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Z_Formaters\Z_Formaters.csproj" />
+  </ItemGroup>
+
 </Project>

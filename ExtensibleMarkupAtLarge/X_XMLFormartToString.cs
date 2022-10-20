@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,60 +11,94 @@ namespace ExtensibleMarkupAtLarge
 {
     class X_XMLFormartToString
     {
+        private Z_Formaters.Formaters xFormat = null;
         public void BeginKCBFormatToString(X_XMLProperties message)
         {
+            xFormat = new Z_Formaters.Formaters();
+
             _ExtractBodyForKCB(message);
         }
         private X_XMLProperties _ExtractBodyForKCB(X_XMLProperties message)
         {
+            string szBody = message.szBody;
 
+            while (true)
+            {
+                string[] wordsArray = szBody.Split(' ');
+                string[]? status = new string[2];
+
+                
+
+                if (szBody.Contains("sent to"))
+                {
+                    status[0] = "";
+                    status[1] = "sent";
+
+                    message.CashAmount = xFormat.GetCashAmount(szBody, status);
+                    message.RAccNo = xFormat.GetAccountNumber(szBody);
+                    message.RDate = xFormat.GetDate(szBody);
+                    message.Code = xFormat.GetMpesaCode(szBody);
+                    message.TransactionStatus = "Payment";
+
+                    if (szBody.Contains("Pay Bill"))
+                    {
+                        message.Quota = "Pay Bill Payment";
+                        message.RPhoneNo = xFormat.GetPayBillNo(szBody);
+                    }
+
+                    break;
+                }
+                if (szBody.Contains("has transfered"))
+                {
+                    status[0] = "KES";
+                    status[1] = "to";
+
+                    message.TransactionStatus = "received";
+                    message.Quota = "Deposit";
+
+                    message.CashAmount = xFormat.GetCashAmount(szBody, status);
+                    message.RName = xFormat.GetKCBContactName(szBody);
+
+                }
+
+
+                break;
+            }
 
             return message;
         }
         public void BeginMPESAFormatToString(X_XMLProperties message)
         {
+            xFormat = new Z_Formaters.Formaters();
+
              _ExtractBodyForMPESA(message);
         }
 
         private X_XMLProperties _ExtractBodyForMPESA(X_XMLProperties message)
         {
                                                                                             string szBody = message.szBody;
-                                                                                            string DicedDate = string.Empty;
-                                                                                            string DicedPrice = string.Empty;
-                                                                                            string DicedBalance = string.Empty;
-                                                                                            string DicedBody = string.Empty;
-                                                                                            string DicedTransactionCost = string.Empty;
                                                                                             string szID = string.Empty;
-                                                                                            bool bCheck = false;
-                                                                                            bool bECheck = false;
-                                                                                            bool bEeCheck = false;
                                                                                             bool bWrongData = false;
                                                                                             bool bFuliza = false;
-
-            string [] status = new string[3];
+                                                                                            string [] status = new string[3];
 
             string[] wordsArray = szBody.Split(' ');
-            string[] sentencesArray = szBody.Split('.');
 
             while (true)
             {
-                if (wordsArray[0] == "Failed."  ||
-                    wordsArray[2] == "unable"   ||
-                    wordsArray[0] == "PGH2GTE60C\n[20210717;" ||
-                    wordsArray[1] == "failed,"  ||
-                    wordsArray[0] == "You"      ||
-                    wordsArray[1] == "MSISDN"   ||
-                    wordsArray[0] == "An"       ||
-                    wordsArray[4] == "balance"  && 
-                    wordsArray[5] == "was:")
+                if (szBody.Contains("Failed") ||
+                    szBody.Contains("balance was") ||
+                    szBody.Contains("currently underway") ||
+                    szBody.Contains("cancelled the transaction") ||
+                    szBody.Contains("failed"))
                 {
                     bWrongData = true;
                     break;
                 }
 
-                if (wordsArray[6] == "Paybill")
+                if (szBody.Contains("Paybill"))
                 {
-                    szID = "Paybill";
+                    szID = "paybill";
 
                     status[0] = "Confirmed";
                     status[1] = "sent";
@@ -71,7 +106,7 @@ namespace ExtensibleMarkupAtLarge
 
                     break;
                 }
-                if (wordsArray[5] == "airtime")
+                if (szBody.Contains("airtime"))
                 {
                     szID = "airtime";
 
@@ -81,7 +116,7 @@ namespace ExtensibleMarkupAtLarge
 
                     break;
                 }
-                if (wordsArray[5] == "paid" || wordsArray[3] == "paid")
+                if (szBody.Contains("paid to"))
                 {
                     szID = "paid";
 
@@ -91,13 +126,9 @@ namespace ExtensibleMarkupAtLarge
 
                     break;
                 }
-                if ( wordsArray[3] == "sent" || wordsArray[5] == "sent" || wordsArray[5] == "EASYFLOAT")
+                if (szBody.Contains("sent to") || szBody.Contains("EASYFLOAT"))
                 {
                     szID = "sent";
-                    if (wordsArray[5] == "EASYFLOAT")
-                    {
-                        szID = "airtime";
-                    }
 
                     status[0] = "Confirmed";
                     status[1] = "sent";
@@ -105,7 +136,7 @@ namespace ExtensibleMarkupAtLarge
 
                     break;
                 }
-                if (wordsArray[4] == "received" || wordsArray[3] == "received")
+                if (szBody.Contains("received"))
                 {
                     szID = "received";
 
@@ -115,12 +146,12 @@ namespace ExtensibleMarkupAtLarge
 
                     break;
                 }
-                if (wordsArray[5] == "PMWithdraw" || wordsArray[5] == "AMWithdraw")
+                if (szBody.Contains("PMWithdraw") || szBody.Contains("AMWithdraw") )
                 {
-                    szID = "Withdraw";
+                    szID = "withdraw";
 
                     status[0] = "PMWithdraw";
-                    if (wordsArray[5] == "AMWithdraw")
+                    if (szBody.Contains("AMWithdraw"))
                     {
                         status[0] = "AMWithdraw";
                     }
@@ -129,7 +160,7 @@ namespace ExtensibleMarkupAtLarge
 
                     break;
                 }
-                if (wordsArray[15] == "Fuliza" || wordsArray[2] == "Fuliza")
+                if (szBody.Contains("Fuliza"))
                 {
                     szID = "borrowed";
 
@@ -143,236 +174,95 @@ namespace ExtensibleMarkupAtLarge
                     break;
                 }
 
-                //message.Code = wordsArray[0];
-                //message.TransactionStatus = wordsArray[3];
-                //message.CashAmount = wordsArray[4];
-                //message.RName = wordsArray[6] + " " + wordsArray[8];
-                //message.RPhoneNo = wordsArray[9];
-                //message.Balance = wordsArray[20];
-                //message.RDate = wordsArray[11];
-
-                //Debug.WriteLine(message.Code
-                //            + " = " + message.TransactionStatus
-                //            + " = " + message.CashAmount
-                //            + " = " + message.RName
-                //            + " = " + message.RPhoneNo
-                //            + " = " + message.Balance
-                //            + " = " + message.RDate);
-
                 break;
             }
-            if (!bWrongData)
+            if (bWrongData == false)
             {
                 xx_RegexFilter(szBody,
                             message,
                             wordsArray,
                             status,
                             szID);
-
-                Debug.WriteLine(message.Code
-                                + " = " + message.TransactionStatus
-                                + " = " + message.RAccNo
-                                + " = " + message.RName
-                                + " = " + message.RDate
-                                + " = " + message.CashAmount
-                                + " = " + message.Balance
-                                + " = " + message.TransactionCost);
             }
-            if (bFuliza)
+            if (bFuliza == true)
             {
                 xx_FulizaLoanFormater(szBody,
                                     message,
                                     wordsArray,
-                                    status,
                                     szID);
-
-                Debug.WriteLine(message.Code
-                                + " = " + message.RName
-                                + " = " + message.TransactionStatus
-                                + " = " + message.FulizaAmount
-                                + " = " + message.Charges
-                                + " = " + message.FulizaBorrowed);
             }
             return message;
             
         }
 
-        private string xx_RegexFilter(string szvBody, 
+        private X_XMLProperties xx_RegexFilter(string szvBody, 
                                     X_XMLProperties vmessage, 
                                     string[] wordsArray, 
                                     string [] vStatus,
                                     string szvID)
         {
-                                                                                                string szCashAmountAfter = string.Empty;
-                                                                                                string szNameAfter = string.Empty;
-                                                                                                string szCashBalanceAfter = string.Empty;
-                                                                                                string szDateAfter = string.Empty;
-                                                                                                string szPhoneNoAfter = string.Empty;
-                                                                                                string[]? SzACashAmount = null;
-                                                                                                string[]? SzACashBalance = null;
-                                                                                                string[]? SzADate = null;
-                                                                                                string[]? SzARName = null;
-                                                                                                string[]? SzAPhoneNo = null;
-
-            List<X_XMLProperties> xml_prop = new List<X_XMLProperties>();
+                                                                                                bool bIsArrayNull;
+                                                                                                List<X_XMLProperties> xml_prop = new List<X_XMLProperties>();
 
             try
             {
-                //var regCash = new Regex(@"received(\b(.*)(\s+from))");
-                //var regCash = new Regex(string.Format(@"{0}(\b(.*)(\s+{1}))", vStatus[0], vStatus[1]));
-                //var regBalance = new Regex(@"balance is(\s\b(.*)\D)");
-                var regCostings = new Regex(@"Transaction cost,(\s\b(.*)\D)");
-                //var regDate = new Regex(@"on(\b(.*)(\s+at))");
-                //var regRName = new Regex(string.Format(@"{0}(\b(.*)(\s)\b(on|in)(\s.*\w\s))", vStatus[2]));
-                var regPayPall = new Regex(@"via(\b(.*)(\s)\b(on|in)(\s.*\w\s))");
-                //var regRPhoneNo254 = new Regex(@"254((.*)(\s+)on(.*)(\s+)at)");
-                //var regRPhoneNo07 = new Regex(@"\s07((.*)(\s+on))");
-                //var regRAccountNo = new Regex(@"account((.*)(\s+)on)");
-                var regWithdraw = new Regex(@"from ((.*)(\s+)New)");
-
-                //var rNameBefore = regRName.Matches(szvBody);
-                var rPayPallBefore = regPayPall.Matches(szvBody);
-                //var rRPhoneNo254 = regRPhoneNo254.Matches(szvBody);
-                //var rRPhoneNo07 = regRPhoneNo07.Matches(szvBody);
-                //var rRAccountNo = regRAccountNo.Matches(szvBody);
-                var rWithdraw = regWithdraw.Matches(szvBody);
-
-                bool bPayPall = rPayPallBefore.Count.Equals(0);
-                //bool bNameBefore = rNameBefore.Count.Equals(0);
-                //bool bRPhoneNo254 = rRPhoneNo254.Count.Equals(0);
-                //bool bRPhoneNo07 = rRPhoneNo07.Count.Equals(0);
-                //bool bRAccountNo = rRAccountNo.Count.Equals(0);
-                bool bWithdraw = rWithdraw.Count.Equals(0);
-
-
-                try
+                while (true)
                 {
-                    while (true)
+
+                    bIsArrayNull = vStatus.Contains(null);
+
+                    if (bIsArrayNull)
+                        break;
+
+                    vmessage.RName = xFormat.GetContactName(szvBody, szvID, vStatus);
+
+                    vmessage.Balance = xFormat.GetCashBalance(szvBody);
+
+                    vmessage.CashAmount = xFormat.GetCashAmount(szvBody, vStatus);
+
+                    vmessage.RAccNo = xFormat.GetAccountNumber(szvBody);
+
+                    vmessage.Charges = xFormat.GetCharges(szvBody);
+
+                    vmessage.RDate = xFormat.GetDate(szvBody);
+
+                    vmessage.RPhoneNo = xFormat.GetPhoneNumber(szvBody, szvID, vStatus).ToLower();
+
+                    vmessage.Code = wordsArray[0];
+                    vmessage.TransactionStatus = szvID;
+
+                    if (szvBody.Contains("received") || szvBody.Contains("Give"))
                     {
-                        //if (bRPhoneNo07 == false)
-                        //{
-                        //    szPhoneNoAfter = rRPhoneNo07[0].Value;
-                        //}
-                        ////if (bNameBefore == false)
-                        ////{
-                        ////    szNameAfter = rNameBefore[0].Value;
-                        ////    //szPhoneNoAfter = rNameBefore[0].Value;
-                        ////}
-                        //if (bRPhoneNo254 == false)
-                        //{
-                        //    szPhoneNoAfter = rRPhoneNo254[0].Value;
-                        //}
-                        //if (bRAccountNo == false)
-                        //{
-                        //    szPhoneNoAfter = rRAccountNo[0].Value;
-                        //}
-                        if (szvID != "received")
-                        {
-                            vmessage.Charges = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regCostings)[2]));
-                        }
-                        if (bPayPall == false)
-                        {
-                            szPhoneNoAfter = rPayPallBefore[0].Value;
-                            //szNameAfter = rNameBefore[0].Value;
-                        }
-                        if(bWithdraw == false)
-                        {
-                            szNameAfter = rWithdraw[0].Value;
-                        }
+                        vmessage.Quota = "Deposit";
+                    }
+                    if (szvBody.Contains("airtime") || 
+                        szvBody.Contains("Safaricom Limited") == true || 
+                        szvBody.Contains("Safaricom Offers") == true)
+                    {
+                        vmessage.Quota = "Airtime Purchase";
                         break;
                     }
+                    if (szvBody.Contains("sent to"))
+                    {
+                        vmessage.Quota = "Customer Transfer";
+                    }
+                    if (szvBody.Contains("withdraw") || szvID == "withdraw")
+                    {
+                        vmessage.Quota = "Withdrawal";
+                    }
+                    if (szvBody.Contains("for account"))
+                    {
+                        if (szvBody.Contains("Safaricom Limited") == false || szvBody.Contains("Safaricom Offers") == false)
+                        {
+                            vmessage.Quota = "Pay Bill Payment";
+                        }
+                    }
+                    if (szvBody.Contains("paid to"))
+                    {
+                        vmessage.Quota = "Merchant Payment";
+                    }
 
-                    //SzARName = szNameAfter.Split(' ');
-                    SzAPhoneNo = szPhoneNoAfter.Split(' ');
-                }
-                catch (Exception)
-                {
-
-                }
-                
-
-                vmessage.RName = GetContactName(szvBody, szvID);
-
-                vmessage.Balance = GetCashBalance(szvBody);
-
-                vmessage.CashAmount = GetCashAmount(szvBody, vStatus);
-
-                vmessage.RDate = GetDate(szvBody);
-
-                vmessage.RPhoneNo = GetPhoneNumber(szvBody, szvID);
-
-                vmessage.Code = wordsArray[0];
-                vmessage.TransactionStatus = szvID;
-
-                ////Regex r = new Regex("\\s+");
-                ////SzARName[1] = r.Replace(SzARName[1], "");
-
-                //vmessage.CashAmount = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regCash)[1]));
-                //if (szvID != "airtime")
-                //{
-                //    vmessage.RPhoneNo = SzAPhoneNo[1];
-                //}
-
-                //if (vmessage.RPhoneNo == string.Empty)
-                //{
-                //    string[] SzAName = vmessage.RName.Split(' ');
-
-                //    string name = "";
-
-                //    foreach (string item in SzAName)
-                //    {
-                //        name = name + item;
-                //    }
-                //    vmessage.RPhoneNo = name;
-                //}
-
-
-                switch (szvID)
-                {
-                    case "paid":
-                        //vmessage.RPhoneNo = SzARName[1] + SzARName[3];
-                        break;
-                    case "Paybill":
-                        //vmessage.RAccNo = SzARName[1];
-                        //vmessage.RPhoneNo = SzARName[1];
-                        break;
-                    case "airtime":
-                        //if (SzARName[1] == "on")
-                        //{
-                        //    vmessage.RName = "airtime";
-                        //}
-                        //if (SzARName[1] == "EASYFLOAT")
-                        //{
-                        //    vmessage.Quota = SzARName[1];
-                        //}
-                        break;
-                    case "sent":
-                        //if (SzARName[1] == "SIDIAN")
-                        //{
-                        //    vmessage.Quota = SzARName[1];
-                        //}
-                        //if(SzARName[1] == "GO")
-                        //{
-                        //    vmessage.RPhoneNo = SzAPhoneNo[1];
-                        //}
-                        break;
-                    case "received":
-                        //if (SzARName[1] == "SIDIAN")
-                        //{
-                        //    vmessage.Quota = SzARName[1];
-                        //}
-                        //if (bPayPall == false)
-                        //{
-                        //    vmessage.RAccNo = SzARName[1]+ SzARName[2];
-                        //    vmessage.Quota = SzAPhoneNo[1];
-                        //    vmessage.RPhoneNo = SzARName[1]+ SzAPhoneNo[0]+SzAPhoneNo[1];
-                        //}
-                        break;
-                    case "Withdraw":
-                        //vmessage.RPhoneNo =
-                        //vmessage.RAccNo = 
-                        //vmessage.RName = SzARName[1] + " " + SzARName[2] + " " + SzARName[3] + " " + SzARName[4] + " " + SzARName[5] + " " + SzARName[6];
-                        break;
+                    break;
                 }
             }
             catch (Exception ex)
@@ -383,305 +273,54 @@ namespace ExtensibleMarkupAtLarge
 
             xml_prop.Add(vmessage);
 
-            return vStatus[0];
+            return vmessage;
         }
 
-        public string GetContactName(string szvBody, 
-                                               string szvID)
-        {
-                                                                                                        string szNameAfter = string.Empty;
-                                                                                                        string szContactName = string.Empty;
-                                                                                                        bool bIsBeforeBeforeEmpty = false;
-
-            while (true)
-            {
-                var regRName = new Regex(string.Format(@"{0}(\b(.*)(\s)\b(on|in)(\s.*\w\s))", "to"));
-
-                var rNameBefore = regRName.Matches(szvBody);
-
-                bIsBeforeBeforeEmpty = rNameBefore.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == true)
-                {
-                    break;
-                }
-
-                switch (szvID)
-                {
-                    case "Paybill":
-                        szContactName = BodyToValueArray(szvBody, regRName)[0] + " " + BodyToValueArray(szvBody, regRName)[1];
-                        break;
-                    case "airtime":
-                    case "paid":
-                    case "sent":
-                    case "received":
-                        if (BodyToValueArray(szvBody, regRName)[1] == "on")
-                        {
-                            szContactName = "Airtime Bought";
-                            //szvID = "paid";
-                            break;
-                        }
-                        if (BodyToValueArray(szvBody, regRName)[1] == "for")
-                        {
-                            szContactName = "Airtime Sent";
-                            //szvID = "sent";
-                            break;
-                        }
-                        szContactName = BodyToValueArray(szvBody, regRName)[1] + " " + BodyToValueArray(szvBody, regRName)[2];
-
-                        if (szContactName.Contains("KCB"))
-                        {
-                            szContactName = BodyToValueArray(szvBody, regRName)[1];
-                        }
-
-                        break;
-                    case "Withdraw":
-                        szContactName = "Account" + " " + BodyToValueArray(szvBody, regRName)[1];
-                        break;
-                }
-
-                break;
-            }
-            return szContactName;
-        }
-
-        public string GetPhoneNumber(string szvBody,
+        private X_XMLProperties xx_FulizaLoanFormater(string szvBody,
+                                    X_XMLProperties vmessage,
+                                    string[] wordsArray,
                                     string szvID)
         {
-            string szPhoneNo = string.Empty;
-            bool bIsBeforeBeforeEmpty = false;
+                                                                                                                bool bIsBeforeBeforeEmpty;
+                                                                                                                List<X_XMLProperties> xml_prop = new List<X_XMLProperties>();
 
-            while (true)
+            try
             {
-
-                var regRPhoneNo254 = new Regex(@"254((.*)(\s+)on(.*)(\s+)at)");
-                var regRPhoneNo07 = new Regex(@"\s07((.*)(\s+on))");
-
-                var rPhoneNo254Before = regRPhoneNo254.Matches(szvBody);
-                var rPhoneNo07Before = regRPhoneNo07.Matches(szvBody);
-
-                if (szvBody.Contains("+254"))
+                while (true)
                 {
+                    var regt = new Regex(@"Confirmed(\b(.*)(\s)\b(from))");
+                    var rBefore = regt.Matches(szvBody);
 
-                    bIsBeforeBeforeEmpty = rPhoneNo254Before.Count.Equals(0);
+                    bIsBeforeBeforeEmpty = rBefore.Count.Equals(0);
 
                     if (bIsBeforeBeforeEmpty == true)
                     {
-                        break;
+                        var regFulizaAmount = new Regex(@"Ksh(\b(.*)(\s)\b(Fee))");
+                        var regFulizaCharge = new Regex(@"charged (\b(.*)(\s)\b(Total))");
+                        var regFulizaDebt = new Regex(@"outstanding amount is (\b(.*)(\s)\b(due))");
+
+                        vmessage.FulizaAmount = Convert.ToDouble(xFormat.CashConverter(xFormat.BodyToValueArray(szvBody, regFulizaAmount)[1]));
+                        vmessage.Charges = Convert.ToDouble(xFormat.CashConverter(xFormat.BodyToValueArray(szvBody, regFulizaCharge)[2]));
+                        vmessage.FulizaBorrowed = Convert.ToDouble(xFormat.CashConverter(xFormat.BodyToValueArray(szvBody, regFulizaDebt)[4]));
+
+                        vmessage.Quota = "Fuliza Borrowed";
                     }
+                    if (bIsBeforeBeforeEmpty == false)
+                    {
+                        var regFulizaLimit = new Regex(@"M-PESA limit is (\b(.*)(\s)\b(M-PESA))");
+                        var regFulizaAmount = new Regex(@"Confirmed(\b(.*)(\s)\b(from))");
 
-                    szPhoneNo = PhoneNoConverterTo07(BodyToValueArray(szvBody, regRPhoneNo254)[0]);
+                        vmessage.FulizaLimit = Convert.ToDouble(xFormat.CashConverter(xFormat.BodyToValueArray(szvBody, regFulizaLimit)[4]));
+                        vmessage.FulizaAmount = Convert.ToDouble(xFormat.CashConverter(xFormat.BodyToValueArray(szvBody, regFulizaAmount)[2]));
+
+                        vmessage.Quota = "Fuliza Paid";
+                    }
+                    vmessage.Code = wordsArray[0];
+                    vmessage.TransactionStatus = szvID;
+                    vmessage.RName = "Fuliza";
 
                     break;
-                }
-
-                bIsBeforeBeforeEmpty = rPhoneNo07Before.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == false)
-                {
-                    szPhoneNo = BodyToValueArray(szvBody, regRPhoneNo07)[0];
-                    break;
-                }
-
-                if (szvID == "airtime")
-                {
-                    szPhoneNo = PhoneNoConverterTo07(GetAirtimeSentToNumber(szvBody));
-                    break;
-                }
-
-                if (szvBody.Contains("PayPal"))
-                {
-                    szPhoneNo = GetContactName(szvBody, szvID);
-                }
-                    
-                szPhoneNo = GetAccountNumber(szvBody);
-
-                break;
-            }
-            return szPhoneNo;
-        }
-
-        public string GetAirtimeSentToNumber(string szvBody)
-        {
-            string szAirtimeNo = string.Empty;
-            bool bIsBeforeBeforeEmpty = false;
-
-            while (true)
-            {
-                var regRAirtimeNo = new Regex(@"for(\b(.*)(\s)\b(on|in))");
-
-                var rRAirtimeNo = regRAirtimeNo.Matches(szvBody);
-
-                bIsBeforeBeforeEmpty = rRAirtimeNo.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == false)
-                {
-                    szAirtimeNo = BodyToValueArray(szvBody, regRAirtimeNo)[1];
-                }
-                break;
-            }
-            return szAirtimeNo;
-        }
-
-        public string GetAccountNumber(string szvBody)
-        {
-            string szPhoneNo = string.Empty;
-            bool bIsBeforeBeforeEmpty = false;
-
-            while (true)
-            {
-                var regRAccountNo = new Regex(@"account((.*)(\s+)on)");
-
-                var rRAccountNo = regRAccountNo.Matches(szvBody);
-
-                bIsBeforeBeforeEmpty = rRAccountNo.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == false)
-                {
-                    szPhoneNo = BodyToValueArray(szvBody, regRAccountNo)[1];
-                }
-
-                break;
-            }
-            return szPhoneNo;
-        }
-
-        public string PhoneNoConverterTo07(string szNumber)
-        {
-            string szFormatedNumber = string.Empty;
-
-            szFormatedNumber = szNumber.Remove(0, 3);
-
-            return "0" + szFormatedNumber;
-        }
-
-        public double GetCashBalance(string szvBody)
-        {
-                                                                                                    double dBalance= 0;
-                                                                                                    bool bIsBeforeBeforeEmpty = false;
-
-            while (true)
-            {
-
-                var regBalance = new Regex(@"balance is(\s\b(.*)\D)");
-
-                var rBalanceBefore = regBalance.Matches(szvBody);
-
-                bIsBeforeBeforeEmpty = rBalanceBefore.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == true)
-                {
-                    break;
-                }
-
-                dBalance = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regBalance)[2]));
-
-                break;
-            }
-            return dBalance;
-        }
-
-        public double GetCashAmount(string szvBody,
-                                              string[] vSzAStatus)
-        {
-            double dBalance = 0;
-            bool bIsBeforeBeforeEmpty = false;
-
-            while (true)
-            {
-
-                var regCash = new Regex(string.Format(@"{0}(\b(.*)(\s+{1}))", vSzAStatus[0], vSzAStatus[1]));
-
-                var rCashBefore = regCash.Matches(szvBody);
-
-                bIsBeforeBeforeEmpty = rCashBefore.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == true)
-                {
-                    break;
-                }
-
-                dBalance = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regCash)[1]));
-
-                break;
-            }
-            return dBalance;
-        }
-
-        public string GetDate(string szvBody)
-        {
-                                                                                        string szDate = string.Empty;
-                                                                                        bool bIsBeforeBeforeEmpty = false;
-
-            while (true)
-            {
-
-                var regDate = new Regex(@"on(\b(.*)(\s+at))");
-
-                var rDateBefore = regDate.Matches(szvBody);
-
-                bIsBeforeBeforeEmpty = rDateBefore.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == true)
-                {
-                    break;
-                }
-
-                szDate = BodyToValueArray(szvBody, regDate)[1]; ;
-
-                break;
-            }
-            return szDate;
-        }
-
-        private string xx_FulizaLoanFormater(string szvBody,
-                                    X_XMLProperties vmessage,
-                                    string[] wordsArray,
-                                    string[] vStatus,
-                                    string szvID)
-        {
-                                                                                        string cashFulizaAmountAfter = string.Empty;
-                                                                                        string[]? SzAFulizaAmount = null;
-                                                                                        string[]? SzAFulizaCharge = null;
-                                                                                        string[]? SzAFulizaDebt = null;
-                                                                                        string[]? SzAFulizaLimit = null;
-                                                                                        bool extraCheck = false;
-
-            List<X_XMLProperties> xml_prop = new List<X_XMLProperties>();
-
-            try
-            {
-                var regt = new Regex(@"Confirmed(\b(.*)(\s)\b(from))");
-                var caBefore = regt.Matches(szvBody);
-                extraCheck = caBefore[0].Success;
-            }
-            catch
-            {
-                extraCheck = false;
-            }
-            try
-            {
-                if (!extraCheck)
-                {
-                    var regFulizaAmount = new Regex(@"Ksh(\b(.*)(\s)\b(Fee))");
-                    var regFulizaCharge = new Regex(@"charged (\b(.*)(\s)\b(Total))");
-                    var regFulizaDebt = new Regex(@"outstanding amount is (\b(.*)(\s)\b(due))");
-
-                    vmessage.FulizaAmount = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaAmount)[1]));
-                    vmessage.Charges = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaCharge)[2]));
-                    vmessage.FulizaBorrowed = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaDebt)[4]));
-                }
-                if (extraCheck)
-                {
-                    var regFulizaLimit = new Regex(@"M-PESA limit is (\b(.*)(\s)\b(M-PESA))");
-                    var regFulizaAmount = new Regex(@"Confirmed(\b(.*)(\s)\b(from))");
-
-                    vmessage.FulizaLimit = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody,regFulizaLimit)[4]));
-                    vmessage.FulizaAmount = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regFulizaAmount)[2]));
-                }
-                vmessage.Code = wordsArray[0];
-                vmessage.TransactionStatus = szvID;
-                vmessage.RName = vmessage.Quota = "Fuliza";
+                }                
 
                 xml_prop.Add(vmessage);
             }
@@ -690,52 +329,8 @@ namespace ExtensibleMarkupAtLarge
                 var erro = ex.Message;
                 throw new Exception(erro);
             }
-            
 
-            return vStatus[0];
-        }
-
-        public string[] BodyToValueArray(string szvBody, Regex RBody)
-        {
-                                                                                        string szAmountAfter = string.Empty;
-
-            var AmountBefore = RBody.Matches(szvBody);
-            try
-            {
-                szAmountAfter = AmountBefore[0].Value;
-            }
-            catch
-            {
-                szAmountAfter = "Null Null";
-            }
-            string[] SzAmount = szAmountAfter.Split(' ');
-
-            SzAmount = SzAmount.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-
-            return SzAmount;
-        }
-
-        public string CashConverter(string vValue)
-        {
-
-                                                                                        string strFinValue = string.Empty;
-                                                                                        string strFiValue = string.Empty;
-            if (vValue.StartsWith("Ksh"))
-            {
-                string strNoKsh = vValue.Remove(0, 3);
-                string[] staNoSecondDot = strNoKsh.Split(".");
-                string strComValue = staNoSecondDot[0] + "." + staNoSecondDot[1];
-                strFinValue = strComValue.Replace(",", "");
-            }
-            else
-            {
-                string[] staNoSecondDot = vValue.Split(".");
-                string strComValue = staNoSecondDot[0] + "." + staNoSecondDot[1];
-                strFinValue = strComValue.Replace(",", "");
-            }
-            strFiValue = strFinValue;
-
-            return strFiValue;
+            return vmessage;
         }
     }
 }
