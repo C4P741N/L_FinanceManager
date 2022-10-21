@@ -10,7 +10,7 @@ namespace ExtensibleMarkupAtLarge
 		private System.IO.StreamReader sr = null;
 		private XmlAttributeCollection xmlatt = null;
         private X_XMLProperties xml_prop = null;
-        //private X_ExtensibleMarkupStructure xml_stru = null;
+        //private X_ExtensibleMarkupAtLarge xml_stru = null;
         private X_XMLFormartToString xfts = null;
 
         private string szDocPath = @"F:\_notTemp\Proj\MSota\sms-20220711200832.xml";
@@ -48,7 +48,10 @@ namespace ExtensibleMarkupAtLarge
 				{
                     xfts.BeginKCBFormatToString(lsMessage);
 
-					//x_prop.Add(lsMessage);
+					if (lsMessage.Quota != null)
+					{
+						x_prop.Add(lsMessage);
+					}
 				}
 			}
 		}

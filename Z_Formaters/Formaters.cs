@@ -21,11 +21,10 @@ namespace Z_Formaters
 
             bIsBeforeBeforeEmpty = rCostingsBefore.Count.Equals(0);
 
-            if (bIsBeforeBeforeEmpty == false)
-            {
-                dCharges = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regCostings)[2]));
-            }
-
+            if (bIsBeforeBeforeEmpty == true) return dCharges;
+            
+            dCharges = Convert.ToDouble(CashConverter(BodyToValueArray(szvBody, regCostings)[2]));
+            
             return dCharges;
         }
 
@@ -55,56 +54,57 @@ namespace Z_Formaters
             string szContactName = string.Empty;
             bool bIsBeforeBeforeEmpty = false;
 
-            while (true)
+            var regRName = new Regex(string.Format(@"{0}(\b(.*)(\s)\b(on|in)(\s.*\w\s))", SzAvStatus[2]));
+                
+            var rNameBefore = regRName.Matches(szvBody);
+                
+            bIsBeforeBeforeEmpty = rNameBefore.Count.Equals(0);
+
+            if (bIsBeforeBeforeEmpty == true) return string.Empty;
+
+            switch (szvID)
             {
-                var regRName = new Regex(string.Format(@"{0}(\b(.*)(\s)\b(on|in)(\s.*\w\s))", SzAvStatus[2]));
-                
-                var rNameBefore = regRName.Matches(szvBody);
-                
-                bIsBeforeBeforeEmpty = rNameBefore.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == true)
-                {
+                case "paybill":
+                    szContactName = BodyToValueArray(szvBody, regRName)[0] + " " + BodyToValueArray(szvBody, regRName)[1];
                     break;
-                }
-
-                switch (szvID)
-                {
-                    case "paybill":
-                        szContactName = BodyToValueArray(szvBody, regRName)[0] + " " + BodyToValueArray(szvBody, regRName)[1];
+                case "airtime":
+                case "paid":
+                case "sent":
+                case "received":
+                    if (BodyToValueArray(szvBody, regRName)[1] == "on")
+                    {
+                        szContactName = "Airtime Bought";
                         break;
-                    case "airtime":
-                    case "paid":
-                    case "sent":
-                    case "received":
-                        if (BodyToValueArray(szvBody, regRName)[1] == "on")
-                        {
-                            szContactName = "Airtime Bought";
-                            //szvID = "paid";
-                            break;
-                        }
-                        if (BodyToValueArray(szvBody, regRName)[1] == "for")
-                        {
-                            szContactName = "Airtime Sent";
-                            //szvID = "sent";
-                            break;
-                        }
-                        szContactName = BodyToValueArray(szvBody, regRName)[1] + " " + BodyToValueArray(szvBody, regRName)[2];
-
-                        if (szContactName.Contains("KCB"))
-                        {
-                            szContactName = BodyToValueArray(szvBody, regRName)[1];
-                        }
-
+                    }
+                    if (BodyToValueArray(szvBody, regRName)[1] == "for")
+                    {
+                        szContactName = "Airtime Sent";
                         break;
-                    case "withdraw":
-                        szContactName = "Account" + " " + BodyToValueArray(szvBody, regRName)[1];
-                        break;
-                }
+                    }
+                    szContactName = BodyToValueArray(szvBody, regRName)[1] + " " + BodyToValueArray(szvBody, regRName)[2];
 
-                break;
+                    if (szContactName.Contains("KCB"))
+                    {
+                        szContactName = BodyToValueArray(szvBody, regRName)[1];
+                    }
+
+                    break;
+                case "withdraw":
+                    szContactName = RNameCreatorFromAccNo(BodyToValueArray(szvBody, regRName)[1]);
+                    break;
             }
             return szContactName;
+        }
+
+        public string RNameCreatorFromAccNo(string szAccNo)
+        {
+            string szRNameAccNo = string.Empty;
+
+            if (szAccNo == null) return string.Empty;
+
+            szRNameAccNo = "account " + szAccNo;
+
+            return szRNameAccNo;
         }
 
         public string GetPhoneNumber(string szvBody,
@@ -128,10 +128,7 @@ namespace Z_Formaters
 
                     bIsBeforeBeforeEmpty = rPhoneNo254Before.Count.Equals(0);
 
-                    if (bIsBeforeBeforeEmpty == true)
-                    {
-                        break;
-                    }
+                    if (bIsBeforeBeforeEmpty == true) return string.Empty;
 
                     szPhoneNo = xx_PhoneNoConverterTo07(BodyToValueArray(szvBody, regRPhoneNo254)[0]);
 
@@ -140,7 +137,7 @@ namespace Z_Formaters
 
                 bIsBeforeBeforeEmpty = rPhoneNo07Before.Count.Equals(0);
 
-                if (bIsBeforeBeforeEmpty == false)
+                if (bIsBeforeBeforeEmpty == false) 
                 {
                     szPhoneNo = BodyToValueArray(szvBody, regRPhoneNo07)[0];
                     break;
@@ -167,12 +164,11 @@ namespace Z_Formaters
 
         public string StringSplitAndJoin(string szValue)
         {
-            if (szValue != string.Empty)
-            {
-                string[] SzASplitVal = szValue.Split(' ');
+            if (szValue == string.Empty) return string.Empty;
+            
+            string[] SzASplitVal = szValue.Split(' ');
 
-                szValue = SzASplitVal[0] + SzASplitVal[1];
-            }
+            szValue = SzASplitVal[0] + SzASplitVal[1];
 
             return szValue;
         }
@@ -182,20 +178,16 @@ namespace Z_Formaters
             string szAirtimeNo = string.Empty;
             bool bIsBeforeBeforeEmpty = false;
 
-            while (true)
-            {
-                var regRAirtimeNo = new Regex(@"for(\b(.*)(\s)\b(on|in))");
+            var regRAirtimeNo = new Regex(@"for(\b(.*)(\s)\b(on|in))");
 
-                var rRAirtimeNo = regRAirtimeNo.Matches(szvBody);
+            var rRAirtimeNo = regRAirtimeNo.Matches(szvBody);
 
-                bIsBeforeBeforeEmpty = rRAirtimeNo.Count.Equals(0);
+            bIsBeforeBeforeEmpty = rRAirtimeNo.Count.Equals(0);
 
-                if (bIsBeforeBeforeEmpty == false)
-                {
-                    szAirtimeNo = BodyToValueArray(szvBody, regRAirtimeNo)[1];
-                }
-                break;
-            }
+            if (bIsBeforeBeforeEmpty == true) return string.Empty;
+                
+            szAirtimeNo = BodyToValueArray(szvBody, regRAirtimeNo)[1];
+                
             return szAirtimeNo;
         }
 
@@ -206,35 +198,27 @@ namespace Z_Formaters
             bool bIsBeforeBeforeEmpty;
             int ignored;
 
-            while (true)
+            if (szvBody.Contains("Safaricom Limited") ||
+                szvBody.Contains("Safaricom Offers")) return string.Empty;
+
+            var regRAccountNo = new Regex(@"account((.*)(\s+)on)");
+
+            var rRAccountNo = regRAccountNo.Matches(szvBody);
+
+            bIsBeforeBeforeEmpty = rRAccountNo.Count.Equals(0);
+
+            if (bIsBeforeBeforeEmpty == true) return string.Empty;
+                
+            szPhoneNo = BodyToValueArray(szvBody, regRAccountNo)[1];
+            szIsPhoneNo = BodyToValueArray(szvBody, regRAccountNo)[2];
+
+            bool isInt = int.TryParse(szIsPhoneNo, out ignored);
+
+            if (isInt)
             {
-                if (szvBody.Contains("Safaricom Limited") ||
-                    szvBody.Contains("Safaricom Offers"))
-                {
-                    break;
-                }
-
-                var regRAccountNo = new Regex(@"account((.*)(\s+)on)");
-
-                var rRAccountNo = regRAccountNo.Matches(szvBody);
-
-                bIsBeforeBeforeEmpty = rRAccountNo.Count.Equals(0);
-
-                if (bIsBeforeBeforeEmpty == false)
-                {
-                    szPhoneNo = BodyToValueArray(szvBody, regRAccountNo)[1];
-                    szIsPhoneNo = BodyToValueArray(szvBody, regRAccountNo)[2];
-
-                    bool isInt = int.TryParse(szIsPhoneNo, out ignored);
-
-                    if (isInt)
-                    {
-                        szPhoneNo = szPhoneNo + szIsPhoneNo;
-                    }
-                }
-
-                break;
+                szPhoneNo = szPhoneNo + szIsPhoneNo;
             }
+                
             return szPhoneNo;
         }
 
@@ -242,12 +226,9 @@ namespace Z_Formaters
         {
             string szFormatedNumber = string.Empty;
 
-            if (szNumber != string.Empty)
-            {
-                szFormatedNumber = szNumber.Remove(0, 3);
-
-                return "0" + szFormatedNumber;
-            }
+            if (szNumber == string.Empty) return string.Empty;
+            
+            szFormatedNumber = szNumber.Remove(0, 3);
 
             return "0" + szFormatedNumber;
         }
@@ -314,9 +295,9 @@ namespace Z_Formaters
             string szCode = string.Empty;
             bool bIsBeforeBeforeEmpty = false;
 
-            if (szvBody == string.Empty) return string.Empty; ;
+            if (szvBody == string.Empty) return string.Empty;
 
-            var regCode = new Regex(@"\sref\s(\b(.*)(\s+))");
+            var regCode = new Regex(@"\s(Reference:(.*))|ref\s(\b(.*)\s)");
 
             var rCodeBefore = regCode.Matches(szvBody);
 
@@ -335,9 +316,9 @@ namespace Z_Formaters
 
             var pos = szvValue.IndexOf('.');
 
-            if (pos == -1) return string.Empty;
+            if (pos == -1) return szvValue;
 
-            szvValue = szvValue.Substring(0, pos - 1);
+            szvValue = szvValue.Substring(0, pos + 0);
 
             return szvValue;
         }

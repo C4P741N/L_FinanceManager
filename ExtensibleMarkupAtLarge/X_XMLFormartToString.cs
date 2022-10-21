@@ -21,6 +21,7 @@ namespace ExtensibleMarkupAtLarge
         private X_XMLProperties _ExtractBodyForKCB(X_XMLProperties message)
         {
             string szBody = message.szBody;
+            List<X_XMLProperties> xml_prop = new List<X_XMLProperties>();
 
             while (true)
             {
@@ -39,6 +40,7 @@ namespace ExtensibleMarkupAtLarge
                     message.RDate = xFormat.GetDate(szBody);
                     message.Code = xFormat.GetMpesaCode(szBody);
                     message.TransactionStatus = "Payment";
+                    message.RName = xFormat.RNameCreatorFromAccNo(message.RAccNo);
 
                     if (szBody.Contains("Pay Bill"))
                     {
@@ -55,12 +57,14 @@ namespace ExtensibleMarkupAtLarge
 
                     message.TransactionStatus = "received";
                     message.Quota = "Deposit";
+                    message.Code = xFormat.GetMpesaCode(szBody);
 
                     message.CashAmount = xFormat.GetCashAmount(szBody, status);
                     message.RName = xFormat.GetKCBContactName(szBody);
 
                 }
 
+                xml_prop.Add(message);
 
                 break;
             }
