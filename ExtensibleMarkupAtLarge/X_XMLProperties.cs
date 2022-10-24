@@ -25,7 +25,7 @@ namespace ExtensibleMarkupAtLarge
         public string szReadable_date { get; set; }
         public string szContact_name { get; set; }
         public string Code { get; set; }
-        public string TransactionStatus { get; set; }
+        public string PayBill_TillNo { get; set; }
         public double CashAmount { get; set; }
         public string RName { get; set; }
         public string RPhoneNo { get; set; }

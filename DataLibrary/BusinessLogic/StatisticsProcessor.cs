@@ -36,7 +36,7 @@ namespace DataLibrary.BusinessLogic
                                     + "'" + prop.CashAmount + "',"
                                     + "'" + prop.Balance + "',"
                                     + "'" + prop.szProtocol + "',"
-                                    + "'" + prop.TransactionStatus + "',"
+                                    + "'" + prop.PayBill_TillNo + "',"
                                     + "'" + prop.TransactionCost + "',"
                                     + "'" + prop.szAddress + "',"
                                     + "'" + prop.szType + "',"
@@ -62,6 +62,14 @@ namespace DataLibrary.BusinessLogic
 
                     SQLDataAccess.SaveData(szSQL);
 
+                    szSQL = "EXECUTE Ms_DistinctRecepientsCopier";
+
+                    SQLDataAccess.SaveData(szSQL);
+
+                    szSQL = "EXECUTE Ms_DistinctTransactionsCopier";
+
+                    SQLDataAccess.SaveData(szSQL);
+
                 }
                 catch (Exception ex)
                 {
@@ -78,7 +86,7 @@ namespace DataLibrary.BusinessLogic
 
             szSQL = "SELECT "
 
-                    + " [Code]                  AS Code                "
+                    + " [Code]                  AS Code              "
                     + ",[M_Date]                AS Date              "
                     + ",[M_RecepientName]       AS RecepientName     "
                     + ",[M_RecepientPhoneNo]    AS RecepientPhoneNo  "
@@ -87,7 +95,7 @@ namespace DataLibrary.BusinessLogic
                     + ",[M_CashAmount]          AS CashAmount        "
                     + ",[M_Balance]             AS Balance           "
                     + ",[M_szProtocol]          AS szProtocol        "
-                    + ",[M_TransactionStatus]   AS TransactionStatus "
+                    + ",[M_PayBill_TillNo]      AS PayBill_TillNo    "
                     + ",[M_TransactionCost]     AS TransactionCost   "
                     + ",[M_Address]             AS Address           "
                     + ",[M_Type]                AS Type              "
@@ -96,7 +104,7 @@ namespace DataLibrary.BusinessLogic
                     + ",[M_Toa]                 AS Toa               "
                     + ",[M_Sc_toa]              AS Sc_toa            "
                     + ",[M_Service_center]      AS Service_center    "
-                    + ",[M_Read]                AS M_Read              "
+                    + ",[M_Read]                AS M_Read            "
                     + ",[M_Locked]              AS Locked            "
                     + ",[M_Date_sent]           AS Date_sent         "
                     + ",[M_Status]              AS Status            "

@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[Ms_DuplicateChecker]
+CREATE PROCEDURE [DB_MSota].[dbo].[Ms_DuplicateChecker]
 (
 @szCode						nvarchar(250),
 @szDate						nvarchar(250),
@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[Ms_DuplicateChecker]
 @szCashAmount				nvarchar(250),
 @szBalance					nvarchar(250),
 @szszProtocol				nvarchar(250),
-@szTransactionStatus		nvarchar(250),
+@szPayBill_TillNo			nvarchar(250),
 @szTransactionCost			nvarchar(250),
 @szAddress					nvarchar(250),
 @szType						nvarchar(250),
@@ -24,7 +24,6 @@ CREATE PROCEDURE [dbo].[Ms_DuplicateChecker]
 @szStatus					nvarchar(250),
 @szSub_id					nvarchar(250),
 @szReadable_date			nvarchar(250),
-@szszContact_name			nvarchar(250),
 @szQuota					nvarchar(250),
 @szFulizaLimit				nvarchar(250),
 @szFulizaBorrowed			nvarchar(250),
@@ -37,9 +36,9 @@ AS
 BEGIN
  
 	DECLARE @dCode					NVARCHAR(253)
-	DECLARE @dM_TransactionStatus	NVARCHAR(253)
+	DECLARE @dRecepientPhoneNo		NVARCHAR(253)
 
-MERGE INTO [MSota].[dbo].[Ms_Collection]
+MERGE INTO [DB_MSota].[dbo].[Ms_Collection]
 
 USING
 (values(
@@ -52,7 +51,7 @@ USING
 		 ,@szCashAmount		
 		 ,@szBalance			
 		 ,@szszProtocol		
-		 ,@szTransactionStatus
+		 ,@szPayBill_TillNo
 		 ,@szTransactionCost	
 		 ,@szAddress			
 		 ,@szType				
@@ -67,7 +66,6 @@ USING
 		 ,@szStatus			
 		 ,@szSub_id			
 		 ,@szReadable_date	
-		 ,@szszContact_name	
 		 ,@szQuota			
 		 ,@szFulizaLimit		
 		 ,@szFulizaBorrowed	
@@ -86,7 +84,7 @@ X(
 		,[M_CashAmount]			
 		,[M_Balance]				
 		,[M_szProtocol]			
-		,[M_TransactionStatus]	
+		,[M_PayBill_TillNo]	
 		,[M_TransactionCost]		
 		,[M_Address]				
 		,[M_Type]				
@@ -100,8 +98,7 @@ X(
 		,[M_Date_sent]			
 		,[M_Status]				
 		,[M_Sub_id]				
-		,[M_Readable_date]		
-		,[M_szContact_name]		
+		,[M_Readable_date]			
 		,[M_Quota]				
 		,[M_FulizaLimit]			
 		,[M_FulizaBorrowed]		
@@ -112,7 +109,7 @@ X(
 	ON
   (
 		[Ms_Collection].[Code]				  = @szCode 
-	AND [Ms_Collection].[M_TransactionStatus] = @szTransactionStatus 
+	AND [Ms_Collection].[M_RecepientPhoneNo] = @szRecepientPhoneNo 
   )											  
 	 
 WHEN NOT MATCHED BY TARGET THEN
@@ -128,7 +125,7 @@ WHEN NOT MATCHED BY TARGET THEN
         ,[M_CashAmount]
         ,[M_Balance]
         ,[M_szProtocol]
-        ,[M_TransactionStatus]
+        ,[M_PayBill_TillNo]
         ,[M_TransactionCost]
         ,[M_Address]
         ,[M_Type]
@@ -143,7 +140,6 @@ WHEN NOT MATCHED BY TARGET THEN
         ,[M_Status]
         ,[M_Sub_id]
         ,[M_Readable_date]
-        ,[M_szContact_name]
         ,[M_Quota]
         ,[M_FulizaLimit]
         ,[M_FulizaBorrowed]
@@ -163,7 +159,7 @@ WHEN NOT MATCHED BY TARGET THEN
         ,X.[M_CashAmount]
         ,X.[M_Balance]
         ,X.[M_szProtocol]
-        ,X.[M_TransactionStatus]
+        ,X.[M_PayBill_TillNo]
         ,X.[M_TransactionCost]
         ,X.[M_Address]
         ,X.[M_Type]
@@ -178,7 +174,6 @@ WHEN NOT MATCHED BY TARGET THEN
         ,X.[M_Status]
         ,X.[M_Sub_id]
         ,X.[M_Readable_date]
-        ,X.[M_szContact_name]
         ,X.[M_Quota]
         ,X.[M_FulizaLimit]
         ,X.[M_FulizaBorrowed]

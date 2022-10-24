@@ -28,7 +28,12 @@ namespace ExtensibleMarkupAtLarge
                 string[] wordsArray = szBody.Split(' ');
                 string[]? status = new string[2];
 
-                
+                if (szBody == "Ksh 14000.00 sent to KCB Pay Bill 522522 for account 1206232161 has been received on 05/06/2022 at 05:09 PM. M-PESA ref QF5786HI4J.Dial *522# to pay your bills.")
+                {
+
+                }
+
+
 
                 if (szBody.Contains("sent to"))
                 {
@@ -39,13 +44,12 @@ namespace ExtensibleMarkupAtLarge
                     message.RAccNo = xFormat.GetAccountNumber(szBody);
                     message.RDate = xFormat.GetDate(szBody);
                     message.Code = xFormat.GetMpesaCode(szBody);
-                    message.TransactionStatus = "Payment";
                     message.RName = xFormat.RNameCreatorFromAccNo(message.RAccNo);
 
                     if (szBody.Contains("Pay Bill"))
                     {
                         message.Quota = "Pay Bill Payment";
-                        message.RPhoneNo = xFormat.GetPayBillNo(szBody);
+                        message.PayBill_TillNo = xFormat.GetPayBillNo(szBody);
                     }
 
                     break;
@@ -55,13 +59,11 @@ namespace ExtensibleMarkupAtLarge
                     status[0] = "KES";
                     status[1] = "to";
 
-                    message.TransactionStatus = "received";
                     message.Quota = "Deposit";
                     message.Code = xFormat.GetMpesaCode(szBody);
 
                     message.CashAmount = xFormat.GetCashAmount(szBody, status);
                     message.RName = xFormat.GetKCBContactName(szBody);
-
                 }
 
                 xml_prop.Add(message);
@@ -233,37 +235,40 @@ namespace ExtensibleMarkupAtLarge
                     vmessage.RPhoneNo = xFormat.GetPhoneNumber(szvBody, szvID, vStatus).ToLower();
 
                     vmessage.Code = wordsArray[0];
-                    vmessage.TransactionStatus = szvID;
 
+                    if (vmessage.RName.Contains("Airtime"))
+                        vmessage.RPhoneNo = xFormat.StringSplitAndJoin(vmessage.RName).ToLower();
+                    
                     if (szvBody.Contains("received") || szvBody.Contains("Give"))
-                    {
                         vmessage.Quota = "Deposit";
-                    }
-                    if (szvBody.Contains("airtime") || 
-                        szvBody.Contains("Safaricom Limited") == true || 
+
+                    if (szvBody.Contains("airtime") ||
+                        szvBody.Contains("Safaricom Limited") == true ||
                         szvBody.Contains("Safaricom Offers") == true)
                     {
                         vmessage.Quota = "Airtime Purchase";
                         break;
                     }
+
                     if (szvBody.Contains("sent to"))
-                    {
                         vmessage.Quota = "Customer Transfer";
-                    }
+                    
                     if (szvBody.Contains("withdraw") || szvID == "withdraw")
-                    {
                         vmessage.Quota = "Withdrawal";
-                    }
+
                     if (szvBody.Contains("for account"))
                     {
                         if (szvBody.Contains("Safaricom Limited") == false || szvBody.Contains("Safaricom Offers") == false)
                         {
                             vmessage.Quota = "Pay Bill Payment";
+                            //vmessage.PayBill_TillNo = szvID;
                         }
                     }
+
                     if (szvBody.Contains("paid to"))
                     {
                         vmessage.Quota = "Merchant Payment";
+                        //vmessage.PayBill_TillNo = szvID;
                     }
 
                     break;
@@ -320,8 +325,9 @@ namespace ExtensibleMarkupAtLarge
                         vmessage.Quota = "Fuliza Paid";
                     }
                     vmessage.Code = wordsArray[0];
-                    vmessage.TransactionStatus = szvID;
                     vmessage.RName = "Fuliza";
+
+                    vmessage.RPhoneNo = xFormat.StringSplitAndJoin(vmessage.Quota).ToLower();
 
                     break;
                 }                

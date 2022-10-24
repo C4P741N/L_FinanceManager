@@ -12,8 +12,9 @@ namespace ExtensibleMarkupAtLarge
         private X_XMLProperties xml_prop = null;
         //private X_ExtensibleMarkupAtLarge xml_stru = null;
         private X_XMLFormartToString xfts = null;
+		private Z_Formaters.Formaters xFormat = null;
 
-        private string szDocPath = @"F:\_notTemp\Proj\MSota\sms-20220711200832.xml";
+		private string szDocPath = @"F:\_notTemp\Proj\MSota\sms-20220711200832.xml";
 		private string szDocPath2 = @"D:\_notTemp\Proj\MSota\sms-20220711200832.xml";
 		private string szDocPath3 = @"C:\Users\danco\source\repos\MSota\sms-20220711200832.xml";
         private string szDocPath4 = @"G:\_notTemp\Proj\MSota\sms-20220711200832.xml";
@@ -34,29 +35,25 @@ namespace ExtensibleMarkupAtLarge
             {
 
                 if (lsMessage.szAddress =="MPESA")
-                {
-					//X_XMLProperties messageUpdate = _ExtractBodyForMPESA(lsMessage);
 					xfts.BeginMPESAFormatToString(lsMessage);
 
-                    if (lsMessage.Code != null)
-                    {
-						x_prop.Add(lsMessage);
-					}
-				}
-
 				if (lsMessage.szAddress == "KCB")
-				{
                     xfts.BeginKCBFormatToString(lsMessage);
 
-					if (lsMessage.Quota != null)
+                if (lsMessage.Quota != null)
+                {
+					if (string.IsNullOrEmpty(lsMessage.RPhoneNo))
 					{
-						x_prop.Add(lsMessage);
+						lsMessage.RPhoneNo = xFormat.StringSplitAndJoin(lsMessage.RName).ToLower();
 					}
+					x_prop.Add(lsMessage);
 				}
+				
 			}
 		}
 		private void xx_InitialitzeStuff()
         {
+			xFormat = new Z_Formaters.Formaters();
 			xml_doc = new System.Xml.XmlDocument();
 			xfts = new X_XMLFormartToString();
 

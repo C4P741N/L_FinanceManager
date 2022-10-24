@@ -73,7 +73,7 @@ namespace Z_Formaters
                 case "received":
                     if (BodyToValueArray(szvBody, regRName)[1] == "on")
                     {
-                        szContactName = "Airtime Bought";
+                        szContactName = "Airtime Purchase";
                         break;
                     }
                     if (BodyToValueArray(szvBody, regRName)[1] == "for")
@@ -164,11 +164,20 @@ namespace Z_Formaters
 
         public string StringSplitAndJoin(string szValue)
         {
-            if (szValue == string.Empty) return string.Empty;
+            if (string.IsNullOrEmpty(szValue)) return string.Empty;
             
             string[] SzASplitVal = szValue.Split(' ');
 
-            szValue = SzASplitVal[0] + SzASplitVal[1];
+            szValue = SpecialCharactersRemover(SzASplitVal[0] + SzASplitVal[1]);
+
+            return szValue;
+        }
+
+        public string SpecialCharactersRemover(string szValue)
+        {
+            if (string.IsNullOrEmpty(szValue)) return string.Empty;
+
+            szValue = Regex.Replace(szValue, "[^a-zA-Z0-9% ]", string.Empty);
 
             return szValue;
         }
@@ -193,15 +202,15 @@ namespace Z_Formaters
 
         public string GetAccountNumber(string szvBody)
         {
-            string szPhoneNo = string.Empty;
-            string szIsPhoneNo;
+            string szPhoneOrAccNo = string.Empty;
+            string szIsPhoneOrAccNo;
             bool bIsBeforeBeforeEmpty;
             int ignored;
 
             if (szvBody.Contains("Safaricom Limited") ||
                 szvBody.Contains("Safaricom Offers")) return string.Empty;
 
-            var regRAccountNo = new Regex(@"account((.*)(\s+)on)");
+            var regRAccountNo = new Regex(@"(for account (.*))|(from KCB )((.*)(\s+)on)");
 
             var rRAccountNo = regRAccountNo.Matches(szvBody);
 
@@ -209,17 +218,17 @@ namespace Z_Formaters
 
             if (bIsBeforeBeforeEmpty == true) return string.Empty;
                 
-            szPhoneNo = BodyToValueArray(szvBody, regRAccountNo)[1];
-            szIsPhoneNo = BodyToValueArray(szvBody, regRAccountNo)[2];
+            szPhoneOrAccNo = BodyToValueArray(szvBody, regRAccountNo)[2];
+            szIsPhoneOrAccNo = BodyToValueArray(szvBody, regRAccountNo)[3];
 
-            bool isInt = int.TryParse(szIsPhoneNo, out ignored);
+            bool isInt = int.TryParse(szIsPhoneOrAccNo, out ignored);
 
             if (isInt)
             {
-                szPhoneNo = szPhoneNo + szIsPhoneNo;
+                szPhoneOrAccNo = szPhoneOrAccNo + szIsPhoneOrAccNo;
             }
                 
-            return szPhoneNo;
+            return szPhoneOrAccNo;
         }
 
         private string xx_PhoneNoConverterTo07(string szNumber)
