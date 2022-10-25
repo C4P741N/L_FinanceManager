@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataLibrary\DataLibrary.csproj" />
+    <ProjectReference Include="..\LogicObjects\LogicObjects.csproj" />
     <!--<ProjectReference Include="..\DBConnection\DBConnection.csproj" />-->
   </ItemGroup>
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LogicObjects;
 //using DBConnection;
 using Microsoft.Data.SqlClient;
 using static DataLibrary.BusinessLogic.StatisticsProcessor;
@@ -13,6 +14,8 @@ namespace DataAndStatistics
     public class VariablesFormater
     {
         private DataAndStatisticsProp oDsp = null;
+        private Recepients rpsx = null;
+        //private Transactions trsx = null;
         //private DBRecordGet oDbget = null;
         //private SqlDataReader oReader = null;
         private DataMazematics math = null;
@@ -42,95 +45,135 @@ namespace DataAndStatistics
                                                                                         double dFulizaAmountPaid = 0;
                                                                                         bool bSpent = false;
 
-            List<DataAndStatisticsProp> oStuffs = xx_Stuf();
+            Recepients rps = xx_GetCollectionValues();
 
-            foreach (DataAndStatisticsProp stuff in oStuffs)
+            foreach (Recepient rp in rps)
             {
-                math.BeginMazematics(stuff,
-                                    ref dvCashBalance,
-                                    ref dvFulizaAmount,
-                                    ref dvCharges,
-                                    ref dvFulizaAmountPaid);
 
-                xx_GetListOfRecepientsAndData(stuff);
+                foreach (L_Transaction tr in rp.transactions)
+                {
+                    math.BeginMazematics(tr,
+                                        ref dvCashBalance,
+                                        ref dvFulizaAmount,
+                                        ref dvCharges,
+                                        ref dvFulizaAmountPaid);
 
-                bSpent = stuff.TransactionStatus != "received";
-              
-                if (bSpent) 
-                {
-                    dCashSpent += dvCashBalance;
+                    //xx_GetListOfRecepientsAndData(stuff);
+
+                    bSpent = tr.TranactionQuota != "received";
+
+                    if (bSpent)
+                    {
+                        dCashSpent += dvCashBalance;
+                    }
+                    if (!bSpent)
+                    {
+                        dCashReceived += dvCashBalance;
+                    }
+                    dFulizaAmount += dvFulizaAmount;
+                    dCharges += dvCharges;
+                    dFulizaAmountPaid += dvFulizaAmountPaid;
                 }
-                if (!bSpent)
-                {
-                    dCashReceived += dvCashBalance;
-                }
-                dFulizaAmount       +=  dvFulizaAmount;
-                dCharges            +=  dvCharges;
-                dFulizaAmountPaid   +=  dvFulizaAmountPaid;
+                uisprop.CashSpent = math.RoundingOf(dCashSpent);
+                uisprop.CashReceived = math.RoundingOf(dCashReceived);
+                uisprop.FulizaAmount = math.RoundingOf(dFulizaAmount);
+                uisprop.FulizaCharge = math.RoundingOf(dCharges);
+                uisprop.FulizaAmountPaid = math.RoundingOf(dFulizaAmountPaid);
             }
-            uisprop.CashSpent           = math.RoundingOf(dCashSpent);
-            uisprop.CashReceived        = math.RoundingOf(dCashReceived);
-            uisprop.FulizaAmount        = math.RoundingOf(dFulizaAmount);
-            uisprop.FulizaCharge        = math.RoundingOf(dCharges);
-            uisprop.FulizaAmountPaid    = math.RoundingOf(dFulizaAmountPaid);
 
         }
 
-        private void xx_GetListOfRecepientsAndData(DataAndStatisticsProp stuff)
+        private Recepients xx_GetCollectionValues()
         {
+            var rpsList = new List<Recepients>();
+            rpsx = new Recepients();
 
-        }
-        private List<DataAndStatisticsProp> xx_Stuf()
-        {
-            var oDataVal = new List<DataAndStatisticsProp>();
+            var rpsStats = LoadRecepientsStatistics();
+            var trsStats = LoadTransactionStatistics();
 
-            var Stats = LoadStatistics();
+            if (rpsStats == null) return rpsx;
 
-            if (Stats != null)
+            foreach (var rpstat in rpsStats)
             {
-                //var prop = new DataAndStatisticsProp();
+                var rp = new Recepient();
 
-                foreach (var stat in Stats)
+                rp.RecepientId = rpstat.RecepientPhoneNo;
+                rp.RecepientName = rpstat.RecepientName;
+                rp.RecepientAccNo = rpstat.RecepientAccNo;
+
+                foreach (var trstat in trsStats)
                 {
-                    var prop = new DataAndStatisticsProp();
+                    if (trstat.RecepientPhoneNo == rp.RecepientId)
+                    {
+                        var tr = new L_Transaction();
 
-                    prop.Code = stat.Code;
-                    prop.Date = stat.Date;
-                    prop.RecepientName = stat.RecepientName;
-                    prop.RecepientPhoneNo = stat.RecepientPhoneNo;
-                    prop.RecepientDate = stat.RecepientDate;
-                    prop.RecepientAccNo = stat.RecepientAccNo;
-                    prop.CashAmount = stat.CashAmount;
-                    prop.Balance = stat.Balance;
-                    prop.szProtocol = stat.szProtocol;
-                    prop.TransactionStatus = stat.TransactionStatus;
-                    prop.TransactionCost = stat.TransactionCost;
-                    prop.Address = stat.Address;
-                    prop.Type = stat.Type;
-                    prop.Subject = stat.Subject;
-                    prop.Body = stat.Body;
-                    prop.Toa = stat.Toa;
-                    prop.Sc_toa = stat.Sc_toa;
-                    prop.Service_center = stat.Service_center;
-                    prop.Read = stat.M_Read;
-                    prop.Locked = stat.Locked;
-                    prop.Date_sent = stat.Date_sent;
-                    prop.Status = stat.Status;
-                    prop.Sub_id = stat.Sub_id;
-                    prop.Readable_date = stat.Readable_date;
-                    prop.szContact_name = stat.szContact_name;
-                    prop.Quota = stat.Quota;
-                    prop.FulizaLimit = stat.FulizaLimit;
-                    prop.FulizaBorrowed = stat.FulizaBorrowed;
-                    prop.FulizaCharge = stat.FulizaCharge;
-                    prop.FulizaAmount = stat.FulizaAmount;
+                        tr.TransactionID = trstat.RecepientPhoneNo;
+                        tr.TranactionQuota = trstat.Quota;
+                        tr.TranactionCost = Convert.ToDouble(trstat.TransactionCost);
+                        tr.TranactionDate = long.Parse(trstat.Date);
+                        tr.TransactionAmount = Convert.ToDouble(trstat.CashAmount);
 
-                    oDataVal.Add(prop);
+                        rp.transactions.AddTransaction(tr);
+                    }
                 }
+
+                rpsx.AddRecepient(rp);
+            }
+
+            return rpsx;
+        }
+
+        //private List<DataAndStatisticsProp> xx_Stuf()
+        //{
+        //    var oDataVal = new List<DataAndStatisticsProp>();
+
+        //    var Stats = LoadStatistics();
+
+        //    if (Stats != null)
+        //    {
+        //        //var prop = new DataAndStatisticsProp();
+
+        //        foreach (var stat in Stats)
+        //        {
+        //            var prop = new DataAndStatisticsProp();
+
+        //            prop.Code = stat.Code;
+        //            prop.Date = stat.Date;
+        //            prop.RecepientName = stat.RecepientName;
+        //            prop.RecepientPhoneNo = stat.RecepientPhoneNo;
+        //            prop.RecepientDate = stat.RecepientDate;
+        //            prop.RecepientAccNo = stat.RecepientAccNo;
+        //            prop.CashAmount = stat.CashAmount;
+        //            prop.Balance = stat.Balance;
+        //            prop.szProtocol = stat.szProtocol;
+        //            prop.TransactionStatus = stat.TransactionStatus;
+        //            prop.TransactionCost = stat.TransactionCost;
+        //            prop.Address = stat.Address;
+        //            prop.Type = stat.Type;
+        //            prop.Subject = stat.Subject;
+        //            prop.Body = stat.Body;
+        //            prop.Toa = stat.Toa;
+        //            prop.Sc_toa = stat.Sc_toa;
+        //            prop.Service_center = stat.Service_center;
+        //            prop.Read = stat.M_Read;
+        //            prop.Locked = stat.Locked;
+        //            prop.Date_sent = stat.Date_sent;
+        //            prop.Status = stat.Status;
+        //            prop.Sub_id = stat.Sub_id;
+        //            prop.Readable_date = stat.Readable_date;
+        //            prop.szContact_name = stat.szContact_name;
+        //            prop.Quota = stat.Quota;
+        //            prop.FulizaLimit = stat.FulizaLimit;
+        //            prop.FulizaBorrowed = stat.FulizaBorrowed;
+        //            prop.FulizaCharge = stat.FulizaCharge;
+        //            prop.FulizaAmount = stat.FulizaAmount;
+
+        //            oDataVal.Add(prop);
+        //        }
                 
-            }
+        //    }
 
-            return oDataVal;
-        }
+        //    return oDataVal;
+        //}
     }
 }

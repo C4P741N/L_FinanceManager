@@ -51,7 +51,6 @@ namespace DataLibrary.BusinessLogic
                                     + "'" + prop.szStatus + "',"
                                     + "'" + prop.szSub_id + "',"
                                     + "'" + prop.RAccNo + "',"
-                                    + "'" + prop.szContact_name + "',"
                                     + "'" + prop.Quota + "',"
                                     + "'" + prop.FulizaLimit + "',"
                                     + "'" + prop.FulizaBorrowed + "',"
@@ -62,13 +61,7 @@ namespace DataLibrary.BusinessLogic
 
                     SQLDataAccess.SaveData(szSQL);
 
-                    szSQL = "EXECUTE Ms_DistinctRecepientsCopier";
-
-                    SQLDataAccess.SaveData(szSQL);
-
-                    szSQL = "EXECUTE Ms_DistinctTransactionsCopier";
-
-                    SQLDataAccess.SaveData(szSQL);
+                    
 
                 }
                 catch (Exception ex)
@@ -78,16 +71,30 @@ namespace DataLibrary.BusinessLogic
                     throw exe;
                 }
             }
+            _CopyAndSaveCollectionsToRecepientsAndTransactions();
         }
 
-        public static List<DL_XMLDataModel> LoadStatistics()
+        private static void _CopyAndSaveCollectionsToRecepientsAndTransactions()
+        {
+            string szSQL;
+
+            szSQL = "EXECUTE RecepientsCopier";
+
+            SQLDataAccess.SaveData(szSQL);
+
+            szSQL = "EXECUTE TransactionsCopier";
+
+            SQLDataAccess.SaveData(szSQL);
+        }
+
+        public static List<DL_XMLDataModel> LoadTransactionStatistics()
         {
                                                                                             string szSQL = string.Empty;
 
             szSQL = "SELECT "
 
                     + " [Code]                  AS Code              "
-                    + " ,[Code_ID]              AS Code_ID"
+                    + ",[Code_ID]               AS Code_ID           "
                     + ",[M_Date]                AS Date              "
                     + ",[M_RecepientPhoneNo]    AS RecepientPhoneNo  "
                     + ",[M_CashAmount]          AS CashAmount        "
@@ -100,7 +107,24 @@ namespace DataLibrary.BusinessLogic
                     + ",[M_FulizaCharge]        AS FulizaCharge      "
                     + ",[M_FulizaAmount]        AS FulizaAmount      "
 
-                    + "FROM[DB_MSota].[dbo].[Ms_Transactions]"
+                    + "FROM[DB_MSota].[dbo].[Ms_Transactions]        "
+
+                    ;
+
+            return SQLDataAccess.LoadData<DL_XMLDataModel>(szSQL);
+        }
+
+        public static List<DL_XMLDataModel> LoadRecepientsStatistics()
+        {
+            string szSQL = string.Empty;
+
+            szSQL = "SELECT "
+
+                    + " [M_RecepientName]       AS RecepientName           "
+                    + ",[M_RecepientAccNo]      AS RecepientAccNo              "
+                    + ",[M_RecepientPhoneNo]    AS RecepientPhoneNo  "
+
+                    + "FROM[DB_MSota].[dbo].[Ms_Recepients]        "
 
                     ;
 

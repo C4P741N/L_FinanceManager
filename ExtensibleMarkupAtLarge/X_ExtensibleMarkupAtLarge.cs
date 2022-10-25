@@ -131,7 +131,6 @@ namespace ExtensibleMarkupAtLarge
 						xml_prop.szDate_sent		= xmlatt["date_sent"].Value;
 						xml_prop.szSub_id			= xmlatt["sub_id"].Value;
 						xml_prop.szReadable_date	= xmlatt["readable_date"].Value;
-						xml_prop.szContact_name		= xmlatt["contact_name"].Value;
 
                         ls.Add(xml_prop);
 					}
