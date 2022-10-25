@@ -367,6 +367,36 @@ namespace Z_Formaters
             return date;
         }
 
+        public long DateConvertionToLongTicks(long lvDate)///************
+        {
+            DateTime date = new DateTime();
+            long unixDate = lvDate;
+
+            if (lvDate == 0) return lvDate;
+
+            DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            date = start.AddMilliseconds(unixDate).ToLocalTime();
+
+            return lvDate;
+        }
+
+        public long DateConvertionFromLongToTicksVal(long lvDate)
+        {
+            DateTime date = new DateTime();
+            long unixDate = lvDate;
+
+            if (lvDate == 0) return unixDate;
+
+            DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            date = start.AddMilliseconds(unixDate).ToLocalTime();
+
+            long lDate =  date.Ticks;
+
+            return lDate;
+        }
+
         public DateTime DateFormat_dMyy_Convertion(string szvDate)
         {
             DateTime dt = new DateTime();

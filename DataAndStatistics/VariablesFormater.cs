@@ -15,17 +15,16 @@ namespace DataAndStatistics
     {
         private DataAndStatisticsProp oDsp = null;
         private Recepients rpsx = null;
-        //private Transactions trsx = null;
-        //private DBRecordGet oDbget = null;
-        //private SqlDataReader oReader = null;
         private DataMazematics math = null;
         private U_StatisticsProp uisprop = null;
+        private Z_Formaters.Formaters xFormaters = null;
         public void BeginFormatingVariables(ref U_StatisticsProp uisprop)
         {
             //oDbget = new DBRecordGet();
             oDsp = new DataAndStatisticsProp();
             math = new DataMazematics();
             uisprop = new U_StatisticsProp();
+            xFormaters = new Z_Formaters.Formaters();
 
             xx_StartGettingStufToFormater(uisprop);
             
@@ -52,13 +51,32 @@ namespace DataAndStatistics
 
                 foreach (L_Transaction tr in rp.transactions)
                 {
-                    math.BeginMazematics(tr,
-                                        ref dvCashBalance,
-                                        ref dvFulizaAmount,
-                                        ref dvCharges,
-                                        ref dvFulizaAmountPaid);
+                    //math.BeginMazematics(tr,
+                    //                    ref dvCashBalance,
+                    //                    ref dvFulizaAmount,
+                    //                    ref dvCharges,
+                    //                    ref dvFulizaAmountPaid);
 
                     //xx_GetListOfRecepientsAndData(stuff);
+
+                    long TrDate = xFormaters.DateConvertionFromLongToTicksVal(tr.TranactionDate);
+
+                    DateTime date1 = new DateTime(2022, 2, 1);
+                    DateTime date2 = new DateTime(2022, 2, 28);
+                    long test = date1.Ticks;
+                    long test2 = date2.Ticks;
+
+                    var Day = new DateTime(TrDate).Day;
+                    var Month = ((uint)new DateTime(TrDate).Month);
+                    var Year = new DateTime(TrDate).Year;
+                    var DayOfWeek = new DateTime(TrDate).DayOfWeek;
+                    var DayOfYear = new DateTime(TrDate).DayOfYear;
+                    var TimeOfDay = new DateTime(TrDate).TimeOfDay;
+
+                    if (date1.Ticks <= TrDate && date2.Ticks >= TrDate)
+                    {
+
+                    }
 
                     bSpent = tr.TranactionQuota != "received";
 
