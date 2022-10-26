@@ -40,12 +40,19 @@ namespace ExtensibleMarkupAtLarge
 				if (lsMessage.szAddress == "KCB")
                     xfts.BeginKCBFormatToString(lsMessage);
 
-                if (lsMessage.Quota != null)
+				if (lsMessage.RName == "MARY MUGO")
+				{
+
+				}
+
+				if (lsMessage.Quota != null)
                 {
 					if (string.IsNullOrEmpty(lsMessage.RPhoneNo))
 					{
 						lsMessage.RPhoneNo = xFormat.StringSplitAndJoin(lsMessage.RName).ToLower();
 					}
+					lsMessage.RName = xFormat.StringFormaterToProperCase(lsMessage.RName);
+
 					x_prop.Add(lsMessage);
 				}
 				

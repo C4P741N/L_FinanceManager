@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using BaseCommands;
 using MSota.Models;
 using DataAndStatistics;
+using LogicObjects;
 
 namespace MSota.Controllers
 {
@@ -13,6 +14,7 @@ namespace MSota.Controllers
         private StatementController stctr = null;
         //private B_BaseCommands bc = null;
         private U_StatisticsProp uisprop = null;
+        private L_Recepients xrps = null;
         public IActionResult ExtractAndAddDataOnClick()
         {
             //bc = new B_BaseCommands();
@@ -28,7 +30,7 @@ namespace MSota.Controllers
             st = new Statement();
             stctr = new StatementController();
 
-            B_BaseCommands.BeginLaunchOfStuffToGetData(ref uisprop);
+            B_BaseCommands.BeginLaunchOfStuffToGetData(ref xrps);
             //bc.BeginLaunchOfStuffToGetData(ref uisprop);
 
             //stctr.Dispose();

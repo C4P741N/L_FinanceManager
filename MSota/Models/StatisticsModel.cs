@@ -17,9 +17,11 @@ namespace MSota.Models
         public double AmountCharged { get; set; }
 
         [Display(Name = "Receipient Names")]
-        public double ListReceipientNames { get; set; }
+        public string? ListReceipientNames { get; set; }
+
         [Display(Name = "Amount Spent On Receipient")]
         public double ListAmountSpentOnReceipient { get; set; }
+
         [Display(Name = "Date Amount WasSpent On Receipient")]
         public double ListDateAmountWasSpentOnReceipient { get; set; }
     }

@@ -23,6 +23,9 @@ namespace DataLibrary.BusinessLogic
 
             foreach (X_XMLProperties prop in x_prop)
             {
+
+                
+
                 try
                 {
                     szSQL = "EXECUTE Ms_DuplicateChecker " //This part gives me joy

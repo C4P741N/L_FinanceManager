@@ -2,6 +2,7 @@
 using static DataLibrary.BusinessLogic.StatisticsProcessor;
 //using DBConnection;
 using DataAndStatistics;
+using LogicObjects;
 
 namespace BaseCommands
 {
@@ -28,18 +29,18 @@ namespace BaseCommands
 
         }
 
-        public static void BeginLaunchOfStuffToGetData(ref U_StatisticsProp statprop)
+        public static void BeginLaunchOfStuffToGetData(ref L_Recepients vrps)
         {
             B_BaseCommands bcmd = new B_BaseCommands();
 
-            bcmd.xx_GetDataAndStuff(ref statprop);
+            bcmd.xx_GetDataAndStuff(ref vrps);
         }
 
-        private void xx_GetDataAndStuff(ref U_StatisticsProp statprop)
+        private void xx_GetDataAndStuff(ref L_Recepients vrps)
         {
             vf = new VariablesFormater();
 
-            vf.BeginFormatingVariables(ref statprop);
+            vrps = vf.BeginFormatingVariables();
 
         }
     }

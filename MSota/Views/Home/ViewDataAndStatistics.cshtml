@@ -5,16 +5,40 @@
 }
 @*<script src="~/js/site.js" asp-append-version="true"></script>*@
 <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
+
 <h1 class="p-5">Statistics</h1>
 
-@*<p>
+<p>
     <a asp-action="Create">Create New</a>
-</p>*@
+</p>
 
 
-@*<table class="container">
+<table class="container">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ListReceipientNames)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.AmountSpent)
             </th>
@@ -33,7 +57,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-
+            <td id="number1">
+                @Html.DisplayFor(modelItem => item.ListReceipientNames)
+            </td>
 
             <td id="number1">
                 @Html.DisplayFor(modelItem => item.AmountSpent)
@@ -52,15 +78,15 @@
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>*@
-@*        </tr>
+        </tr>
 }
     </tbody>
-</table>*@
+</table>
 
 
 
 
-<div class="container text-center position-absolute start-50 translate-middle p-3">
+@*<div class="container text-center position-absolute start-50 translate-middle p-3">
 
     <div class="d-flex flex-nowrap bd-highlight fs-3">
             <div class="order-1 mx-auto">
@@ -97,10 +123,10 @@
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>*@
-        </div>
+        @*</div>
 }
    
-</div>
+@*</div>*@
 
 @*<p class="container position-absolute start-50 align-middle p-5 m-5">Your Monthly Expenditure</p>
 *@

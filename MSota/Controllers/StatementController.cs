@@ -23,7 +23,7 @@ namespace MSota.Controllers
             st.AmountSpent = uisprop.CashSpent;
             st.FulizaAmount = uisprop.FulizaAmount;
             st.FulizaCharge = uisprop.FulizaCharge;
-            st.FulizaAmountPaid = uisprop.FulizaAmountPaid;
+            st.FulizaBorrowed = uisprop.FulizaBorrowed;
 
             return View();
         }

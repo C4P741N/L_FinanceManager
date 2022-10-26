@@ -6,6 +6,7 @@ using DataLibrary;
 using static DataLibrary.BusinessLogic.StatisticsProcessor;
 using static BaseCommands.B_BaseCommands;
 using DataAndStatistics;
+using LogicObjects;
 
 namespace MSota.Controllers
 {
@@ -45,32 +46,51 @@ namespace MSota.Controllers
         }
         public IActionResult ViewDataAndStatistics()
         {
+            double AmountBorrowed = 0;
+            double AmountCharged  = 0;
+            double AmountReceived = 0;
+            double AmountSpent = 0;
+
+
             ViewBag.Message = "Statistics List";
 
             U_StatisticsProp statprop = null;
+            L_Recepients rps = null;
 
-            BeginLaunchOfStuffToGetData(ref statprop);
+            BeginLaunchOfStuffToGetData(ref rps);
 
             var statistics = new List<StatisticsModel>();
 
-            statistics.Add(new StatisticsModel
-            {
-                AmountBorrowed = statprop.FulizaAmount,
-                AmountCharged = statprop.FulizaCharge,
-                AmountReceived = statprop.CashReceived,
-                AmountSpent = statprop.CashSpent
-            });
-
-            //foreach (var row in data) //Useful for list row
+            //statistics.Add(new StatisticsModel
             //{
-            //    statistics.Add(new StatisticsModel
-            //    {
-            //        AmountBorrowed = row.AmountBorrowed,
-            //        AmountCharged = row.AmountCharged,
-            //        AmountReceived = row.AmountReceived,
-            //        AmountSpent = row.AmountSpent
-            //    });
-            //}
+            //    AmountBorrowed = statprop.FulizaAmount,
+            //    AmountCharged = statprop.FulizaCharge,
+            //    AmountReceived = statprop.CashReceived,
+            //    AmountSpent = statprop.CashSpent
+            //});
+
+            foreach (L_Recepient rp in rps)
+            {
+                foreach (var row in rp.transactions) //Useful for list row
+                {
+
+                    AmountBorrowed = row.TotalFulizaBorrowed;
+                    AmountCharged = row.TotalFulizaCharge;
+                    AmountReceived = row.TotalTransactionDeposited;
+                    AmountSpent = row.TotalTransactionWithdrawn;
+                   
+                }
+                statistics.Add(new StatisticsModel
+                {
+                    ListReceipientNames = rp.RecepientName,
+                    AmountBorrowed = AmountBorrowed,
+                    AmountCharged  = AmountCharged ,
+                    AmountReceived = AmountReceived,
+                    AmountSpent = AmountSpent
+                });
+            }
+
+            statistics.Sort((x, y) => string.Compare(x.ListReceipientNames, y.ListReceipientNames));
 
             return View(statistics);
         }

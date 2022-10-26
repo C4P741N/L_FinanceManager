@@ -14,11 +14,11 @@ namespace DataAndStatistics
     public class VariablesFormater
     {
         private DataAndStatisticsProp oDsp = null;
-        private Recepients rpsx = null;
+        private L_Recepients rpsx = null;
         private DataMazematics math = null;
         private U_StatisticsProp uisprop = null;
         private Z_Formaters.Formaters xFormaters = null;
-        public void BeginFormatingVariables(ref U_StatisticsProp uisprop)
+        public L_Recepients BeginFormatingVariables()
         {
             //oDbget = new DBRecordGet();
             oDsp = new DataAndStatisticsProp();
@@ -26,28 +26,38 @@ namespace DataAndStatistics
             uisprop = new U_StatisticsProp();
             xFormaters = new Z_Formaters.Formaters();
 
-            xx_StartGettingStufToFormater(uisprop);
-            
+            rpsx = xx_StartGettingStufToFormater();
+
+            return rpsx;
         }
 
-        private void xx_StartGettingStufToFormater(U_StatisticsProp uisprop)
+        private L_Recepients xx_StartGettingStufToFormater()
         {
-                                                                                        double dCashSpent = 0;
-                                                                                        double dCashReceived = 0;
+                                                                                        //double dCashSpent = 0;
+                                                                                        //double dCashReceived = 0;
                                                                                         double dvCashBalance = 0;
                                                                                         double dCashBalance = 0;
                                                                                         double dvFulizaAmount = 0;
-                                                                                        double dFulizaAmount = 0;
+                                                                                        //double dFulizaAmount = 0;
                                                                                         double dvCharges = 0;
-                                                                                        double dCharges = 0;
+                                                                                        //double dCharges = 0;
                                                                                         double dvFulizaAmountPaid = 0;
-                                                                                        double dFulizaAmountPaid = 0;
-                                                                                        bool bSpent = false;
+                                                                                        //double dFulizaBorrowed = 0;
+                                                                                        bool bIsDeposit = false;
+            
+            bool bCountLimitReached = false;
 
-            Recepients rps = xx_GetCollectionValues();
+            L_Recepients rps = xx_GetCollectionValues();
 
-            foreach (Recepient rp in rps)
+            foreach (L_Recepient rp in rps)
             {
+
+                double dCashSpent = 0;
+                double dCashReceived = 0;
+                double dTransactionCharges = 0;
+                double dFulizaAmount = 0;
+                double dFulizaBorrowed = 0;
+                int nCount = 0;
 
                 foreach (L_Transaction tr in rp.transactions)
                 {
@@ -78,33 +88,61 @@ namespace DataAndStatistics
 
                     }
 
-                    bSpent = tr.TranactionQuota != "received";
+                    bIsDeposit = tr.TranactionQuota == "Deposit";
 
-                    if (bSpent)
+                    if (tr.FulizaDebtBalance != 0 || tr.FulizaCharge != 0 || tr.FulizaBorrowed != 0)
                     {
-                        dCashSpent += dvCashBalance;
+
                     }
-                    if (!bSpent)
+
+                    if (bIsDeposit == false)
                     {
-                        dCashReceived += dvCashBalance;
+                        dCashSpent += tr.TransactionAmount;
                     }
-                    dFulizaAmount += dvFulizaAmount;
-                    dCharges += dvCharges;
-                    dFulizaAmountPaid += dvFulizaAmountPaid;
+                    if (bIsDeposit == true)
+                    {
+                        dCashReceived += tr.TransactionAmount;
+                    }
+                    
+                    dTransactionCharges += tr.TranactionCost;
+
+                    if (rp.RecepientName.Contains("Fuliza"))
+                    {
+                        
+                    }
+
+                    dFulizaAmount += tr.FulizaDebtBalance;
+                    dFulizaBorrowed += tr.FulizaBorrowed;
+                    
+                    nCount++;
+
+                    bCountLimitReached = nCount == rp.transactions.Count();
+
+                    if (bCountLimitReached)
+                    {
+                        tr.TotalTransactionWithdrawn    = math.RoundingOf(dCashSpent);
+                        tr.TotalTransactionDeposited    = math.RoundingOf(dCashReceived);
+                        tr.TotalFulizaBorrowed          = math.RoundingOf(dFulizaBorrowed);
+                        tr.TotalFulizaDebtBalance       = math.RoundingOf(dFulizaAmount);
+                        tr.TotalFulizaCharge            = math.RoundingOf(dTransactionCharges);
+
+                        rp.transactions.AddTransaction(tr);
+                    }
                 }
-                uisprop.CashSpent = math.RoundingOf(dCashSpent);
-                uisprop.CashReceived = math.RoundingOf(dCashReceived);
-                uisprop.FulizaAmount = math.RoundingOf(dFulizaAmount);
-                uisprop.FulizaCharge = math.RoundingOf(dCharges);
-                uisprop.FulizaAmountPaid = math.RoundingOf(dFulizaAmountPaid);
+                //uisprop.CashSpent   = math.RoundingOf(dCashSpent);
+                //uisprop.CashReceived = math.RoundingOf(dCashReceived);
+                //uisprop.FulizaAmount = math.RoundingOf(dFulizaAmount);
+                //uisprop.FulizaCharge = math.RoundingOf(dCharges);
+                //uisprop.FulizaBorrowed = math.RoundingOf(dFulizaBorrowed);
             }
 
+            return rps;
         }
 
-        private Recepients xx_GetCollectionValues()
+        private L_Recepients xx_GetCollectionValues()
         {
-            var rpsList = new List<Recepients>();
-            rpsx = new Recepients();
+            var rpsList = new List<L_Recepients>();
+            rpsx = new L_Recepients();
 
             var rpsStats = LoadRecepientsStatistics();
             var trsStats = LoadTransactionStatistics();
@@ -113,7 +151,7 @@ namespace DataAndStatistics
 
             foreach (var rpstat in rpsStats)
             {
-                var rp = new Recepient();
+                var rp = new L_Recepient();
 
                 rp.RecepientId = rpstat.RecepientPhoneNo;
                 rp.RecepientName = rpstat.RecepientName;
@@ -130,6 +168,9 @@ namespace DataAndStatistics
                         tr.TranactionCost = Convert.ToDouble(trstat.TransactionCost);
                         tr.TranactionDate = long.Parse(trstat.Date);
                         tr.TransactionAmount = Convert.ToDouble(trstat.CashAmount);
+                        tr.FulizaBorrowed = Convert.ToDouble(trstat.FulizaBorrowed);
+                        tr.FulizaCharge = Convert.ToDouble(trstat.FulizaCharge);
+                        tr.FulizaDebtBalance = Convert.ToDouble(trstat.FulizaAmount);
 
                         rp.transactions.AddTransaction(tr);
                     }

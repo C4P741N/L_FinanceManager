@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LogicObjects
 {
-    public class Recepient
+    public class L_Recepient
     {
         public string? RecepientName { get; set; }    
 
@@ -16,7 +16,7 @@ namespace LogicObjects
 
         public long Relationship { get; set; }
 
-        public Transactions transactions { get; set; } = new Transactions();
+        public L_Transactions transactions { get; set; } = new L_Transactions();
 
     }
 }

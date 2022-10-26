@@ -327,7 +327,7 @@ namespace ExtensibleMarkupAtLarge
                     vmessage.Code = wordsArray[0];
                     vmessage.RName = "Fuliza";
 
-                    vmessage.RPhoneNo = xFormat.StringSplitAndJoin(vmessage.Quota).ToLower();
+                    vmessage.RPhoneNo = vmessage.RName.ToLower();
 
                     break;
                 }                

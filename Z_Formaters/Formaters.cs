@@ -367,6 +367,16 @@ namespace Z_Formaters
             return date;
         }
 
+        public string StringFormaterToProperCase(string szvValue)
+        {
+            if(string.IsNullOrEmpty(szvValue)) return string.Empty;
+
+            string Value = System.Threading.Thread.CurrentThread
+                                                .CurrentCulture.TextInfo.ToTitleCase(szvValue.ToLower());
+
+            return Value;
+        }
+
         public long DateConvertionToLongTicks(long lvDate)///************
         {
             DateTime date = new DateTime();
