@@ -418,7 +418,7 @@ namespace Z_Formaters
             string szMonth = DateSplitByBackSlash(szvDate)[1];
             string szYear = DateSplitByBackSlash(szvDate)[2];
 
-            szDateFormated = szMonth + "/" + szDay + "/" + szYear;
+            szDateFormated = szDay + "/" + szMonth + "/" + szYear;
 
             dt = Convert.ToDateTime(szDateFormated);
 

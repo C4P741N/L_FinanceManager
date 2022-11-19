@@ -3,8 +3,6 @@ CREATE PROCEDURE [dbo].[RecepientsCopier]
 
 AS
 
-SET IDENTITY_INSERT [DB_MSota].[dbo].[Ms_Recepients] ON
-
 BEGIN
 
     MERGE INTO [DB_MSota].[dbo].[Ms_Recepients]
@@ -52,5 +50,3 @@ BEGIN
         );
 
 END;
-
-SET IDENTITY_INSERT [DB_MSota].[dbo].[Ms_Recepients] OFF
