@@ -21,38 +21,25 @@ namespace MSota.Controllers
             _logger = logger;
         }
 
-        //public HttpResponse ExtractAndAddDataOnClick()
-        //{
-        //    //bc = new B_BaseCommands();
+        [HttpPost]
+        [Route("/[controller]/[action]/PostData")]
+        public HttpResponseMessage ExtractAndAddDataOnClick()
+        {
+            //bc = new B_BaseCommands();
 
-        //    //bc.BeginLaunchOfXMLStuff();
-        //    B_BaseCommands.BeginDataInsertIf();
+            //bc.BeginLaunchOfXMLStuff();
+            //B_BaseCommands.BeginDataInsertIf();
 
-        //     return null;
-        //}
+            return new HttpResponseMessage{
+                StatusCode = System.Net.HttpStatusCode.OK
+            };
+        }
 
         [HttpGet]
         [Route("/[controller]/[action]/GetData")]
-        public List<StatisticsModel> ViewDataAndStatistics()
+        public L_Recepients ViewDataAndStatistics()
         {
-            var statistics = new List<StatisticsModel>();
-
-            foreach (L_Recepient rp in BeginLaunchOfStuffToGetData())
-            {
-                foreach (var row in rp.transactions) //Useful for list row
-                {
-
-                    statistics.Add(new StatisticsModel
-                    {
-                        ListReceipientNames = row.TotalFulizaBorrowed.ToString(),
-                        AmountBorrowed = row.TotalFulizaCharge,
-                        AmountReceived = row.TotalTransactionDeposited,
-                        AmountSpent = row.TotalTransactionWithdrawn
-                    });
-                }
-            }
-
-            return statistics;
+            return BeginLaunchOfStuffToGetData();
         }
     }
 }
