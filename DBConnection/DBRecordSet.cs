@@ -47,7 +47,7 @@ namespace DBConnection
                                         + "'" + prop.CashAmount + "',"
                                         + "'" + prop.Balance + "',"
                                         + "'" + prop.szProtocol + "',"
-                                        + "'" + prop.TransactionStatus + "',"
+                                        //+ "'" + prop.TransactionStatus + "',"
                                         + "'" + prop.TransactionCost + "',"
                                         + "'" + prop.szAddress + "',"
                                         + "'" + prop.szType + "',"
@@ -62,11 +62,11 @@ namespace DBConnection
                                         + "'" + prop.szStatus + "',"
                                         + "'" + prop.szSub_id + "',"
                                         + "'" + prop.RAccNo + "',"
-                                        + "'" + prop.szContact_name + "',"
+                                        //+ "'" + prop.szContact_name + "',"
                                         + "'" + prop.Quota + "',"
                                         + "'" + prop.FulizaLimit + "',"
                                         + "'" + prop.FulizaBorrowed + "',"
-                                        + "'" + prop.FulizaCharge + "',"
+                                        //+ "'" + prop.FulizaCharge + "',"
                                         + "'" + prop.FulizaAmount + "'"
 
                                         ;

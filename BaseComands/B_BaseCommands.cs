@@ -29,11 +29,14 @@ namespace BaseCommands
 
         }
 
-        public static void BeginLaunchOfStuffToGetData(ref L_Recepients vrps)
+        public static L_Recepients BeginLaunchOfStuffToGetData()
         {
+            L_Recepients vrps = null;
             B_BaseCommands bcmd = new B_BaseCommands();
 
             bcmd.xx_GetDataAndStuff(ref vrps);
+
+            return vrps;
         }
 
         private void xx_GetDataAndStuff(ref L_Recepients vrps)
