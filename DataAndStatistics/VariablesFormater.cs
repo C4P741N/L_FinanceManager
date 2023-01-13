@@ -4,9 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using LogicObjects;
 //using DBConnection;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
 using static DataLibrary.BusinessLogic.StatisticsProcessor;
 
 namespace DataAndStatistics
@@ -18,20 +21,72 @@ namespace DataAndStatistics
         private DataMazematics math = null;
         private U_StatisticsProp uisprop = null;
         private Z_Formaters.Formaters xFormaters = null;
-        public L_Recepients BeginFormatingVariables()
+        private L_Transactions tr = null;
+
+        public VariablesFormater() 
         {
             //oDbget = new DBRecordGet();
             oDsp = new DataAndStatisticsProp();
             math = new DataMazematics();
             uisprop = new U_StatisticsProp();
             xFormaters = new Z_Formaters.Formaters();
-
-            rpsx = xx_StartGettingStufToFormater();
-
-            return rpsx;
         }
 
-        private L_Recepients xx_StartGettingStufToFormater()
+        public L_Transactions BeginGettingTransactions()
+        {
+            return xx_GetTransactionCollectionValues();
+        }
+
+        private L_Transactions xx_GetTransactionCollectionValues()
+        {
+            L_Transactions trs = new L_Transactions();
+
+            foreach (var dXml in LoadTransactionStatistics())
+            {
+                var tr = new L_Transaction();
+
+                if (dXml.FulizaCharge.IsNullOrEmpty() == false)
+                    dXml.TransactionCost = dXml.FulizaCharge;
+
+                trs.TotalAmountTransacted += math.RoundingOf(Convert.ToDouble(dXml.CashAmount));
+                trs.TotalLoanBorrowed += math.RoundingOf(Convert.ToDouble(dXml.FulizaBorrowed));
+                trs.TotalCharge += math.RoundingOf(Convert.ToDouble(dXml.TransactionCost));
+
+                tr.TransactionID = dXml.Code_ID;
+                tr.TranactionQuota = dXml.Quota;
+                tr.TranactionDate = long.Parse(dXml.Date);
+
+                tr.TransactionAmount = math.RoundingOf(Convert.ToDouble(dXml.CashAmount));
+                tr.TranactionCharge = math.RoundingOf(Convert.ToDouble(dXml.TransactionCost));
+                tr.LoanBorrowed = math.RoundingOf(Convert.ToDouble(dXml.FulizaBorrowed));
+
+                trs.AddTransaction(tr);
+            }
+
+            return trs;
+        }
+
+        //private L_Transactions xx_GetTransactions()
+        //{
+        //    L_Transactions trs = new L_Transactions();
+
+        //    foreach (L_Transaction tr in xx_GetTransactionCollectionValues())
+        //    {
+        //        trs.TotalAmountTransacted += tr.TransactionAmount;
+        //        trs.TotalLoanBorrowed += tr.LoanBorrowed;
+        //        trs.TotalCharge += tr.TranactionCharge;
+
+
+        //        tr.TranactionCharge = math.RoundingOf(tr.TranactionCharge);
+        //        tr.TransactionAmount = math.RoundingOf(tr.TransactionAmount);
+
+        //        trs.AddTransaction(tr);
+        //    }
+
+        //    return trs;
+        //}
+
+        private Transactor xx_StartGettingStufToFormater()
         {
                                                                                         //double dCashSpent = 0;
                                                                                         //double dCashReceived = 0;
@@ -49,6 +104,8 @@ namespace DataAndStatistics
 
             L_Recepients rps = xx_GetCollectionValues();
 
+            Transactor transactor = new Transactor();
+
             foreach (L_Recepient rp in rps)
             {
 
@@ -58,6 +115,8 @@ namespace DataAndStatistics
                 double dFulizaAmount = 0;
                 double dFulizaBorrowed = 0;
                 int nCount = 0;
+
+                transactor.TransactionsCount += 1;
 
                 foreach (L_Transaction tr in rp.transactions)
                 {
@@ -90,10 +149,10 @@ namespace DataAndStatistics
 
                     bIsDeposit = tr.TranactionQuota == "Deposit";
 
-                    if (tr.FulizaDebtBalance != 0 || tr.FulizaCharge != 0 || tr.FulizaBorrowed != 0)
-                    {
+                    //if (tr.FulizaDebtBalance != 0 || tr.FulizaCharge != 0 || tr.FulizaBorrowed != 0)
+                    //{
 
-                    }
+                    //}
 
                     if (bIsDeposit == false)
                     {
@@ -104,15 +163,12 @@ namespace DataAndStatistics
                         dCashReceived += tr.TransactionAmount;
                     }
                     
-                    dTransactionCharges += tr.TranactionCost;
+                    dTransactionCharges += tr.TranactionCharge;
 
-                    if (rp.RecepientName.Contains("Fuliza"))
-                    {
-                        
-                    }
+                    
 
-                    dFulizaAmount += tr.FulizaDebtBalance;
-                    dFulizaBorrowed += tr.FulizaBorrowed;
+                    //dFulizaAmount += tr.FulizaDebtBalance;
+                    dFulizaBorrowed += tr.LoanBalance;
                     
                     nCount++;
 
@@ -120,24 +176,32 @@ namespace DataAndStatistics
 
                     if (bCountLimitReached)
                     {
-                        tr.TotalTransactionWithdrawn    = math.RoundingOf(dCashSpent);
-                        tr.TotalTransactionDeposited    = math.RoundingOf(dCashReceived);
-                        tr.TotalFulizaBorrowed          = math.RoundingOf(dFulizaBorrowed);
-                        tr.TotalFulizaDebtBalance       = math.RoundingOf(dFulizaAmount);
-                        tr.TotalFulizaCharge            = math.RoundingOf(dTransactionCharges);
+                        rp.TotalTransactionWithdrawn    = math.RoundingOf(dCashSpent);
+                        rp.TotalTransactionDeposited    = math.RoundingOf(dCashReceived);
+
+                        if (rp.RecepientName.Contains("Fuliza"))
+                        {
+                            transactor.TotalLoanBorrowed = math.RoundingOf(dFulizaBorrowed);
+
+                            //tr.TotalFulizaBorrowed = math.RoundingOf(dFulizaBorrowed);
+                            //tr.TotalFulizaDebtBalance = math.RoundingOf(dFulizaAmount);
+                            //tr.TotalFulizaCharge = math.RoundingOf(dTransactionCharges);
+                        }
+
+                        transactor.TotAlamountTransacted += rp.TotalTransactionWithdrawn;
+                        transactor.TotalAmountDeposited += rp.TotalTransactionDeposited;
 
                         rp.transactions.AddTransaction(tr);
                     }
                 }
-                //uisprop.CashSpent   = math.RoundingOf(dCashSpent);
-                //uisprop.CashReceived = math.RoundingOf(dCashReceived);
-                //uisprop.FulizaAmount = math.RoundingOf(dFulizaAmount);
-                //uisprop.FulizaCharge = math.RoundingOf(dCharges);
-                //uisprop.FulizaBorrowed = math.RoundingOf(dFulizaBorrowed);
             }
 
-            return rps;
+            transactor.recepients = rps;
+
+            return transactor;
         }
+
+        
 
         private L_Recepients xx_GetCollectionValues()
         {
@@ -163,24 +227,64 @@ namespace DataAndStatistics
                     {
                         var tr = new L_Transaction();
 
-                        tr.TransactionID = trstat.RecepientPhoneNo;
+                        if (trstat.FulizaCharge.IsNullOrEmpty() == false)
+                            trstat.TransactionCost = trstat.FulizaCharge;
+
+                        tr.TransactionID = trstat.Code_ID;
                         tr.TranactionQuota = trstat.Quota;
-                        tr.TranactionCost = Convert.ToDouble(trstat.TransactionCost);
                         tr.TranactionDate = long.Parse(trstat.Date);
+
                         tr.TransactionAmount = Convert.ToDouble(trstat.CashAmount);
-                        tr.FulizaBorrowed = Convert.ToDouble(trstat.FulizaBorrowed);
-                        tr.FulizaCharge = Convert.ToDouble(trstat.FulizaCharge);
-                        tr.FulizaDebtBalance = Convert.ToDouble(trstat.FulizaAmount);
+                        tr.TranactionCharge = Convert.ToDouble(trstat.TransactionCost);
+                        tr.LoanBorrowed = Convert.ToDouble(trstat.FulizaBorrowed);
 
                         rp.transactions.AddTransaction(tr);
+
                     }
                 }
 
+                //if (rpsx.RecepientExists(rp.RecepientName) == false)
+                //{
+                //    rpsx.AddRecepient(rp);
+                //}
+                //else
+                //{
+
+                //    foreach (var trstat in trsStats)
+                //    {
+                //        if (trstat.RecepientPhoneNo == rp.RecepientId)
+                //        {
+                //            var tr = new L_Transaction();
+
+                //            tr.TransactionID = trstat.RecepientPhoneNo;
+                //            tr.TranactionQuota = trstat.Quota;
+                //            tr.TranactionCost = Convert.ToDouble(trstat.TransactionCost);
+                //            tr.TranactionDate = long.Parse(trstat.Date);
+                //            tr.TransactionAmount = Convert.ToDouble(trstat.CashAmount);
+                //            tr.FulizaBorrowed = Convert.ToDouble(trstat.FulizaBorrowed);
+                //            tr.FulizaCharge = Convert.ToDouble(trstat.FulizaCharge);
+                //            tr.FulizaDebtBalance = Convert.ToDouble(trstat.FulizaAmount);
+
+                //            rp.transactions.AddTransaction(tr);
+                //        }
+                //    }
+                //}
+
+                //if(rpsx.RecepientExists(rp.RecepientName) == true)
+                //{
+                //    rpsx.UpdateRecepient()
+                //}
+
+                
+
                 rpsx.AddRecepient(rp);
+
             }
 
             return rpsx;
         }
+
+        //private L_Transaction 
 
         //private List<DataAndStatisticsProp> xx_Stuf()
         //{
@@ -229,7 +333,7 @@ namespace DataAndStatistics
 
         //            oDataVal.Add(prop);
         //        }
-                
+
         //    }
 
         //    return oDataVal;

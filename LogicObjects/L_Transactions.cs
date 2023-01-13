@@ -52,6 +52,12 @@ namespace LogicObjects
             return true;
         }
 
+        public double TotalAmountTransacted { get; set; }
+
+        public double TotalCharge { get; set; }
+
+        public double TotalLoanBorrowed { get; set; }
+
         public L_Transaction GetTransaction(string szTransactionID)
         {
             L_Transaction tr = collTransaction.FirstOrDefault(tr => tr.TransactionID == szTransactionID);

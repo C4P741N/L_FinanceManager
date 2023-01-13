@@ -23,7 +23,7 @@ namespace MSota.Controllers
 
         [HttpPost]
         [Route("/[controller]/[action]/PostData")]
-        public HttpResponseMessage ExtractAndAddDataOnClick()
+        public HttpResponseMessage PostData()
         {
             //bc = new B_BaseCommands();
 
@@ -36,10 +36,10 @@ namespace MSota.Controllers
         }
 
         [HttpGet]
-        [Route("/[controller]/[action]/GetData")]
-        public L_Recepients ViewDataAndStatistics()
+        [Route("/[controller]/[action]/GetTransactionData")]
+        public L_Transactions GetTransactionStatistics()
         {
-            return BeginLaunchOfStuffToGetData();
+            return Transactions();
         }
     }
 }

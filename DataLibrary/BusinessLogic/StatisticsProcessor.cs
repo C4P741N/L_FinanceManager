@@ -92,29 +92,23 @@ namespace DataLibrary.BusinessLogic
 
         public static List<DL_XMLDataModel> LoadTransactionStatistics()
         {
-                                                                                            string szSQL = string.Empty;
+            return SQLDataAccess.LoadData<DL_XMLDataModel>("SELECT "
 
-            szSQL = "SELECT "
+                                                            + " [Code]                  AS Code              " + Environment.NewLine
+                                                            + ",[Code_ID]               AS Code_ID           " + Environment.NewLine
+                                                            + ",[M_Date]                AS Date              " + Environment.NewLine
+                                                            + ",[M_RecepientPhoneNo]    AS RecepientPhoneNo  " + Environment.NewLine
+                                                            + ",[M_CashAmount]          AS CashAmount        " + Environment.NewLine
+                                                            + ",[M_Balance]             AS Balance           " + Environment.NewLine
+                                                            + ",[M_PayBill_TillNo]      AS PayBill_TillNo    " + Environment.NewLine
+                                                            + ",[M_TransactionCost]     AS TransactionCost   " + Environment.NewLine
+                                                            + ",[M_Quota]               AS Quota             " + Environment.NewLine
+                                                            + ",[M_FulizaLimit]         AS FulizaLimit       " + Environment.NewLine
+                                                            + ",[M_FulizaBorrowed]      AS FulizaBorrowed    " + Environment.NewLine
+                                                            + ",[M_FulizaCharge]        AS FulizaCharge      " + Environment.NewLine
+                                                            + ",[M_FulizaAmount]        AS FulizaAmount      " + Environment.NewLine
 
-                    + " [Code]                  AS Code              "
-                    + ",[Code_ID]               AS Code_ID           "
-                    + ",[M_Date]                AS Date              "
-                    + ",[M_RecepientPhoneNo]    AS RecepientPhoneNo  "
-                    + ",[M_CashAmount]          AS CashAmount        "
-                    + ",[M_Balance]             AS Balance           "
-                    + ",[M_PayBill_TillNo]      AS PayBill_TillNo    "
-                    + ",[M_TransactionCost]     AS TransactionCost   "
-                    + ",[M_Quota]               AS Quota             "
-                    + ",[M_FulizaLimit]         AS FulizaLimit       "
-                    + ",[M_FulizaBorrowed]      AS FulizaBorrowed    "
-                    + ",[M_FulizaCharge]        AS FulizaCharge      "
-                    + ",[M_FulizaAmount]        AS FulizaAmount      "
-
-                    + "FROM[DB_MSota].[dbo].[Ms_Transactions]        "
-
-                    ;
-
-            return SQLDataAccess.LoadData<DL_XMLDataModel>(szSQL);
+                                                            + "FROM[DB_MSota].[dbo].[Ms_Transactions]        " );
         }
 
         public static List<DL_XMLDataModel> LoadRecepientsStatistics()

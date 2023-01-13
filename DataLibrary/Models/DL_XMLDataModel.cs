@@ -9,6 +9,7 @@ namespace DataLibrary.Models
     public class DL_XMLDataModel
     {
         public string Code { get; set; }
+        public string Code_ID { get; set; }
         public string Date { get; set; }
         public string RecepientName { get; set; }
         public string RecepientPhoneNo { get; set; }

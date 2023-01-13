@@ -14,28 +14,18 @@ namespace LogicObjects
 
         public double TransactionAmount { get; set; }
 
-        public double TranactionCost { get; set; }
+        public double TranactionCharge { get; set; }
 
         public string? TranactionQuota { get; set; }
 
-        public double FulizaBorrowed { get; set; }
+        public double LoanBorrowed { get; set; }
 
-        public double FulizaCharge { get; set; }
+        //public double FulizaCharge { get; set; }
 
-        public double FulizaDebtBalance { get; set; }
+        public double LoanBalance { get; set; }
 
 
 
-        public double TotalTransactionDeposited { get; set; }
-
-        public double TotalTransactionWithdrawn { get; set; }
-
-        public double TotalTranactionCost { get; set; }
-                      
-        public double TotalFulizaBorrowed { get; set; }
-                      
-        public double TotalFulizaCharge { get; set; }
-                      
-        public double TotalFulizaDebtBalance { get; set; }
+        
     }
 }

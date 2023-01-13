@@ -17,6 +17,13 @@ namespace LogicObjects
             return rp;
         }
 
+        public L_Recepient[] UpdateRecepient(L_Recepient[] rp, int index)
+        {
+            collRecepient.CopyTo(rp, index);
+
+            return rp;
+        }
+
         public void Sort(string szvRName)
         {
 
@@ -24,14 +31,12 @@ namespace LogicObjects
 
         }
 
-        public bool RecepientExists(string RecepientID)
+        public bool RecepientExists(string RecepientName)
         {
-            L_Recepient rp = collRecepient.FirstOrDefault(rp => rp.RecepientId == RecepientID);
+            L_Recepient rp = collRecepient.FirstOrDefault(rp => rp.RecepientName == RecepientName);
 
             if (rp == null)
-            {
                 return false;
-            }
 
             return true;
         }

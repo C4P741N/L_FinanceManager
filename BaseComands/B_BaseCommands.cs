@@ -3,6 +3,7 @@ using static DataLibrary.BusinessLogic.StatisticsProcessor;
 //using DBConnection;
 using DataAndStatistics;
 using LogicObjects;
+using System.Transactions;
 
 namespace BaseCommands
 {
@@ -29,22 +30,11 @@ namespace BaseCommands
 
         }
 
-        public static L_Recepients BeginLaunchOfStuffToGetData()
+        public static L_Transactions Transactions()
         {
-            L_Recepients vrps = null;
-            B_BaseCommands bcmd = new B_BaseCommands();
+            VariablesFormater vf = new VariablesFormater();
 
-            bcmd.xx_GetDataAndStuff(ref vrps);
-
-            return vrps;
-        }
-
-        private void xx_GetDataAndStuff(ref L_Recepients vrps)
-        {
-            vf = new VariablesFormater();
-
-            vrps = vf.BeginFormatingVariables();
-
+            return vf.BeginGettingTransactions();
         }
     }
 }
