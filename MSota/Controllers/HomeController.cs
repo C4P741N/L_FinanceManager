@@ -37,9 +37,14 @@ namespace MSota.Controllers
 
         [HttpGet]
         [Route("/[controller]/[action]/GetTransactionData")]
-        public L_Transactions GetTransactionStatistics()
+        //public L_Transactions GetTransactionStatistics()
+        //{
+        //    return Transactions();
+        //}
+
+        public string GetTransactionStatistics()
         {
-            return Transactions();
+            return Transactions().TotalAmountTransacted.ToString();
         }
     }
 }
