@@ -42,9 +42,9 @@ namespace MSota.Controllers
         //    return Transactions();
         //}
 
-        public string GetTransactionStatistics()
+        public double GetTransactionStatistics()
         {
-            return Transactions().TotalAmountTransacted.ToString();
+            return Transactions().TotalAmountTransacted;
         }
     }
 }
