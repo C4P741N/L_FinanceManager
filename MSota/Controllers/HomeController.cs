@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using static MSota.Base.BaseCommands;
 using MSota.Models;
+using MSota.DataLibrary;
 
 namespace MSota.Controllers
 {
@@ -13,10 +14,12 @@ namespace MSota.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
+        private ITransactionsResponse _transactionsResponse;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ITransactionsResponse transactionsResponse)
         {
             _logger = logger;
+            _transactionsResponse = transactionsResponse;
         }
 
         [HttpPost]
@@ -33,9 +36,9 @@ namespace MSota.Controllers
 
         [HttpGet]
         [Route("/[controller]/[action]/GetTransactionData")]
-        public TransactionsResponse GetTransactionStatistics()
+        public ITransactions GetTransactionStatistics([FromQuery] ITransactionsResponse _transactionsResponse)
         {
-            return Transactions();
+            return _transactionsResponse.CollectTransactions();
         }
     }
 }
