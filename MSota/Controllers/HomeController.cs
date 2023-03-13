@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using static MSota.Base.BaseCommands;
-using MSota.Models;
-using MSota.DataLibrary;
+using MSota.Accounts;
 
 namespace MSota.Controllers
 {
@@ -14,19 +12,19 @@ namespace MSota.Controllers
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
-        private ITransactionsResponse _transactionsResponse;
+        private ITransactions _transactions;
 
-        public HomeController(ILogger<HomeController> logger, ITransactionsResponse transactionsResponse)
+        public HomeController(ILogger<HomeController> logger, ITransactions transactions)
         {
             _logger = logger;
-            _transactionsResponse = transactionsResponse;
+            _transactions = transactions;
         }
 
         [HttpPost]
         [Route("/[controller]/[action]/PostXmlData")]
         public HttpResponseMessage PostData()
         {
-            BeginDataInsertIf();
+            //BeginDataInsertIf();
 
             return new HttpResponseMessage
             {
@@ -36,9 +34,14 @@ namespace MSota.Controllers
 
         [HttpGet]
         [Route("/[controller]/[action]/GetTransactionData")]
-        public ITransactions GetTransactionStatistics([FromQuery] ITransactionsResponse _transactionsResponse)
+        public ActionResult GetTransactionStatistics()
         {
-            return _transactionsResponse.CollectTransactions();
+            MSota.Responses.TransactionsResponse trRp = _transactions.GetAllTransactions();
+            if (trRp.Success)
+            {
+                return  Ok(trRp);
+            }
+            return BadRequest(trRp);
         }
     }
 }

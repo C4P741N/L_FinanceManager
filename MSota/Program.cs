@@ -14,17 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
-//builder.Services.AddTransient<ITransactionsResponse, TransactionsResponse>();
+//Dependency Injection
+builder.Services.AddScoped<MSota.Accounts.ITransactions, MSota.Accounts.Transactions>();
+builder.Services.AddScoped<MSota.BaseFormaters.IFortmaterAtLarge, MSota.BaseFormaters.FortmaterAtLarge>();
 
-//builder.Services.AddDbContext<DbContext>(options =>
-//   options.UseSqlServer(builder.Configuration.GetConnectionString(/* ConectionString key from appsettings.json */)));
-
-//var connectionString = builder.Configuration.GetConnectionString("SQLConnectionString");
-//builder.Services.AddDbContext<DbContext>(x => x.UseSqlServer(connectionString));
-
-builder.Services.AddDbContext<DbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString")));
-
+//SQL connection string
+builder.Services.AddDbContext<DbContext>(x => 
+        x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -39,8 +35,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
 
 app.UseHttpsRedirection();
 
