@@ -11,11 +11,7 @@ namespace MSota.Accounts
             try
             {
 
-                return new Responses.TransactionsResponse(new Responses.Error 
-                { 
-                    szErrorMessage = string.Empty
-                }
-                , lsTransactions);
+                return new Responses.TransactionsResponse(null, lsTransactions);
 
             }
             catch (Exception ex)
@@ -24,6 +20,7 @@ namespace MSota.Accounts
                 return new MSota.Responses.TransactionsResponse(new MSota.Responses.Error
                 {
                     szErrorMessage = ex.Message,
+                    bErrorFound = true
                 }, lsTransactions);
             }
 
