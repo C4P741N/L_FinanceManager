@@ -1,9 +1,25 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MSota.BaseFormaters
 {
     public class FortmaterAtLarge : IFortmaterAtLarge
     {
+        public string GetUniqueKey()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            Enumerable
+               .Range(65, 26)
+                .Select(e => ((char)e).ToString())
+                .Concat(Enumerable.Range(97, 26).Select(e => ((char)e).ToString()))
+                .Concat(Enumerable.Range(0, 10).Select(e => e.ToString()))
+                .OrderBy(e => Guid.NewGuid())
+                .Take(11)
+                .ToList().ForEach(e => builder.Append(e));
+
+            return builder.ToString().ToUpper();
+        }
         public double GetCharges(string szvBody)
         {
             bool bIsBeforeBeforeEmpty = false;
@@ -142,8 +158,6 @@ namespace MSota.BaseFormaters
                     szPhoneNo = xx_PhoneNoConverterTo07(GetAirtimeSentToNumber(szvBody));
                     break;
                 }
-
-                szPhoneNo = GetAccountNumber(szvBody);
 
                 if (szvBody.Contains("PayPal") || szvID == "paid" || szvID == "withdraw" || szPhoneNo == "sent")
                 {

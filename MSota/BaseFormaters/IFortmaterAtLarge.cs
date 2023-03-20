@@ -5,6 +5,7 @@ namespace MSota.BaseFormaters
     public interface IFortmaterAtLarge
     {
         string[] BodyToValueArray(string szvBody, Regex RBody);
+        string GetUniqueKey();
         string CashConverter(string vValue);
         DateTime DateConvertionFromLong(long lvDate);
         long DateConvertionFromLongToTicksVal(long lvDate);

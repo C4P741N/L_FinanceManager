@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.Extensions.Configuration;
+using MSota.BaseFormaters;
+using MSota.ExtensibleMarkupAtLarge;
+using MSota.DataLibrary;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //Dependency Injection
 builder.Services.AddScoped<MSota.Accounts.ITransactions, MSota.Accounts.Transactions>();
 builder.Services.AddScoped<MSota.BaseFormaters.IFortmaterAtLarge, MSota.BaseFormaters.FortmaterAtLarge>();
+builder.Services.AddScoped<IXmlProps, XmlProps>();
+builder.Services.AddScoped<IXmlDataFotmater, XmlDataFotmater>();
+builder.Services.AddScoped<IXmlExtractor, XmlExtractor>();
+builder.Services.AddScoped<ISqlDataServer, SqlDataServer>();
 
 //SQL connection string
 builder.Services.AddDbContext<DbContext>(x => 

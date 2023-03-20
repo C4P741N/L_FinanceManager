@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using MSota.Accounts;
+using MSota.ExtensibleMarkupAtLarge;
 using MSota.Responses;
 
 namespace MSota.Controllers
@@ -14,11 +15,13 @@ namespace MSota.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private ITransactions _transactions;
+        private IXmlExtractor _XmlExtractor;
 
-        public HomeController(ILogger<HomeController> logger, ITransactions transactions)
+        public HomeController(ILogger<HomeController> logger, ITransactions transactions, IXmlExtractor XmlExtractor)
         {
             _logger = logger;
             _transactions = transactions;
+            _XmlExtractor = XmlExtractor;
         }
 
         [HttpPost]
@@ -26,6 +29,7 @@ namespace MSota.Controllers
         public HttpResponseMessage PostData()
         {
             //BeginDataInsertIf();
+            _XmlExtractor.DBUpdateFromXmlFile();
             if (true)
             {
                 return new HttpResponseMessage
