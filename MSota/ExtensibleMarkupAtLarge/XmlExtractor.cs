@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic;
 using MSota.BaseFormaters;
 using MSota.DataLibrary;
+using MSota.Responses;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -20,61 +21,77 @@ namespace MSota.ExtensibleMarkupAtLarge
         IFortmaterAtLarge _formatter;
         ISqlDataServer _sqlDataServer;
         System.Xml.XmlDocument xml_doc = new System.Xml.XmlDocument();
+        //Error _error;
         public XmlExtractor(IXmlProps xmlProps, IXmlDataFotmater xfts, IFortmaterAtLarge formatter, ISqlDataServer sqlDataServer)
         {
             _xmlProps = xmlProps;
             _xfts = xfts;
             _formatter = formatter;
             _sqlDataServer = sqlDataServer;
+            //_error = error;
         }
 
-        public void DBUpdateFromXmlFile()
+        public BaseResponse DBUpdateFromXmlFile()
         {
-            List<IXmlProps> lsMessages = xx_MessageListFromXML();
-            List<IXmlProps> x_prop = new List<IXmlProps>();
-
-            Collection col = new Collection();
-
-            foreach (IXmlProps lsMessage in lsMessages)
+            try
             {
+                List<IXmlProps> lsMessages = xx_MessageListFromXML();
+                List<IXmlProps> x_prop = new List<IXmlProps>();
 
-                if (lsMessage.szAddress == "MPESA")
-                    _xfts.BeginExtractMpesaData(lsMessage);
+                Collection col = new Collection();
 
-                if (lsMessage.szAddress == "KCB")
-                    _xfts.BeginExtractKcbData(lsMessage);
-
-                if (lsMessage.szQuota != null)
+                foreach (IXmlProps lsMessage in lsMessages)
                 {
-                    lsMessage.szRName = _formatter.StringFormaterToProperCase(lsMessage.szRName);
 
-                    if (lsMessage.szRName != "Fuliza")
+                    if (lsMessage.szAddress == "MPESA")
+                        _xfts.BeginExtractMpesaData(lsMessage);
+
+                    if (lsMessage.szAddress == "KCB")
+                        _xfts.BeginExtractKcbData(lsMessage);
+
+                    if (lsMessage.szQuota != null)
                     {
-                        if (col.Contains(lsMessage.szRName) is false)
-                        {
-                            lsMessage.szUniqueKey = _formatter.GetUniqueKey();
+                        lsMessage.szRName = _formatter.StringFormaterToProperCase(lsMessage.szRName);
 
-                            col.Add("", lsMessage.szRName);
-                            if (string.IsNullOrEmpty(lsMessage.szRPhoneNo) is false)
+                        if (lsMessage.szRName != "Fuliza")
+                        {
+                            if (col.Contains(lsMessage.szRName) is false)
                             {
+                                lsMessage.szUniqueKey = _formatter.GetUniqueKey();
+
+                                col.Add("", lsMessage.szRName);
+                                if (string.IsNullOrEmpty(lsMessage.szRPhoneNo) is false)
+                                {
+                                    col.Add("", lsMessage.szRPhoneNo);
+                                }
+                            }
+                            else if (string.IsNullOrEmpty(lsMessage.szRPhoneNo) is false && col.Contains(lsMessage.szRPhoneNo) is false)
+                            {
+                                lsMessage.szUniqueKey = _formatter.GetUniqueKey();
+
                                 col.Add("", lsMessage.szRPhoneNo);
                             }
                         }
-                        else if (string.IsNullOrEmpty(lsMessage.szRPhoneNo) is false && col.Contains(lsMessage.szRPhoneNo) is false)
-                        {
-                            lsMessage.szUniqueKey = _formatter.GetUniqueKey();
-
-                            col.Add("", lsMessage.szRPhoneNo);
-                        }
+                        x_prop.Add(lsMessage);
                     }
-                    x_prop.Add(lsMessage);
+
                 }
+                col.Clear();
+                GC.Collect();
 
+                _sqlDataServer.PostData(x_prop);
+
+                return new BaseResponse(new Error());
             }
-            col.Clear();
-            GC.Collect();
-
-            _sqlDataServer.PostData(x_prop);
+            catch (Exception ex)
+            {
+                return new BaseResponse(new Error
+                {
+                    szErrorMessage = ex.Message,
+                    szStackTrace = ex.StackTrace,
+                    bErrorFound = true
+                });
+            }
         }
         private List<IXmlProps> xx_MessageListFromXML()
         {

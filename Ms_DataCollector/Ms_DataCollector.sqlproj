@@ -61,6 +61,7 @@
     <Folder Include="dbo\Programmabiliy\StoredProcedure" />
     <Folder Include="dbo\Tables" />
     <Folder Include="Publish Profile" />
+    <Folder Include="Home Profile\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Programmabiliy\StoredProcedure\DuplicateChecker.sql" />
@@ -72,5 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Profile\Ms_DataCollector.publish.xml" />
+    <None Include="Home Profile\Ms_DataCollector.publish.xml" />
   </ItemGroup>
 </Project>

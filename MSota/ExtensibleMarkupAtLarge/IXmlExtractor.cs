@@ -1,7 +1,9 @@
-﻿namespace MSota.ExtensibleMarkupAtLarge
+﻿using MSota.Responses;
+
+namespace MSota.ExtensibleMarkupAtLarge
 {
     public interface IXmlExtractor
     {
-        void DBUpdateFromXmlFile();
+        BaseResponse DBUpdateFromXmlFile();
     }
 }

@@ -1,19 +1,18 @@
 ﻿
-CREATE PROCEDURE [dbo].[RecepientsCopier]
+ALTER PROCEDURE [dbo].[Ms_DistinctRecepientsCopier]
 
 AS
 
+SET IDENTITY_INSERT [DB_MSota].[dbo].[Ms_Recepients] ON
+
 BEGIN
 
-    MERGE INTO [Ms_DataCollector].[dbo].[Ms_Recepients]
+    MERGE INTO [DB_MSota].[dbo].[Ms_Recepients]
 
     USING 
     (
         (SELECT  *
-        FROM    (SELECT [M_RecepientName], 
-                        [M_RecepientPhoneNo], 
-                        [M_RecepientAccNo], 
-                        [M_UniqueID],
+        FROM    (SELECT M_RecepientName, M_RecepientPhoneNo, M_RecepientAccNo,
                         ROW_NUMBER() OVER (PARTITION BY M_RecepientPhoneNo ORDER BY M_RecepientPhoneNo) 
                         AS RowNumber
                 FROM   Ms_Collection) AS a
@@ -24,8 +23,7 @@ BEGIN
         (							
 		     [M_RecepientName]		
 		    ,[M_RecepientPhoneNo]	
-		    ,[M_RecepientAccNo]	
-            ,[M_UniqueID]
+		    ,[M_RecepientAccNo]		
 		    ,[RowNo]
         )
 
@@ -42,7 +40,6 @@ BEGIN
              [M_RecepientName]
             ,[M_RecepientPhoneNo]
             ,[M_RecepientAccNo]
-            ,[M_UniqueID]
 		    ,[RowNo]
         )
 
@@ -51,8 +48,9 @@ BEGIN
              X.[M_RecepientName]
             ,X.[M_RecepientPhoneNo]
             ,X.[M_RecepientAccNo]
-            ,X.[M_UniqueID]
 		    ,X.[RowNo]
         );
 
 END;
+
+SET IDENTITY_INSERT [DB_MSota].[dbo].[Ms_Recepients] OFF

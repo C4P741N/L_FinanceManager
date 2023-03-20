@@ -1,13 +1,13 @@
 ﻿
-CREATE PROCEDURE [dbo].[TransactionsCopier]
+ALTER PROCEDURE [dbo].[Ms_DistinctTransactionsCopier]
 
 AS
 
-SET IDENTITY_INSERT [Ms_DataCollector].[dbo].[Ms_Transactions] ON
+SET IDENTITY_INSERT [DB_MSota].[dbo].[Ms_Transactions] ON
 
 BEGIN
 
-    MERGE INTO [Ms_DataCollector].[dbo].[Ms_Transactions]
+    MERGE INTO [DB_MSota].[dbo].[Ms_Transactions]
 
     USING 
     (
@@ -15,9 +15,8 @@ BEGIN
 
              [ID]                
             ,[Code]              
-            --,[Code_ID]           
-            ,[M_Date] 
-            ,[M_UniqueID]
+            ,[Code_ID]           
+            ,[M_Date]            
             ,[M_RecepientPhoneNo]
             ,[M_CashAmount]      
             ,[M_Balance]         
@@ -36,9 +35,8 @@ BEGIN
         (							
 		     X_ID                
             ,X_Code              
-            --,X_Code_ID           
-            ,X_Date 
-            ,X_UniqueID
+            ,X_Code_ID           
+            ,X_Date            
             ,X_RecepientPhoneNo
             ,X_CashAmount      
             ,X_Balance         
@@ -53,8 +51,8 @@ BEGIN
 
     ON
         (
-		    [Ms_Transactions].[Code]	= X.X_Code		
-	    AND [Ms_Transactions].[M_UniqueID]  = X.X_UniqueID
+		    [Ms_Transactions].[Code_ID]	= X.X_Code_ID		
+	    AND [Ms_Transactions].[M_Date]  = X.X_Date
         )											  
 	 
     WHEN NOT MATCHED BY TARGET THEN
@@ -63,9 +61,8 @@ BEGIN
         (
              [ID]                
             ,[Code]              
-            --,[Code_ID]           
-            ,[M_Date] 
-            ,[M_UniqueID]
+            ,[Code_ID]           
+            ,[M_Date]            
             ,[M_RecepientPhoneNo]
             ,[M_CashAmount]      
             ,[M_Balance]         
@@ -82,9 +79,8 @@ BEGIN
         (
              X.X_ID                
             ,X.X_Code              
-            --,X.X_Code_ID           
-            ,X.X_Date   
-            ,X.X_UniqueID
+            ,X.X_Code_ID           
+            ,X.X_Date            
             ,X.X_RecepientPhoneNo
             ,X.X_CashAmount      
             ,X.X_Balance         
@@ -99,4 +95,4 @@ BEGIN
 
 END;
 
-SET IDENTITY_INSERT [Ms_DataCollector].[dbo].[Ms_Transactions] OFF
+SET IDENTITY_INSERT [DB_MSota].[dbo].[Ms_Transactions] OFF

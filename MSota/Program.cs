@@ -24,6 +24,7 @@ builder.Services.AddScoped<IXmlProps, XmlProps>();
 builder.Services.AddScoped<IXmlDataFotmater, XmlDataFotmater>();
 builder.Services.AddScoped<IXmlExtractor, XmlExtractor>();
 builder.Services.AddScoped<ISqlDataServer, SqlDataServer>();
+builder.Services.AddScoped<ISQLDataAccess, SQLDataAccess>();
 
 //SQL connection string
 builder.Services.AddDbContext<DbContext>(x => 

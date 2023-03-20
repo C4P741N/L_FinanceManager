@@ -5,6 +5,45 @@ namespace MSota.BaseFormaters
 {
     public class FortmaterAtLarge : IFortmaterAtLarge
     {
+        public string[] GlobalRNameGetter(string szvBody)
+        {
+            string[] dFin = new string[] { };
+
+            var regName = new Regex(@"sent\s+to\s+(\w+\s+\w+)");
+            var rNameBefore = regName.Matches(szvBody);
+
+            bool bIsBeforeEmpty = rNameBefore.Count.Equals(0);
+
+            if (bIsBeforeEmpty == true) return dFin;
+
+            return BodyToValueArray(szvBody, regName);
+        }
+        public string[] GlobalAccNoAndPhoneNoGetter(string szvBody)
+        {
+            string[] dFin = new string[] { };
+
+            var regAccNo = new Regex(@"\b\d{10}\b");
+            var rAccNoBefore = regAccNo.Matches(szvBody);
+
+            bool bIsBeforeEmpty = rAccNoBefore.Count.Equals(0);
+
+            if (bIsBeforeEmpty == true) return dFin;
+
+            return BodyToValueArray(szvBody, regAccNo);
+        }
+        public string [] GlobalCashGetter(string szvBody)
+        {
+            string[] dFin = new string[] {};
+
+            var regCash = new Regex(@"\d+(?:,\d+)*\.\d{2}");
+            var rCashBefore = regCash.Matches(szvBody);
+
+            bool bIsBeforeEmpty = rCashBefore.Count.Equals(0);
+
+            if (bIsBeforeEmpty == true) return dFin;
+
+            return BodyToValueArray(szvBody, regCash);
+        }
         public string GetUniqueKey()
         {
             StringBuilder builder = new StringBuilder();

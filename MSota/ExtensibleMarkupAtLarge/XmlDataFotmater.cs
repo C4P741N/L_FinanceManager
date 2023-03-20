@@ -255,10 +255,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                     }
 
                     if (szvBody.Contains("paid to"))
-                    {
                         vmessage.szQuota = "Merchant Payment";
-                        //vmessage.PayBill_TillNo = szvID;
-                    }
 
                     break;
                 }

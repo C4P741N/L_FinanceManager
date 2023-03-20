@@ -28,9 +28,8 @@ namespace MSota.Controllers
         [Route("/[controller]/[action]/PostXmlData")]
         public HttpResponseMessage PostData()
         {
-            //BeginDataInsertIf();
-            _XmlExtractor.DBUpdateFromXmlFile();
-            if (true)
+            BaseResponse baseResponse = _XmlExtractor.DBUpdateFromXmlFile();
+            if (baseResponse._success)
             {
                 return new HttpResponseMessage
                 {
@@ -43,13 +42,6 @@ namespace MSota.Controllers
                 StatusCode = System.Net.HttpStatusCode.NotModified
             };
         }
-
-        //public BaseResponse test()
-        //{
-        //    MSota.Responses.BaseResponse response = null;
-
-        //    return response;
-        //}
 
         [HttpGet]
         [Route("/[controller]/[action]/GetTransactionData")]

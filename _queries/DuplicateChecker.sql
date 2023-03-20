@@ -1,15 +1,15 @@
-﻿CREATE PROCEDURE [dbo].[Ms_DuplicateChecker]
+CREATE PROCEDURE [DB_MSota].[dbo].[Ms_DuplicateChecker]
 (
 @szCode						nvarchar(250),
 @szDate						nvarchar(250),
 @szRecepientName			nvarchar(250),
 @szRecepientPhoneNo			nvarchar(250),
---@szRecepientDate			nvarchar(250),
+@szRecepientDate			nvarchar(250),
 @szRecepientAccNo			nvarchar(250),
 @szCashAmount				nvarchar(250),
 @szBalance					nvarchar(250),
 @szszProtocol				nvarchar(250),
-@szM_PayBill_TillNo		nvarchar(250),
+@szPayBill_TillNo			nvarchar(250),
 @szTransactionCost			nvarchar(250),
 @szAddress					nvarchar(250),
 @szType						nvarchar(250),
@@ -28,8 +28,7 @@
 @szFulizaLimit				nvarchar(250),
 @szFulizaBorrowed			nvarchar(250),
 @szFulizaCharge				nvarchar(250),
-@szFulizaAmount				nvarchar(250),
-@szUniqueKey				nvarchar(250)
+@szFulizaAmount				nvarchar(250)	
 )
 
 AS
@@ -37,9 +36,9 @@ AS
 BEGIN
  
 	DECLARE @dCode					NVARCHAR(253)
-	DECLARE @dM_TransactionStatus	NVARCHAR(253)
+	DECLARE @dRecepientPhoneNo		NVARCHAR(253)
 
-MERGE INTO [Ms_DataCollector].[dbo].[Ms_Collection]
+MERGE INTO [DB_MSota].[dbo].[Ms_Collection]
 
 USING
 (values(
@@ -47,12 +46,12 @@ USING
 		 ,@szDate				
 		 ,@szRecepientName	
 		 ,@szRecepientPhoneNo	
-		 --,@szRecepientDate	
+		 ,@szRecepientDate	
 		 ,@szRecepientAccNo	
 		 ,@szCashAmount		
 		 ,@szBalance			
 		 ,@szszProtocol		
-		 ,@szM_PayBill_TillNo
+		 ,@szPayBill_TillNo
 		 ,@szTransactionCost	
 		 ,@szAddress			
 		 ,@szType				
@@ -71,8 +70,7 @@ USING
 		 ,@szFulizaLimit		
 		 ,@szFulizaBorrowed	
 		 ,@szFulizaCharge		
-		 ,@szFulizaAmount
-		 ,@szUniqueKey
+		 ,@szFulizaAmount		
 		)
 ) 
 
@@ -81,7 +79,7 @@ X(
 		,[M_Date]				
 		,[M_RecepientName]		
 		,[M_RecepientPhoneNo]	
-		--,[M_RecepientDate]		
+		,[M_RecepientDate]		
 		,[M_RecepientAccNo]		
 		,[M_CashAmount]			
 		,[M_Balance]				
@@ -100,19 +98,18 @@ X(
 		,[M_Date_sent]			
 		,[M_Status]				
 		,[M_Sub_id]				
-		,[M_Readable_date]		
+		,[M_Readable_date]			
 		,[M_Quota]				
 		,[M_FulizaLimit]			
 		,[M_FulizaBorrowed]		
 		,[M_FulizaCharge]		
-		,[M_FulizaAmount]
-		,[M_UniqueID]
+		,[M_FulizaAmount]		
 )
 
 	ON
   (
-		[Ms_Collection].[Code]			= @szCode 
-	AND [Ms_Collection].[M_Date]		= @szDate 
+		[Ms_Collection].[Code]				  = @szCode 
+	AND [Ms_Collection].[M_RecepientPhoneNo] = @szRecepientPhoneNo 
   )											  
 	 
 WHEN NOT MATCHED BY TARGET THEN
@@ -123,7 +120,7 @@ WHEN NOT MATCHED BY TARGET THEN
         ,[M_Date]
         ,[M_RecepientName]
         ,[M_RecepientPhoneNo]
-        --,[M_RecepientDate]
+        ,[M_RecepientDate]
         ,[M_RecepientAccNo]
         ,[M_CashAmount]
         ,[M_Balance]
@@ -148,9 +145,8 @@ WHEN NOT MATCHED BY TARGET THEN
         ,[M_FulizaBorrowed]
         ,[M_FulizaCharge]
         ,[M_FulizaAmount]
-		,[M_UniqueID]
  )
- --VALUES(X.[Code], X.[M_Date], X.[M_RecepientName], X.[M_PayBill_TillNo]);
+ --VALUES(X.[Code], X.[M_Date], X.[M_RecepientName], X.[M_TransactionStatus]);
 
 	VALUES
 	(
@@ -158,7 +154,7 @@ WHEN NOT MATCHED BY TARGET THEN
         ,X.[M_Date]
         ,X.[M_RecepientName]
         ,X.[M_RecepientPhoneNo]
-        --,X.[M_RecepientDate]
+        ,X.[M_RecepientDate]
         ,X.[M_RecepientAccNo]
         ,X.[M_CashAmount]
         ,X.[M_Balance]
@@ -183,7 +179,6 @@ WHEN NOT MATCHED BY TARGET THEN
         ,X.[M_FulizaBorrowed]
         ,X.[M_FulizaCharge]
         ,X.[M_FulizaAmount]
-		,X.[M_UniqueID]
 	);
 
  END;

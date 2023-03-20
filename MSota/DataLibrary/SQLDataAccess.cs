@@ -2,23 +2,26 @@
 using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace MSota.DataLibrary
 {
-    public static class SQLDataAccess
+    public class SQLDataAccess : ISQLDataAccess
     {
-        public static string GetConnectionString()
-        {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: false);
-            var IConf = builder.Build();
-            var szConn = IConf.GetValue<string>("ConnectionStrings:value"); //Connection string from .json
+        private readonly string _connectionString;
+        private IServiceProvider _serviceProvider;
 
-            return szConn;
+
+        public SQLDataAccess(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+            _connectionString = _serviceProvider.GetRequiredService<DbContext>().GetService<IConfiguration>().GetConnectionString("SQLConnectionString");
         }
 
-        public static List<T> LoadData<T>(string sql)
+        public List<T> LoadData<T>(string sql)
         {
-            using (IDbConnection IDbCn = new SqlConnection(GetConnectionString()))
+            using (IDbConnection IDbCn = new SqlConnection(_connectionString))
             {
                 return IDbCn.Query<T>(sql).ToList();
             }
@@ -50,10 +53,10 @@ namespace MSota.DataLibrary
         //    }
         //}
 
-        public static void SaveData(string strvQuery)
+        public void SaveData(string strvQuery)
         {
             using (var oAdap = new SqlDataAdapter())
-            using (var oCon = new SqlConnection(GetConnectionString()))
+            using (var oCon = new SqlConnection(_connectionString))
             using (var oCmd = new SqlCommand(strvQuery, oCon))
             {
                 oCmd.Connection = oCon;
