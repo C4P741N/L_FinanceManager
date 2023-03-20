@@ -5,16 +5,15 @@ namespace MSota.Responses
 {
     public class TransactionsResponse : BaseResponse
     {
-         public List<TransactionModel> Value { get; set; }
-        public TransactionModel Transaction { get; set; }
+         public List<TransactionModel> _value { get; set; }
+        public TransactionModel _transaction { get; set; }
         public TransactionsResponse
-            (Error error, List<TransactionModel> lsModel) 
-            : base(!error.bErrorFound,error) 
-                => Value = lsModel;
+            (Error error, List<TransactionModel> lsModel)
+            : base(error) => _value = lsModel;
 
         public TransactionsResponse
             (Error error, TransactionModel oModel) 
-            : base(!error.bErrorFound, error) 
-                => Transaction = oModel;
+            : base(error) 
+                => _transaction = oModel;
     }
 }

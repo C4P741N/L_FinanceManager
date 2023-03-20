@@ -1,4 +1,5 @@
 ﻿using MSota.Models;
+using System.Diagnostics;
 
 namespace MSota.Accounts
 {
@@ -11,7 +12,7 @@ namespace MSota.Accounts
             try
             {
 
-                return new Responses.TransactionsResponse(null, lsTransactions);
+                return new Responses.TransactionsResponse(new MSota.Responses.Error(), lsTransactions);
 
             }
             catch (Exception ex)
@@ -20,6 +21,7 @@ namespace MSota.Accounts
                 return new MSota.Responses.TransactionsResponse(new MSota.Responses.Error
                 {
                     szErrorMessage = ex.Message,
+                    szStackTrace = ex.StackTrace,
                     bErrorFound = true
                 }, lsTransactions);
             }
