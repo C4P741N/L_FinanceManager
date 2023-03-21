@@ -407,3 +407,6 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp
 /*/obj
+/MSota/obj/MSota.csproj.nuget.dgspec.json
+/MSota/obj/MSota.csproj.nuget.g.props
+/MSota/obj/project.assets.json
