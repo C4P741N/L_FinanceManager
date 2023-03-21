@@ -1,10 +1,11 @@
 ﻿using MSota.ExtensibleMarkupAtLarge;
+using MSota.Models;
 
 namespace MSota.DataLibrary
 {
     public interface ISqlDataServer
     {
         void PostData(List<IXmlProps> x_vprop);
-        public List<DL_XMLDataModel> LoadTransactionStatistics();
+        public List<TransactionModel> LoadTransactionStatistics();
     }
 }

@@ -5,6 +5,8 @@ using MSota.ExtensibleMarkupAtLarge;
 using System.Collections.Generic;
 using System.Globalization;
 using MSota.BaseFormaters;
+using System.Text.RegularExpressions;
+using MSota.Models;
 
 namespace MSota.DataLibrary
 {
@@ -83,27 +85,23 @@ namespace MSota.DataLibrary
             _dataAccess.SaveData(szSQL);
         }
 
-        public List<DL_XMLDataModel> LoadTransactionStatistics()
+        public List<TransactionModel> LoadTransactionStatistics()
         {
-            string szSQL = "SELECT "
+            string szSQL = "Select" + Environment.NewLine
 
-                        + " [Code]                  AS Code              " + Environment.NewLine
-                        + ",[Code_ID]               AS Code_ID           " + Environment.NewLine
-                        + ",[M_Date]                AS Date              " + Environment.NewLine
-                        + ",[M_RecepientPhoneNo]    AS RecepientPhoneNo  " + Environment.NewLine
-                        + ",[M_CashAmount]          AS CashAmount        " + Environment.NewLine
-                        + ",[M_Balance]             AS Balance           " + Environment.NewLine
-                        + ",[M_PayBill_TillNo]      AS PayBill_TillNo    " + Environment.NewLine
-                        + ",[M_TransactionCost]     AS TransactionCost   " + Environment.NewLine
-                        + ",[M_Quota]               AS Quota             " + Environment.NewLine
-                        + ",[M_FulizaLimit]         AS FulizaLimit       " + Environment.NewLine
-                        + ",[M_FulizaBorrowed]      AS FulizaBorrowed    " + Environment.NewLine
-                        + ",[M_FulizaCharge]        AS FulizaCharge      " + Environment.NewLine
-                        + ",[M_FulizaAmount]        AS FulizaAmount      " + Environment.NewLine
+                           + "R.[M_RecepientName]               AS RecepientName" + Environment.NewLine
+                           + ",R.[M_UniqueID]                   AS M_UniqueID" + Environment.NewLine
+                           + ",SUM(T.M_CashAmount)              AS Amount" + Environment.NewLine
+                           + ",T.[M_Quota]                      As UniqueID" + Environment.NewLine
 
-                        + "FROM [Ms_DataCollector].[dbo].[Ms_Transactions]        ";
+                           + "FROM[Ms_DataCollector].[dbo].[Ms_Recepients] R" + Environment.NewLine
 
-            return _dataAccess.LoadData<DL_XMLDataModel>(szSQL);
+                           + "JOIN[Ms_DataCollector].[dbo].[Ms_Transactions] T" + Environment.NewLine
+                           + "ON R.M_UniqueID = T.M_UniqueID" + Environment.NewLine
+
+                           + "GROUP BY R.[M_RecepientName], T.[M_Quota], R.[M_UniqueID]"; 
+
+            return _dataAccess.LoadData<TransactionModel>(szSQL);
         } 
     }
 }

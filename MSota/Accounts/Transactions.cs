@@ -8,6 +8,7 @@ namespace MSota.Accounts
     public class Transactions : ITransactions
     {
         ISqlDataServer _sqlDataServer;
+        List<TransactionModel> lsTransactions;
         public Transactions(ISqlDataServer sqlDataServer)
         {
             _sqlDataServer = sqlDataServer;
@@ -18,27 +19,29 @@ namespace MSota.Accounts
 
             try
             {
-                foreach (var dXml in _sqlDataServer.LoadTransactionStatistics())
-                {
-                    var tr = new TransactionModel();
+                lsTransactions = _sqlDataServer.LoadTransactionStatistics();
 
-                    //if (dXml.FulizaCharge.IsNullOrEmpty() == false)
-                    //    dXml.TransactionCost = dXml.FulizaCharge;
+                //foreach (var dXml in _sqlDataServer.LoadTransactionStatistics())
+                //{
+                //    var tr = new TransactionModel();
 
-                    //trs.TotalAmountTransacted += math.RoundingOf(Convert.ToDouble(dXml.CashAmount));
-                    //trs.TotalLoanBorrowed += math.RoundingOf(Convert.ToDouble(dXml.FulizaBorrowed));
-                    //trs.TotalCharge += math.RoundingOf(Convert.ToDouble(dXml.TransactionCost));
+                //    //if (dXml.FulizaCharge.IsNullOrEmpty() == false)
+                //    //    dXml.TransactionCost = dXml.FulizaCharge;
 
-                    tr.TransactionID = dXml.Code_ID;
-                    tr.TranactionQuota = dXml.Quota;
-                    tr.TranactionDate = Convert.ToDateTime(dXml.Date);
+                //    //trs.TotalAmountTransacted += math.RoundingOf(Convert.ToDouble(dXml.CashAmount));
+                //    //trs.TotalLoanBorrowed += math.RoundingOf(Convert.ToDouble(dXml.FulizaBorrowed));
+                //    //trs.TotalCharge += math.RoundingOf(Convert.ToDouble(dXml.TransactionCost));
 
-                    tr.TransactionAmount = Convert.ToDouble(dXml.CashAmount);
-                    tr.TranactionCharge = Convert.ToDouble(dXml.TransactionCost);
-                    tr.LoanBorrowed = Convert.ToDouble(dXml.FulizaBorrowed);
+                //    tr.TransactionID = dXml.Code_ID;
+                //    tr.TranactionQuota = dXml.Quota;
+                //    tr.TranactionDate = Convert.ToDateTime(dXml.Date);
 
-                    lsTransactions.Add(tr);
-                }
+                //    tr.TransactionAmount = Convert.ToDouble(dXml.CashAmount);
+                //    tr.TranactionCharge = Convert.ToDouble(dXml.TransactionCost);
+                //    tr.LoanBorrowed = Convert.ToDouble(dXml.FulizaBorrowed);
+
+                //    lsTransactions.Add(tr);
+                //}
 
                 return new Responses.TransactionsResponse(new MSota.Responses.Error(), lsTransactions);
 
