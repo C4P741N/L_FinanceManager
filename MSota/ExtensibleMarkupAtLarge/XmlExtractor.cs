@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace MSota.ExtensibleMarkupAtLarge
 {
@@ -52,20 +53,6 @@ namespace MSota.ExtensibleMarkupAtLarge
 
                     if (lsMessage.szAddress == "KCB")
                         _xfts.BeginExtractKcbData(lsMessage);
-
-                    if(lsMessage.szRName == "kituku mwanthi")
-                    {
-
-                    }
-                    if (lsMessage.szRName == "KITUKU MWANTHI")
-                    {
-
-                    }
-                    if(lsMessage.szRName == "TELKOM KENYA")
-                    {
-
-                    }
-
 
                     if (lsMessage.szQuota != null)
                     {

@@ -4,7 +4,7 @@
     {
         public string? TransactionID { get; set; }
 
-        public long TranactionDate { get; set; }
+        public DateTime TranactionDate { get; set; }
 
         public double TransactionAmount { get; set; }
 

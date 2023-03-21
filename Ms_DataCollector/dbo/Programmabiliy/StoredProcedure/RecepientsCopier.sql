@@ -9,15 +9,15 @@ BEGIN
 
     USING 
     (
-        (SELECT  *
-        FROM    (SELECT [M_RecepientName], 
+        (SELECT  --*
+        --FROM    (SELECT 
+						[M_RecepientName], 
                         [M_RecepientPhoneNo], 
                         [M_RecepientAccNo], 
-                        [M_UniqueID],
-                        ROW_NUMBER() OVER (PARTITION BY [M_UniqueID] ORDER BY [M_UniqueID]) 
-                        AS RowNumber
-                FROM   Ms_Collection) AS a
-        WHERE   a.RowNumber = 1)         
+                        [M_UniqueID]--,
+                        --ROW_NUMBER() OVER (PARTITION BY [M_UniqueID] ORDER BY [M_UniqueID]) AS RowNumber
+                FROM   Ms_Collection--) AS a
+        WHERE   [M_UniqueID] IS NOT NULL AND [M_UniqueID] != '') 
 
     )
     X   

@@ -23,6 +23,12 @@ namespace MSota.BaseFormaters
 
         //    return AmountBefore;
         //}
+        private string StringToTitleCase(string szName)
+        {
+            var name = szName.Substring(0, 1).ToUpper() + szName.Substring(1).ToLower();
+
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
+        }
         public string GlobalRNameGetter(string szvBody, string[] status)
         {
             string[] dFin = new string[] { };
@@ -42,20 +48,18 @@ namespace MSota.BaseFormaters
             dFin = BodyToValueArray(szvBody, regName);
 
             if (status[2] == "withdraw")
-                return szOut = rNameBefore.Select(x => x.ToString()).ToArray()[0];
+                return szOut = StringToTitleCase(rNameBefore.Select(x => x.ToString()).ToArray()[0]);
             if (status[1] == "for")
-                return szOut = dFin[1];
+                return szOut = StringToTitleCase(dFin[1]);
             if (status[1] == "from")
-                return szOut = dFin[1] + " " + dFin[2];
+                return szOut = StringToTitleCase(dFin[1] + " " + dFin[2]);
             if (status[0] == "sent" || status[0] == "paid")
-                return szOut = dFin[2] + " " + dFin[3];
+                return szOut = StringToTitleCase(dFin[2] + " " + dFin[3]);
 
-            return szOut;
+            return StringToTitleCase(szOut);
         }
         public string GlobalAccNoAndPhoneNoGetter(string szvBody)
         {
-            //string[] dFin = new string[] { };
-
             var regAccNo = new Regex(@"\b\d{10}\b");
             var rAccNoBefore = regAccNo.Matches(szvBody);
 
