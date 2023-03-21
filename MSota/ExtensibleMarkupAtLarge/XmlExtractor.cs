@@ -38,6 +38,10 @@ namespace MSota.ExtensibleMarkupAtLarge
                 List<IXmlProps> lsMessages = xx_MessageListFromXML();
                 List<IXmlProps> x_prop = new List<IXmlProps>();
 
+                string[] SzCollName = new string[lsMessages.Count];
+                string[] SzCollPhonNo = new string[lsMessages.Count];
+                int count = 0;
+
                 Collection col = new Collection();
 
                 foreach (IXmlProps lsMessage in lsMessages)
@@ -49,32 +53,40 @@ namespace MSota.ExtensibleMarkupAtLarge
                     if (lsMessage.szAddress == "KCB")
                         _xfts.BeginExtractKcbData(lsMessage);
 
+                    if(lsMessage.szRName == "kituku mwanthi")
+                    {
+
+                    }
+                    if (lsMessage.szRName == "KITUKU MWANTHI")
+                    {
+
+                    }
+                    if(lsMessage.szRName == "TELKOM KENYA")
+                    {
+
+                    }
+
+
                     if (lsMessage.szQuota != null)
                     {
-                        lsMessage.szRName = _formatter.StringFormaterToProperCase(lsMessage.szRName);
-
                         if (lsMessage.szRName != "Fuliza")
                         {
-                            if (col.Contains(lsMessage.szRName) is false)
+                            if (SzCollName.Contains(lsMessage.szRName + lsMessage.szRAccNo) is false)
                             {
                                 lsMessage.szUniqueKey = _formatter.GetUniqueKey();
 
-                                col.Add("", lsMessage.szRName);
-                                if (string.IsNullOrEmpty(lsMessage.szRPhoneNo) is false)
-                                {
-                                    col.Add("", lsMessage.szRPhoneNo);
-                                }
+                                SzCollName[count] = lsMessage.szRName + lsMessage.szRAccNo;
                             }
-                            else if (string.IsNullOrEmpty(lsMessage.szRPhoneNo) is false && col.Contains(lsMessage.szRPhoneNo) is false)
-                            {
-                                lsMessage.szUniqueKey = _formatter.GetUniqueKey();
+                            //else if (string.IsNullOrEmpty(lsMessage.szRAccNo) is false && SzCollPhonNo.Contains(lsMessage.szRAccNo) is false)
+                            //{
+                            //    lsMessage.szUniqueKey = _formatter.GetUniqueKey();
 
-                                col.Add("", lsMessage.szRPhoneNo);
-                            }
+                            //    SzCollPhonNo[count] = lsMessage.szRName+lsMessage.szRAccNo;
+                            //}
                         }
                         x_prop.Add(lsMessage);
                     }
-
+                    count++;
                 }
                 col.Clear();
                 GC.Collect();

@@ -3,16 +3,20 @@ using System.Data;
 using Dapper;
 using MSota.ExtensibleMarkupAtLarge;
 using System.Collections.Generic;
+using System.Globalization;
+using MSota.BaseFormaters;
 
 namespace MSota.DataLibrary
 {
     public class SqlDataServer : ISqlDataServer
     {
         private ISQLDataAccess _dataAccess;
+        IFortmaterAtLarge _fortmater;
 
-        public SqlDataServer(ISQLDataAccess dataAccess)
+        public SqlDataServer(ISQLDataAccess dataAccess, IFortmaterAtLarge fortmater)
         {
             _dataAccess = dataAccess;
+            _fortmater= fortmater;
         }
 
         public void PostData(List<IXmlProps> x_vprop)
@@ -22,6 +26,7 @@ namespace MSota.DataLibrary
         public void AddStatisticsToDb(List<IXmlProps> x_vprop)
         {
             string szSQL = string.Empty;
+            System.Globalization.CultureInfo dAmountCultureInfo = new CultureInfo("en-GB");
 
             foreach (IXmlProps prop in x_vprop)
             {
@@ -33,8 +38,8 @@ namespace MSota.DataLibrary
                                     + "'" + prop.szRPhoneNo + "',"
                                     //+ "'" + prop.szRecepientDate + "',"
                                     + "'" + prop.szRAccNo + "',"
-                                    + "'" + prop.dCashAmount + "',"
-                                    + "'" + prop.dBalance + "',"
+                                    + "'" + _fortmater.ConvertToString(prop.dCashAmount) + "',"
+                                    + "'" + _fortmater.ConvertToString(prop.dBalance) + "',"
                                     + "'" + prop.szProtocol + "',"
                                     + "'" + prop.szPayBill_TillNo + "',"
                                     + "'" + prop.szTransactionCost + "',"
@@ -52,10 +57,10 @@ namespace MSota.DataLibrary
                                     + "'" + prop.szSub_id + "',"
                                     + "'" + prop.szReadable_date + "',"
                                     + "'" + prop.szQuota + "',"
-                                    + "'" + prop.dFulizaLimit + "',"
-                                    + "'" + prop.dFulizaBorrowed + "',"
-                                    + "'" + prop.dCharges + "',"
-                                    + "'" + prop.dFulizaAmount + "',"
+                                    + "'" + _fortmater.ConvertToString(prop.dFulizaLimit) + "',"
+                                    + "'" + _fortmater.ConvertToString(prop.dFulizaBorrowed) + "',"
+                                    + "'" + _fortmater.ConvertToString(prop.dCharges) + "',"
+                                    + "'" + _fortmater.ConvertToString(prop.dFulizaAmount) + "',"
                                     + "'" + prop.szUniqueKey + "'"
 
                                     ;

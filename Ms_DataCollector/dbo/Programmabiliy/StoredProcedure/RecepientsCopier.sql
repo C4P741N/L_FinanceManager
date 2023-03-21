@@ -14,7 +14,7 @@ BEGIN
                         [M_RecepientPhoneNo], 
                         [M_RecepientAccNo], 
                         [M_UniqueID],
-                        ROW_NUMBER() OVER (PARTITION BY M_RecepientPhoneNo ORDER BY M_RecepientPhoneNo) 
+                        ROW_NUMBER() OVER (PARTITION BY [M_UniqueID] ORDER BY [M_UniqueID]) 
                         AS RowNumber
                 FROM   Ms_Collection) AS a
         WHERE   a.RowNumber = 1)         

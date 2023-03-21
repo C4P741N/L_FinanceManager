@@ -1,48 +1,87 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace MSota.BaseFormaters
 {
     public class FortmaterAtLarge : IFortmaterAtLarge
     {
-        public string[] GlobalRNameGetter(string szvBody)
+        //public string[] GlobalBodyToValueArray(string szvBody, Regex RBody)
+        //{
+        //    string szAmountAfter = string.Empty;
+        //    string[] SzAmount;
+
+        //    var AmountBefore = RBody.Matches(szvBody);
+
+        //    if (AmountBefore.Count.Equals(0)) return (SzAmount = szAmountAfter.Split(' '));
+
+        //    //szAmountAfter = AmountBefore;
+
+        //    //SzAmount = szAmountAfter.Split(' ');
+
+        //    //SzAmount = SzAmount.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+        //    return AmountBefore;
+        //}
+        public string GlobalRNameGetter(string szvBody, string[] status)
         {
             string[] dFin = new string[] { };
+            string szOut = string.Empty;
 
-            var regName = new Regex(@"sent\s+to\s+(\w+\s+\w+)");
+            var regName = new Regex($@"{status[0]}\s+{status[1]}\s+(\w+\s+\w+)");
+
+            if (status[2] == "withdraw")
+                regName = new Regex(@"(?<=from\s)(.*?)(?=\sNew)");
+
             var rNameBefore = regName.Matches(szvBody);
 
             bool bIsBeforeEmpty = rNameBefore.Count.Equals(0);
 
-            if (bIsBeforeEmpty == true) return dFin;
+            if (bIsBeforeEmpty == true) return string.Empty;
 
-            return BodyToValueArray(szvBody, regName);
+            dFin = BodyToValueArray(szvBody, regName);
+
+            if (status[2] == "withdraw")
+                return szOut = rNameBefore.Select(x => x.ToString()).ToArray()[0];
+            if (status[1] == "for")
+                return szOut = dFin[1];
+            if (status[1] == "from")
+                return szOut = dFin[1] + " " + dFin[2];
+            if (status[0] == "sent" || status[0] == "paid")
+                return szOut = dFin[2] + " " + dFin[3];
+
+            return szOut;
         }
-        public string[] GlobalAccNoAndPhoneNoGetter(string szvBody)
+        public string GlobalAccNoAndPhoneNoGetter(string szvBody)
         {
-            string[] dFin = new string[] { };
+            //string[] dFin = new string[] { };
 
             var regAccNo = new Regex(@"\b\d{10}\b");
             var rAccNoBefore = regAccNo.Matches(szvBody);
 
             bool bIsBeforeEmpty = rAccNoBefore.Count.Equals(0);
 
-            if (bIsBeforeEmpty == true) return dFin;
+            if (bIsBeforeEmpty == true) return string.Empty;
 
-            return BodyToValueArray(szvBody, regAccNo);
+            return BodyToValueArray(szvBody, regAccNo)[0];
         }
         public string [] GlobalCashGetter(string szvBody)
         {
-            string[] dFin = new string[] {};
+            string[] SzFin = new string[] {};
+            string[] SzResult = new string[5];
 
             var regCash = new Regex(@"\d+(?:,\d+)*\.\d{2}");
             var rCashBefore = regCash.Matches(szvBody);
 
             bool bIsBeforeEmpty = rCashBefore.Count.Equals(0);
 
-            if (bIsBeforeEmpty == true) return dFin;
+            if (bIsBeforeEmpty == true) return SzFin;
 
-            return BodyToValueArray(szvBody, regCash);
+            //var tes0 = BodyToValueArray(szvBody, regCash);
+
+            SzResult = rCashBefore.Select(x => x.Value).ToArray();
+
+            return SzResult;
         }
         public string GetUniqueKey()
         {
@@ -512,11 +551,15 @@ namespace MSota.BaseFormaters
             return SzAmount;
         }
 
-        public string CashConverter(string vValue)
+        public double CashConverter(string vValue)
         {
 
+            if (string.IsNullOrEmpty(vValue)) return 0;
+
+            System.Globalization.CultureInfo dAmountCultureInfo = new CultureInfo("en-GB");
+
             string strFinValue = string.Empty;
-            string strFiValue = string.Empty;
+            double dFiValue = 0;
             if (vValue.StartsWith("Ksh"))
             {
                 string strNoKsh = vValue.Remove(0, 3);
@@ -530,9 +573,32 @@ namespace MSota.BaseFormaters
                 string strComValue = staNoSecondDot[0] + "." + staNoSecondDot[1];
                 strFinValue = strComValue.Replace(",", "");
             }
-            strFiValue = strFinValue;
+            dFiValue = Convert.ToDouble(strFinValue, dAmountCultureInfo);
 
-            return strFiValue;
+            return dFiValue;
         }
+        public string ConvertToString(string vValue)
+        {
+
+            if (string.IsNullOrEmpty(vValue)) return string.Empty;
+
+            System.Globalization.CultureInfo dAmountCultureInfo = new CultureInfo("en-GB");
+
+            string szFiValue = Convert.ToString(vValue, dAmountCultureInfo);
+
+            return szFiValue;
+        }
+        public string ConvertToString(double vValue)
+        {
+
+            if (vValue == 0) return string.Empty;
+
+            System.Globalization.CultureInfo dAmountCultureInfo = new CultureInfo("en-GB");
+
+            string szFiValue = Convert.ToString(vValue, dAmountCultureInfo);
+
+            return szFiValue;
+        }
+
     }
 }

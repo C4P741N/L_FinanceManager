@@ -4,9 +4,14 @@ namespace MSota.BaseFormaters
 {
     public interface IFortmaterAtLarge
     {
+        string ConvertToString(double vValue);
+        string ConvertToString(string vValue);
+        public string GlobalRNameGetter(string szvBody, string [] SzStatus);
+        public string GlobalAccNoAndPhoneNoGetter(string szvBody);
+        public string[] GlobalCashGetter(string szvBody);
         string[] BodyToValueArray(string szvBody, Regex RBody);
         string GetUniqueKey();
-        string CashConverter(string vValue);
+        double CashConverter(string vValue);
         DateTime DateConvertionFromLong(long lvDate);
         long DateConvertionFromLongToTicksVal(long lvDate);
         long DateConvertionToLongTicks(long lvDate);

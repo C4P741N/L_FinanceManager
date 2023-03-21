@@ -55,16 +55,22 @@ namespace MSota.DataLibrary
 
         public void SaveData(string strvQuery)
         {
-            using (var oAdap = new SqlDataAdapter())
-            using (var oCon = new SqlConnection(_connectionString))
-            using (var oCmd = new SqlCommand(strvQuery, oCon))
+            try
             {
-                oCmd.Connection = oCon;
+                using (var oAdap = new SqlDataAdapter())
+                using (var oCon = new SqlConnection(_connectionString))
+                using (var oCmd = new SqlCommand(strvQuery, oCon))
+                {
+                    oCmd.Connection = oCon;
 
-                oAdap.InsertCommand = oCmd;
+                    oAdap.InsertCommand = oCmd;
 
-                oCon.Open();
-                oCmd.ExecuteNonQuery();
+                    oCon.Open();
+                    oCmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
             }
         }
     }
