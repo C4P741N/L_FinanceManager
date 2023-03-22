@@ -39,8 +39,11 @@ namespace MSota.ExtensibleMarkupAtLarge
                 List<IXmlProps> lsMessages = xx_MessageListFromXML();
                 List<IXmlProps> x_prop = new List<IXmlProps>();
 
-                string[] SzCollName = new string[lsMessages.Count];
+                //string[] SzCollName = Array.Empty<string>();
                 string[] SzCollPhonNo = new string[lsMessages.Count];
+
+                var SzCollName = new Dictionary<string, string>();
+
                 int count = 0;
 
                 Collection col = new Collection();
@@ -58,11 +61,17 @@ namespace MSota.ExtensibleMarkupAtLarge
                     {
                         if (lsMessage.szRName != "Fuliza")
                         {
-                            if (SzCollName.Contains(lsMessage.szRName + lsMessage.szRAccNo) is false)
+                            if (SzCollName.ContainsKey(lsMessage.szRName + lsMessage.szRAccNo) is false)
                             {
                                 lsMessage.szUniqueKey = _formatter.GetUniqueKey();
 
-                                SzCollName[count] = lsMessage.szRName + lsMessage.szRAccNo;
+                                SzCollName.Add(lsMessage.szRName + lsMessage.szRAccNo, lsMessage.szUniqueKey);
+                            }
+                            else
+                            {
+                                string Code = SzCollName.GetValueOrDefault(lsMessage.szRName + lsMessage.szRAccNo);
+
+                                lsMessage.szUniqueKey = Code;
                             }
                             //else if (string.IsNullOrEmpty(lsMessage.szRAccNo) is false && SzCollPhonNo.Contains(lsMessage.szRAccNo) is false)
                             //{

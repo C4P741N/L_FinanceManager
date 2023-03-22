@@ -111,7 +111,7 @@ X(
 
 	ON
   (
-		[Ms_Collection].[Code]			= @szCode 
+		[Ms_Collection].[Code]		= @szCode 
 	AND [Ms_Collection].[M_Date]		= @szDate 
   )											  
 	 
