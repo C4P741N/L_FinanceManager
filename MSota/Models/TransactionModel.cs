@@ -2,7 +2,9 @@
 {
     public class TransactionModel
     {
-        public string? TransactionID { get; set; }
+        public string? RecepientID { get; set; }
+
+        public string? RecepientName { get; set; }
 
         public DateTime TranactionDate { get; set; }
 

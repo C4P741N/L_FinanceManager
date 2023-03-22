@@ -87,12 +87,12 @@ namespace MSota.DataLibrary
 
         public List<TransactionModel> LoadTransactionStatistics()
         {
-            string szSQL = "Select" + Environment.NewLine
+            string szSQL = "SELECT" + Environment.NewLine
 
                            + "R.[M_RecepientName]               AS RecepientName" + Environment.NewLine
-                           + ",R.[M_UniqueID]                   AS M_UniqueID" + Environment.NewLine
-                           + ",SUM(T.M_CashAmount)              AS Amount" + Environment.NewLine
-                           + ",T.[M_Quota]                      As UniqueID" + Environment.NewLine
+                           + ",R.[M_UniqueID]                   AS RecepientID" + Environment.NewLine
+                           + ",SUM(T.M_CashAmount)              AS TransactionAmount" + Environment.NewLine
+                           + ",T.[M_Quota]                      As TranactionQuota" + Environment.NewLine
 
                            + "FROM[Ms_DataCollector].[dbo].[Ms_Recepients] R" + Environment.NewLine
 
