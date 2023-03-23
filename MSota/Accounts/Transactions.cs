@@ -8,42 +8,23 @@ namespace MSota.Accounts
     public class Transactions : ITransactions
     {
         ISqlDataServer _sqlDataServer;
-        List<TransactionModel> lsTransactions;
+        List<TransactionModel> lsTransactions = null;
+        List<FactionsModel> lsFactions = null;
         public Transactions(ISqlDataServer sqlDataServer)
         {
             _sqlDataServer = sqlDataServer;
         }
         public Responses.TransactionsResponse GetAllTransactions()
         {
-            List<TransactionModel> lsTransactions = new List<TransactionModel>();
+            lsTransactions = new List<TransactionModel>();
+            lsFactions = new List<FactionsModel>();
 
             try
             {
                 lsTransactions = _sqlDataServer.LoadTransactionStatistics();
+                lsFactions = _sqlDataServer.LoadFactionsStatistics();
 
-                //foreach (var dXml in _sqlDataServer.LoadTransactionStatistics())
-                //{
-                //    var tr = new TransactionModel();
-
-                //    //if (dXml.FulizaCharge.IsNullOrEmpty() == false)
-                //    //    dXml.TransactionCost = dXml.FulizaCharge;
-
-                //    //trs.TotalAmountTransacted += math.RoundingOf(Convert.ToDouble(dXml.CashAmount));
-                //    //trs.TotalLoanBorrowed += math.RoundingOf(Convert.ToDouble(dXml.FulizaBorrowed));
-                //    //trs.TotalCharge += math.RoundingOf(Convert.ToDouble(dXml.TransactionCost));
-
-                //    tr.TransactionID = dXml.Code_ID;
-                //    tr.TranactionQuota = dXml.Quota;
-                //    tr.TranactionDate = Convert.ToDateTime(dXml.Date);
-
-                //    tr.TransactionAmount = Convert.ToDouble(dXml.CashAmount);
-                //    tr.TranactionCharge = Convert.ToDouble(dXml.TransactionCost);
-                //    tr.LoanBorrowed = Convert.ToDouble(dXml.FulizaBorrowed);
-
-                //    lsTransactions.Add(tr);
-                //}
-
-                return new Responses.TransactionsResponse(new MSota.Responses.Error(), lsTransactions);
+                return new Responses.TransactionsResponse(new MSota.Responses.Error(), lsTransactions, lsFactions);
 
             }
             catch (Exception ex)
@@ -54,7 +35,7 @@ namespace MSota.Accounts
                     szErrorMessage = ex.Message,
                     szStackTrace = ex.StackTrace,
                     bErrorFound = true
-                }, lsTransactions);
+                }, lsTransactions, lsFactions);
             }
 
         }

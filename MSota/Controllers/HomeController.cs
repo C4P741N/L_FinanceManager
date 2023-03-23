@@ -43,10 +43,12 @@ namespace MSota.Controllers
             };
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("/[controller]/[action]/GetTransactionData")]
-        public ActionResult GetTransactionStatistics()
+        public ActionResult GetTransactionStatistics([FromBody]Date date)
         {
+            var test0 = date;
+
             MSota.Responses.TransactionsResponse trRp = _transactions.GetAllTransactions();
             if (trRp._success)
             {
@@ -54,5 +56,12 @@ namespace MSota.Controllers
             }
             return BadRequest(trRp);
         }
+    }
+
+    public class Date
+    {
+        public DateTime to { get; set; }
+        public DateTime from { get; set; }
+        public DateTime defaultmax { get; set; }
     }
 }

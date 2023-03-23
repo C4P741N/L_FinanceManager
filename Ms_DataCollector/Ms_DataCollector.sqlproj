@@ -70,9 +70,13 @@
     <Build Include="dbo\Tables\Ms_Collection.sql" />
     <Build Include="dbo\Tables\Ms_Recepients.sql" />
     <Build Include="dbo\Tables\Ms_Transactions.sql" />
+    <Build Include="dbo\Tables\Factions.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Profile\Ms_DataCollector.publish.xml" />
     <None Include="Home Profile\Ms_DataCollector.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Ms_DataCollector.refactorlog" />
   </ItemGroup>
 </Project>

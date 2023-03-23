@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using MSota.BaseFormaters;
 using MSota.ExtensibleMarkupAtLarge;
 using MSota.DataLibrary;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +48,10 @@ if (app.Environment.IsDevelopment())
 app.UseCors(webApi =>
 {
     webApi.AllowAnyOrigin();
+    //webApi.WithOrigins("http://localhost:3000/");
+    webApi.AllowAnyHeader();
 });
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

@@ -103,5 +103,21 @@ namespace MSota.DataLibrary
 
             return _dataAccess.LoadData<TransactionModel>(szSQL);
         } 
+
+        public List<FactionsModel> LoadFactionsStatistics()
+        {
+            string szSQL = "SELECT" + Environment.NewLine
+
+                            + " [M_Quota] AS GroupName" + Environment.NewLine
+                            + " , SUM([M_CashAmount]) AS GroupTotal" + Environment.NewLine
+
+
+                            + "  FROM[Ms_DataCollector].[dbo].[Ms_Transactions]" + Environment.NewLine
+
+                            + "  GROUP BY[M_TransactionCost],[M_Quota]";
+
+
+            return _dataAccess.LoadData<FactionsModel>(szSQL);
+        }
     }
 }
