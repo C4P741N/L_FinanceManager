@@ -2,7 +2,7 @@
     [ID]                 INT            IDENTITY (1, 1) NOT NULL,
     [Code]               VARCHAR (255)  NOT NULL,
     --[Code_ID]            VARCHAR (255)  NOT NULL,
-    [M_Date]             VARCHAR (255)  NOT NULL,
+    [M_Date]             DATETIME  NOT NULL,
     [M_UniqueID]         VARCHAR (255)  NOT NULL,
     [M_RecepientPhoneNo] VARCHAR (255)  NOT NULL,
     [M_CashAmount]       FLOAT (53)     NOT NULL,

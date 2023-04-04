@@ -7,6 +7,7 @@ using System.Globalization;
 using MSota.BaseFormaters;
 using System.Text.RegularExpressions;
 using MSota.Models;
+using Calendar = MSota.Models.Calendar;
 
 namespace MSota.DataLibrary
 {
@@ -85,7 +86,7 @@ namespace MSota.DataLibrary
             _dataAccess.SaveData(szSQL);
         }
 
-        public List<TransactionModel> LoadTransactionStatistics()
+        public List<TransactionModel> LoadTransactionStatistics(Calendar cal)
         {
             string szSQL = "SELECT" + Environment.NewLine
 
@@ -99,12 +100,14 @@ namespace MSota.DataLibrary
                            + "JOIN[Ms_DataCollector].[dbo].[Ms_Transactions] T" + Environment.NewLine
                            + "ON R.M_UniqueID = T.M_UniqueID" + Environment.NewLine
 
+                           + " WHERE [M_Date] BETWEEN '" + cal .from + "' AND '" + cal.to + "'" + Environment.NewLine
+
                            + "GROUP BY R.[M_RecepientName], T.[M_Quota], R.[M_UniqueID]"; 
 
             return _dataAccess.LoadData<TransactionModel>(szSQL);
         } 
 
-        public List<FactionsModel> LoadFactionsStatistics()
+        public List<FactionsModel> LoadFactionsStatistics(Calendar cal)
         {
             string szSQL = "SELECT" + Environment.NewLine
 
@@ -113,6 +116,8 @@ namespace MSota.DataLibrary
 
 
                             + "  FROM[Ms_DataCollector].[dbo].[Ms_Transactions]" + Environment.NewLine
+
+                            + " WHERE [M_Date] BETWEEN '" + cal.from + "' AND '" + cal.to + "'" + Environment.NewLine
 
                             + "  GROUP BY[M_TransactionCost],[M_Quota]";
 

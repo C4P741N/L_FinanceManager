@@ -1,7 +1,11 @@
-﻿namespace MSota.ExtensibleMarkupAtLarge
+﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Globalization;
+
+namespace MSota.ExtensibleMarkupAtLarge
 {
     public class XmlProps : IXmlProps
     {
+        private string xdateTime;
         public string szUniqueKey { get; set; }
         public string szProtocol { get; set; }
         public string szAddress { get; set; }
@@ -17,7 +21,11 @@
         public string szLocked { get; set; }
         public string szDate_sent { get; set; }
         public string szSub_id { get; set; }
-        public string szReadable_date { get; set; }
+        public string szReadable_date
+        {
+            get { return Convert.ToString(DateTime.ParseExact(xdateTime, "MMM d, yyyy HH:mm:ss", CultureInfo.InvariantCulture).ToUniversalTime()); }
+            set { xdateTime = value; }
+        }
         public string szCode { get; set; }
         public string szPayBill_TillNo { get; set; }
         public double dCashAmount { get; set; }

@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 using MSota.BaseFormaters;
 using MSota.DataLibrary;
 using MSota.Responses;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -47,6 +48,14 @@ namespace MSota.ExtensibleMarkupAtLarge
                 int count = 0;
 
                 Collection col = new Collection();
+
+
+                var sddate = "2/22/2023 8:38:08 PM";
+                DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                //var test = start.ToLongDateString(sddate);
+
+                var test = Convert.ToString(DateTime.ParseExact(sddate, "MMM d, yyyy HH:mm:ss", CultureInfo.InvariantCulture).ToUniversalTime());
+
 
                 foreach (IXmlProps lsMessage in lsMessages)
                 {

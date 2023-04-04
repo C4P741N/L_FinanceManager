@@ -6,7 +6,7 @@ namespace MSota.Accounts
     public interface ITransactions
     {
 
-        MSota.Responses.TransactionsResponse GetAllTransactions();
+        MSota.Responses.TransactionsResponse GetAllTransactions(Calendar cal);
 
         MSota.Responses.TransactionsResponse GetTransaction(TransactionModel tm);
     }

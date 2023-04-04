@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using MSota.Accounts;
 using MSota.ExtensibleMarkupAtLarge;
+using MSota.Models;
 using MSota.Responses;
 
 namespace MSota.Controllers
@@ -45,11 +46,9 @@ namespace MSota.Controllers
 
         [HttpPost]
         [Route("/[controller]/[action]/GetTransactionData")]
-        public ActionResult GetTransactionStatistics([FromBody]Date date)
+        public ActionResult GetTransactionStatistics([FromBody]Calendar cal)
         {
-            var test0 = date;
-
-            MSota.Responses.TransactionsResponse trRp = _transactions.GetAllTransactions();
+            MSota.Responses.TransactionsResponse trRp = _transactions.GetAllTransactions(cal);
             if (trRp._success)
             {
                 return  Ok(trRp);
@@ -58,10 +57,5 @@ namespace MSota.Controllers
         }
     }
 
-    public class Date
-    {
-        public DateTime to { get; set; }
-        public DateTime from { get; set; }
-        public DateTime defaultmax { get; set; }
-    }
+    
 }

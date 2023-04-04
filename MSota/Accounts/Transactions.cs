@@ -14,15 +14,15 @@ namespace MSota.Accounts
         {
             _sqlDataServer = sqlDataServer;
         }
-        public Responses.TransactionsResponse GetAllTransactions()
+        public Responses.TransactionsResponse GetAllTransactions(Calendar cal)
         {
             lsTransactions = new List<TransactionModel>();
             lsFactions = new List<FactionsModel>();
 
             try
             {
-                lsTransactions = _sqlDataServer.LoadTransactionStatistics();
-                lsFactions = _sqlDataServer.LoadFactionsStatistics();
+                lsTransactions = _sqlDataServer.LoadTransactionStatistics(cal);
+                lsFactions = _sqlDataServer.LoadFactionsStatistics(cal);
 
                 return new Responses.TransactionsResponse(new MSota.Responses.Error(), lsTransactions, lsFactions);
 
