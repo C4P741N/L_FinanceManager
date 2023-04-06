@@ -75,6 +75,7 @@
   <ItemGroup>
     <None Include="Publish Profile\Ms_DataCollector.publish.xml" />
     <None Include="Home Profile\Ms_DataCollector.publish.xml" />
+    <None Include="Ms_DataCollector.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Ms_DataCollector.refactorlog" />

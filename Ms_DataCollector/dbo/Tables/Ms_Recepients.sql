@@ -5,7 +5,6 @@
 		M_RecepientName		varchar(255) NOT NULL,
         M_RecepientPhoneNo	varchar(255) NOT NULL,
         M_RecepientAccNo	varchar(255),
-		[M_Relation]		NVARCHAR(50) NOT NULL,
-		RowNo				INT
+		[M_Relation]		NVARCHAR(50) 
     
 );

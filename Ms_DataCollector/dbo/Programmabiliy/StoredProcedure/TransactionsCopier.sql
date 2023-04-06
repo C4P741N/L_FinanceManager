@@ -16,7 +16,7 @@ BEGIN
              [ID]                
             ,[Code]              
             --,[Code_ID]           
-            ,[M_Date] 
+            ,[M_Readable_date] 
             ,[M_UniqueID]
             ,[M_RecepientPhoneNo]
             ,[M_CashAmount]      

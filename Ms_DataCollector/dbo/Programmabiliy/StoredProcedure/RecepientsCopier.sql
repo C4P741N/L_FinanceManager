@@ -26,7 +26,7 @@ BEGIN
 		    ,[M_RecepientPhoneNo]	
 		    ,[M_RecepientAccNo]	
             ,[M_UniqueID]
-		    ,[RowNo]
+		    --,[RowNo]
         )
 
     ON
@@ -43,7 +43,7 @@ BEGIN
             ,[M_RecepientPhoneNo]
             ,[M_RecepientAccNo]
             ,[M_UniqueID]
-		    ,[RowNo]
+		    --,[RowNo]
         )
 
      VALUES
@@ -52,7 +52,7 @@ BEGIN
             ,X.[M_RecepientPhoneNo]
             ,X.[M_RecepientAccNo]
             ,X.[M_UniqueID]
-		    ,X.[RowNo]
+		    --,X.[RowNo]
         );
 
 END;
