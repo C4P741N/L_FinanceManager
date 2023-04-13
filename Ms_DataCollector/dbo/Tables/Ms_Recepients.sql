@@ -5,6 +5,7 @@
 		M_RecepientName		varchar(255) NOT NULL,
         M_RecepientPhoneNo	varchar(255) NOT NULL,
         M_RecepientAccNo	varchar(255),
-		[M_Relation]		NVARCHAR(50) 
+		[M_Relation]		NVARCHAR(50), 
+		 [RowNo]			TINYINT NOT NULL 
     
 );

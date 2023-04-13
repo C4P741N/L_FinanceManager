@@ -9,15 +9,15 @@ BEGIN
 
     USING 
     (
-        (SELECT  --*
-        --FROM    (SELECT 
+        (SELECT  *
+        FROM    (SELECT 
 						[M_RecepientName], 
                         [M_RecepientPhoneNo], 
                         [M_RecepientAccNo], 
-                        [M_UniqueID]--,
-                        --ROW_NUMBER() OVER (PARTITION BY [M_UniqueID] ORDER BY [M_UniqueID]) AS RowNumber
-                FROM   Ms_Collection--) AS a
-        WHERE   [M_UniqueID] IS NOT NULL AND [M_UniqueID] != '') 
+                        [M_UniqueID],
+                        ROW_NUMBER() OVER (PARTITION BY [M_UniqueID] ORDER BY [M_UniqueID]) AS RowNumber
+                FROM   Ms_Collection) AS a
+        WHERE  RowNumber = '1')         
 
     )
     X   
@@ -26,13 +26,14 @@ BEGIN
 		    ,[M_RecepientPhoneNo]	
 		    ,[M_RecepientAccNo]	
             ,[M_UniqueID]
-		    --,[RowNo]
+		    ,[RowNo]
         )
 
     ON
         (
-		    [Ms_Recepients].[M_RecepientName]		  = X.[M_RecepientName]		
-	    AND [Ms_Recepients].[M_RecepientPhoneNo]      = X.[M_RecepientPhoneNo]
+		    [Ms_Recepients].[M_RecepientName]		= X.[M_RecepientName]		
+	    AND [Ms_Recepients].[M_RecepientAccNo]      = X.[M_RecepientAccNo]
+		AND [Ms_Recepients].[M_UniqueID]            = X.[M_UniqueID]
         )											  
 	 
     WHEN NOT MATCHED BY TARGET THEN
@@ -43,7 +44,7 @@ BEGIN
             ,[M_RecepientPhoneNo]
             ,[M_RecepientAccNo]
             ,[M_UniqueID]
-		    --,[RowNo]
+		    ,[RowNo]
         )
 
      VALUES
@@ -52,7 +53,7 @@ BEGIN
             ,X.[M_RecepientPhoneNo]
             ,X.[M_RecepientAccNo]
             ,X.[M_UniqueID]
-		    --,X.[RowNo]
+		    ,X.[RowNo]
         );
 
 END;
