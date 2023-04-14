@@ -69,10 +69,34 @@ namespace MSota.BaseFormaters
 
             return BodyToValueArray(szvBody, regAccNo)[0];
         }
-        public string [] GlobalCashGetter(string szvBody)
+        public double GlobalCashGetter(string szvBody)
         {
             string[] SzFin = new string[] {};
             string[] SzResult = new string[5];
+            double dResult = 0;
+            System.Globalization.CultureInfo CultureInfo = new CultureInfo("en-GB");
+
+            var regCash = new Regex(@"\d+(?:,\d+)*\.\d{2}");
+            var rCashBefore = regCash.Matches(szvBody);
+
+            bool bIsBeforeEmpty = rCashBefore.Count.Equals(0);
+
+            if (bIsBeforeEmpty == true) return dResult;
+
+            //var tes0 = BodyToValueArray(szvBody, regCash);
+
+            SzResult = rCashBefore.Select(x => x.Value).ToArray();
+
+            dResult = Convert.ToDouble(SzResult[0], CultureInfo);
+
+            return dResult;
+        }
+
+        public string [] GlobalCashGetterArray(string szvBody)
+        {
+            string[] SzFin = new string[] { };
+            string[] SzResult = new string[5];
+            double dResult = 0;
 
             var regCash = new Regex(@"\d+(?:,\d+)*\.\d{2}");
             var rCashBefore = regCash.Matches(szvBody);
@@ -135,7 +159,7 @@ namespace MSota.BaseFormaters
 
             szContactName = BodyToValueArray(szvBody, regContact)[0] + " " + BodyToValueArray(szvBody, regContact)[1];
 
-            return szContactName;
+            return StringToTitleCase(szContactName);
         }
 
         public string GetContactName(string szvBody,

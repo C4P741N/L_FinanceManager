@@ -8,7 +8,8 @@ namespace MSota.BaseFormaters
         string ConvertToString(string vValue);
         public string GlobalRNameGetter(string szvBody, string [] SzStatus);
         public string GlobalAccNoAndPhoneNoGetter(string szvBody);
-        public string[] GlobalCashGetter(string szvBody);
+        public double GlobalCashGetter(string szvBody);
+        public string [] GlobalCashGetterArray(string szvBody);
         string[] BodyToValueArray(string szvBody, Regex RBody);
         string GetUniqueKey();
         double CashConverter(string vValue);

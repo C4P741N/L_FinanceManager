@@ -56,7 +56,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                     if (lsMessage.szAddress == "KCB")
                         _xfts.BeginExtractKcbData(lsMessage);
 
-                    if (lsMessage.szQuota != null)
+                    if (lsMessage.szQuota != EnumContainer.EnumContainer.TransactionQuota.None)
                     {
                         if (lsMessage.szRName != "Fuliza")
                         {
@@ -72,12 +72,6 @@ namespace MSota.ExtensibleMarkupAtLarge
 
                                 lsMessage.szUniqueKey = Code;
                             }
-                            //else if (string.IsNullOrEmpty(lsMessage.szRAccNo) is false && SzCollPhonNo.Contains(lsMessage.szRAccNo) is false)
-                            //{
-                            //    lsMessage.szUniqueKey = _formatter.GetUniqueKey();
-
-                            //    SzCollPhonNo[count] = lsMessage.szRName+lsMessage.szRAccNo;
-                            //}
                         }
                         x_prop.Add(lsMessage);
                     }

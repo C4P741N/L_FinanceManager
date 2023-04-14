@@ -16,7 +16,7 @@
         string szLocked { get; set; }
         string szPayBill_TillNo { get; set; }
         string szProtocol { get; set; }
-        string szQuota { get; set; }
+        EnumContainer.EnumContainer.TransactionQuota szQuota { get; set; }
         string szRAccNo { get; set; }
         string szRead { get; set; }
         string szReadable_date { get; set; }
