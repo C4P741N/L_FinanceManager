@@ -1,4 +1,4 @@
-﻿namespace MSota.EnumContainer
+﻿namespace MSota.EnumsAtLarge
 {
     public class EnumContainer
     {

@@ -101,6 +101,7 @@ namespace MSota.DataLibrary
                            + "ON R.M_UniqueID = T.M_UniqueID" + Environment.NewLine
 
                            + " WHERE [M_Date] BETWEEN '" + cal .from + "' AND '" + cal.to + "'" + Environment.NewLine
+                           + "AND T.[M_Quota] != 'AccountDeposit'" + Environment.NewLine
 
                            + "GROUP BY R.[M_RecepientName], T.[M_Quota], R.[M_UniqueID]"; 
 
@@ -118,6 +119,7 @@ namespace MSota.DataLibrary
                             + "  FROM[Ms_DataCollector].[dbo].[Ms_Transactions]" + Environment.NewLine
 
                             + " WHERE [M_Date] BETWEEN '" + cal.from + "' AND '" + cal.to + "'" + Environment.NewLine
+                            + "AND [M_Quota] != 'AccountDeposit'" + Environment.NewLine
 
                             + "  GROUP BY[M_TransactionCost],[M_Quota]";
 

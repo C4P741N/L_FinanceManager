@@ -1,7 +1,9 @@
-﻿using MSota.DataLibrary;
+﻿using Microsoft.AspNetCore.Http;
+using MSota.DataLibrary;
 using MSota.Models;
 using System;
 using System.Diagnostics;
+using System.Net;
 
 namespace MSota.Accounts
 {
@@ -24,7 +26,7 @@ namespace MSota.Accounts
                 lsTransactions = _sqlDataServer.LoadTransactionStatistics(cal);
                 lsFactions = _sqlDataServer.LoadFactionsStatistics(cal);
 
-                return new Responses.TransactionsResponse(new MSota.Responses.Error(), lsTransactions, lsFactions);
+                return new Responses.TransactionsResponse(new MSota.Responses.Error(), lsTransactions, lsFactions, System.Net.HttpStatusCode.Accepted);
 
             }
             catch (Exception ex)
@@ -35,7 +37,7 @@ namespace MSota.Accounts
                     szErrorMessage = ex.Message,
                     szStackTrace = ex.StackTrace,
                     bErrorFound = true
-                }, lsTransactions, lsFactions);
+                }, lsTransactions, lsFactions, HttpStatusCode.InternalServerError);
             }
 
         }

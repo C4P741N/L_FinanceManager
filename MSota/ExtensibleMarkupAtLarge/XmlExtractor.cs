@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -18,15 +19,15 @@ namespace MSota.ExtensibleMarkupAtLarge
 {
     public class XmlExtractor : IXmlExtractor
     {
-        IXmlProps _xmlProps;
+        //IXmlProps _xmlProps;
         IXmlDataFotmater _xfts;
         IFortmaterAtLarge _formatter;
         ISqlDataServer _sqlDataServer;
         System.Xml.XmlDocument xml_doc = new System.Xml.XmlDocument();
         //Error _error;
-        public XmlExtractor(IXmlProps xmlProps, IXmlDataFotmater xfts, IFortmaterAtLarge formatter, ISqlDataServer sqlDataServer)
+        public XmlExtractor(IXmlDataFotmater xfts, IFortmaterAtLarge formatter, ISqlDataServer sqlDataServer)
         {
-            _xmlProps = xmlProps;
+            //_xmlProps = xmlProps;
             _xfts = xfts;
             _formatter = formatter;
             _sqlDataServer = sqlDataServer;
@@ -41,7 +42,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 List<IXmlProps> x_prop = new List<IXmlProps>();
 
                 //string[] SzCollName = Array.Empty<string>();
-                string[] SzCollPhonNo = new string[lsMessages.Count];
+                //string[] SzCollPhonNo = new string[lsMessages.Count];
 
                 var SzCollName = new Dictionary<string, string>();
 
@@ -56,7 +57,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                     if (lsMessage.szAddress == "KCB")
                         _xfts.BeginExtractKcbData(lsMessage);
 
-                    if (lsMessage.szQuota != EnumContainer.EnumContainer.TransactionQuota.None)
+                    if (lsMessage.szQuota != EnumsAtLarge.EnumContainer.TransactionQuota.None)
                     {
                         if (lsMessage.szRName != "Fuliza")
                         {
@@ -82,16 +83,20 @@ namespace MSota.ExtensibleMarkupAtLarge
 
                 _sqlDataServer.PostData(x_prop);
 
-                return new BaseResponse(new Error());
+                return new BaseResponse(new Error(),HttpStatusCode.Accepted);
             }
             catch (Exception ex)
             {
+
+                using var reader = new StringReader(ex?.StackTrace);
+                string? firstStackTraceLine = reader.ReadLine();
+
                 return new BaseResponse(new Error
                 {
                     szErrorMessage = ex.Message,
-                    szStackTrace = ex.StackTrace,
-                    bErrorFound = true
-                });
+                    szStackTrace = firstStackTraceLine,
+                    bErrorFound = true,
+                }, HttpStatusCode.InternalServerError);
             }
         }
         private List<IXmlProps> xx_MessageListFromXML()

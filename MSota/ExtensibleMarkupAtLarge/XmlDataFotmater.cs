@@ -31,11 +31,11 @@ namespace MSota.ExtensibleMarkupAtLarge
                 {
                     message.szRAccNo = _fortmater.GetAccountNumber(szBody);
                     message.szRName = _fortmater.RNameCreatorFromAccNo(message.szRAccNo);
-                    message.szQuota = EnumContainer.EnumContainer.TransactionQuota.AccountWithdraw;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountWithdraw;
 
                     if (szBody.Contains("Pay Bill"))
                     {
-                        message.szQuota = EnumContainer.EnumContainer.TransactionQuota.PayBillPayment;
+                        message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.PayBillPayment;
                         message.szPayBill_TillNo = _fortmater.GetPayBillNo(szBody);
                     }
 
@@ -43,7 +43,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 }
                 if (szBody.Contains("has transfered"))
                 {
-                    message.szQuota = EnumContainer.EnumContainer.TransactionQuota.AccountDeposit;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountDeposit;
                     message.szRName = _fortmater.GetKCBContactName(szBody);
                 }
 
@@ -81,7 +81,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 if (szBody.Contains("received") || 
                     szBody.Contains("Give"))
                 {
-                    message.szQuota = EnumContainer.EnumContainer.TransactionQuota.AccountDeposit;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountDeposit;
 
                     szID = "received";
 
@@ -92,7 +92,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                     szBody.Contains("Safaricom Limited") == true ||
                     szBody.Contains("Safaricom Offers") == true)
                 {
-                    message.szQuota = EnumContainer.EnumContainer.TransactionQuota.AirtimePurchase;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AirtimePurchase;
 
                     szID = "airtime";
 
@@ -104,7 +104,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 }
                 if (szBody.Contains("paid to"))
                 {
-                    message.szQuota = EnumContainer.EnumContainer.TransactionQuota.MerchantPayment;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.MerchantPayment;
                     szID = "paid";
 
                     status[0] = "paid";
@@ -114,10 +114,10 @@ namespace MSota.ExtensibleMarkupAtLarge
                     szBody.Contains("EASYFLOAT") || 
                     szBody.Contains("Paybill"))
                 {
-                    message.szQuota = EnumContainer.EnumContainer.TransactionQuota.CustomerTransfer;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.CustomerTransfer;
 
                     if(szBody.Contains("Paybill"))
-                        message.szQuota = EnumContainer.EnumContainer.TransactionQuota.PayBillPayment;
+                        message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.PayBillPayment;
 
                     szID = "sent";
 
@@ -127,7 +127,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 if (szBody.Contains("PMWithdraw") || 
                     szBody.Contains("AMWithdraw"))
                 {
-                    message.szQuota = EnumContainer.EnumContainer.TransactionQuota.AccountWithdraw;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountWithdraw;
                     szID = "withdraw";
 
                     status[0] = "";
@@ -136,7 +136,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 }
                 if (szBody.Contains("Fuliza"))
                 {
-                    message.szQuota = EnumContainer.EnumContainer.TransactionQuota.AccountLoan;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountLoan;
                     szID = "borrowed";
 
                     status[0] = "Confirmed";
@@ -144,7 +144,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                     status[2] = "outstanding";
                 }
 
-                if (message.szQuota == EnumContainer.EnumContainer.TransactionQuota.None)
+                if (message.szQuota == EnumsAtLarge.EnumContainer.TransactionQuota.None)
                     break;
 
                 message.szCode = wordsArray[0];
@@ -162,23 +162,23 @@ namespace MSota.ExtensibleMarkupAtLarge
 
                 switch (message.szQuota)
                 {
-                    case EnumContainer.EnumContainer.TransactionQuota.AccountWithdraw:
+                    case EnumsAtLarge.EnumContainer.TransactionQuota.AccountWithdraw:
                         message.szRName = _fortmater.GlobalRNameGetter(szBody, status);
                         break;
-                    case EnumContainer.EnumContainer.TransactionQuota.MerchantPayment:
-                    case EnumContainer.EnumContainer.TransactionQuota.CustomerTransfer:
-                    case EnumContainer.EnumContainer.TransactionQuota.AccountDeposit:
+                    case EnumsAtLarge.EnumContainer.TransactionQuota.MerchantPayment:
+                    case EnumsAtLarge.EnumContainer.TransactionQuota.CustomerTransfer:
+                    case EnumsAtLarge.EnumContainer.TransactionQuota.AccountDeposit:
                         break;
-                    case EnumContainer.EnumContainer.TransactionQuota.AirtimePurchase:
+                    case EnumsAtLarge.EnumContainer.TransactionQuota.AirtimePurchase:
                             message.szRName = message.szQuota.ToString();
                         break;
-                    case EnumContainer.EnumContainer.TransactionQuota.AccountLoan:
+                    case EnumsAtLarge.EnumContainer.TransactionQuota.AccountLoan:
                         message.szRName = message.szQuota.ToString();
                         message.dBalance = _fortmater.CashConverter(moneyArray[2]);
 
                         if (szBody.Contains("charged"))
                         {
-                            message.szQuota = EnumContainer.EnumContainer.TransactionQuota.AccountLoanPayment;
+                            message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountLoanPayment;
                             message.szRName = message.szQuota.ToString();
                         }
                         

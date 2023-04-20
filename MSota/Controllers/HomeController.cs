@@ -27,21 +27,32 @@ namespace MSota.Controllers
 
         [HttpPost]
         [Route("/[controller]/[action]/PostXmlData")]
-        public HttpResponseMessage PostData()
+        //public HttpResponseMessage PostData()
+        //{
+        //    BaseResponse baseResponse = _XmlExtractor.DBUpdateFromXmlFile();
+        //    if (baseResponse._success)
+        //    {
+        //        return new HttpResponseMessage
+        //        {
+        //            StatusCode = System.Net.HttpStatusCode.Created
+        //        };
+        //    }
+
+        //    return new HttpResponseMessage
+        //    {
+        //        StatusCode = System.Net.HttpStatusCode.NotModified
+        //    };
+        //}
+
+        public ActionResult PostData()
         {
             BaseResponse baseResponse = _XmlExtractor.DBUpdateFromXmlFile();
-            if (baseResponse._success)
+            if (!baseResponse._error.bErrorFound)
             {
-                return new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.Created
-                };
+                return Ok(baseResponse);
             }
 
-            return new HttpResponseMessage
-            {
-                StatusCode = System.Net.HttpStatusCode.NotModified
-            };
+            return BadRequest(baseResponse);
         }
 
         [HttpPost]
@@ -49,7 +60,7 @@ namespace MSota.Controllers
         public ActionResult GetTransactionStatistics([FromBody]Calendar cal)
         {
             MSota.Responses.TransactionsResponse trRp = _transactions.GetAllTransactions(cal);
-            if (trRp._success)
+            if (!trRp._error.bErrorFound)
             {
                 return  Ok(trRp);
             }
