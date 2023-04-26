@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace MSota.DataLibrary
+namespace MSota.DataServer
 {
     public class SQLDataAccess : ISQLDataAccess
     {

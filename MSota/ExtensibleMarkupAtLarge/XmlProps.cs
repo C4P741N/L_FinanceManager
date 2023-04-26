@@ -23,8 +23,12 @@ namespace MSota.ExtensibleMarkupAtLarge
         public string szSub_id { get; set; }
         public string szReadable_date
         {
-            get { return Convert.ToString(DateTime.ParseExact(xdateTime, "MMM d, yyyy HH:mm:ss", CultureInfo.InvariantCulture).ToUniversalTime()); }
-            set { xdateTime = value; }
+            get { 
+                return Convert.ToString(DateTime.ParseExact(xdateTime, "MMM d, yyyy HH:mm:ss", CultureInfo.InvariantCulture).ToUniversalTime()); 
+            }
+            set { 
+                xdateTime = value; 
+            }
         }
         public string szCode { get; set; }
         public string szPayBill_TillNo { get; set; }

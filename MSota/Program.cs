@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.Extensions.Configuration;
 using MSota.BaseFormaters;
 using MSota.ExtensibleMarkupAtLarge;
-using MSota.DataLibrary;
+using MSota.DataServer;
 using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -27,23 +27,6 @@ namespace MSota.Controllers
 
         [HttpPost]
         [Route("/[controller]/[action]/PostXmlData")]
-        //public HttpResponseMessage PostData()
-        //{
-        //    BaseResponse baseResponse = _XmlExtractor.DBUpdateFromXmlFile();
-        //    if (baseResponse._success)
-        //    {
-        //        return new HttpResponseMessage
-        //        {
-        //            StatusCode = System.Net.HttpStatusCode.Created
-        //        };
-        //    }
-
-        //    return new HttpResponseMessage
-        //    {
-        //        StatusCode = System.Net.HttpStatusCode.NotModified
-        //    };
-        //}
-
         public ActionResult PostData()
         {
             BaseResponse baseResponse = _XmlExtractor.DBUpdateFromXmlFile();

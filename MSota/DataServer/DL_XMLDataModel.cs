@@ -1,4 +1,4 @@
-﻿namespace MSota.DataLibrary
+﻿namespace MSota.DataServer
 {
     public class DL_XMLDataModel
     {

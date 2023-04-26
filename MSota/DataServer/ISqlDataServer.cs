@@ -1,7 +1,7 @@
 ﻿using MSota.ExtensibleMarkupAtLarge;
 using MSota.Models;
 
-namespace MSota.DataLibrary
+namespace MSota.DataServer
 {
     public interface ISqlDataServer
     {

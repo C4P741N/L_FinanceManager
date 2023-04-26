@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using MSota.Models;
 using Calendar = MSota.Models.Calendar;
 
-namespace MSota.DataLibrary
+namespace MSota.DataServer
 {
     public class SqlDataServer : ISqlDataServer
     {
