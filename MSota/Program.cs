@@ -11,6 +11,7 @@ using MSota.BaseFormaters;
 using MSota.ExtensibleMarkupAtLarge;
 using MSota.DataServer;
 using Microsoft.AspNetCore.Builder;
+using MSota.Accounts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ builder.Services.AddScoped<IXmlDataFotmater, XmlDataFotmater>();
 builder.Services.AddScoped<IXmlExtractor, XmlExtractor>();
 builder.Services.AddScoped<ISqlDataServer, SqlDataServer>();
 builder.Services.AddScoped<ISQLDataAccess, SQLDataAccess>();
+builder.Services.AddScoped<IFactions, Factions>();
 
 //SQL connection string
 builder.Services.AddDbContext<DbContext>(x => 

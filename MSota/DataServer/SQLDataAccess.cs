@@ -55,22 +55,16 @@ namespace MSota.DataServer
 
         public void SaveData(string strvQuery)
         {
-            try
+            using (var oAdap = new SqlDataAdapter())
+            using (var oCon = new SqlConnection(_connectionString))
+            using (var oCmd = new SqlCommand(strvQuery, oCon))
             {
-                using (var oAdap = new SqlDataAdapter())
-                using (var oCon = new SqlConnection(_connectionString))
-                using (var oCmd = new SqlCommand(strvQuery, oCon))
-                {
-                    oCmd.Connection = oCon;
+                oCmd.Connection = oCon;
 
-                    oAdap.InsertCommand = oCmd;
+                oAdap.InsertCommand = oCmd;
 
-                    oCon.Open();
-                    oCmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
+                oCon.Open();
+                oCmd.ExecuteNonQuery();
             }
         }
     }

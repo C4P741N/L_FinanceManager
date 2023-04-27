@@ -1,5 +1,0 @@
-﻿CREATE TABLE [dbo].[Factions]
-(
-	[ID] INT NOT NULL IDENTITY (1, 1) PRIMARY KEY, 
-    [M_Relation] NVARCHAR(50) NULL
-)

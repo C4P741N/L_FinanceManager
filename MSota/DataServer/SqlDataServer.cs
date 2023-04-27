@@ -84,6 +84,10 @@ namespace MSota.DataServer
             szSQL = "EXECUTE TransactionsCopier";
 
             _dataAccess.SaveData(szSQL);
+
+            szSQL = "EXECUTE FactionsCopier";
+
+            _dataAccess.SaveData(szSQL);
         }
 
         public List<TransactionModel> LoadTransactionStatistics(Calendar cal)
@@ -125,6 +129,25 @@ namespace MSota.DataServer
 
 
             return _dataAccess.LoadData<FactionsModel>(szSQL);
+        }
+
+        public List<FactionListModel> LoadFactionsList(string FactionID)
+        {
+            //string szSQL = "SELECT" + Environment.NewLine
+
+            //                + " [M_Quota] AS GroupName" + Environment.NewLine
+            //                + " , SUM([M_CashAmount]) AS GroupTotal" + Environment.NewLine
+
+
+            //                + "  FROM[Ms_DataCollector].[dbo].[Ms_Transactions]" + Environment.NewLine
+
+            //                + " WHERE [M_Date] BETWEEN '" + cal.from + "' AND '" + cal.to + "'" + Environment.NewLine
+            //                + "AND [M_Quota] != 'AccountDeposit'" + Environment.NewLine
+
+            //                + "  GROUP BY[M_TransactionCost],[M_Quota]";
+
+
+            return null;
         }
     }
 }

@@ -2,6 +2,8 @@
 {
     public class FactionListModel
     {
-        public int MyProperty { get; set; }
+        public string szName { get; set; }
+        public double dAmount { get; set; }
+        public int nAccNumber { get; set; }
     }
 }

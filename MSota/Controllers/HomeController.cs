@@ -17,12 +17,14 @@ namespace MSota.Controllers
         private readonly ILogger<HomeController> _logger;
         private ITransactions _transactions;
         private IXmlExtractor _XmlExtractor;
+        private IFactions _factions;
 
-        public HomeController(ILogger<HomeController> logger, ITransactions transactions, IXmlExtractor XmlExtractor)
+        public HomeController(ILogger<HomeController> logger, ITransactions transactions, IXmlExtractor XmlExtractor, IFactions factions)
         {
             _logger = logger;
             _transactions = transactions;
             _XmlExtractor = XmlExtractor;
+            _factions = factions;
         }
 
         [HttpPost]
@@ -54,12 +56,12 @@ namespace MSota.Controllers
         [Route("/[controller]/[action]/GetFactionsList")]
         public ActionResult FactionsList([FromBody] string factionId)
         {
-            MSota.Responses.FactionsResponse trRp = _factions.GetFactionsList(factionId);
-            if (!trRp._error.bErrorFound)
+            MSota.Responses.FactionsResponse frRp = _factions.GetFactionList(factionId);
+            if (!frRp._error.bErrorFound)
             {
-                return Ok(trRp);
+                return Ok(frRp);
             }
-            return BadRequest(trRp);
+            return BadRequest(frRp);
         }
     }
 

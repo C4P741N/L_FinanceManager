@@ -8,5 +8,6 @@ namespace MSota.DataServer
         void PostData(List<IXmlProps> x_vprop);
         List<TransactionModel> LoadTransactionStatistics(Calendar cal);
         List<FactionsModel> LoadFactionsStatistics(Calendar cal);
+        List<FactionListModel> LoadFactionsList(string FactionID);
     }
 }

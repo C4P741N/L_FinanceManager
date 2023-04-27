@@ -32,12 +32,16 @@ namespace MSota.Accounts
             catch (Exception ex)
             {
 
-                return new MSota.Responses.TransactionsResponse(new MSota.Responses.Error
-                {
-                    szErrorMessage = ex.Message,
-                    szStackTrace = ex.StackTrace,
-                    bErrorFound = true
-                }, lsTransactions, lsFactions, HttpStatusCode.InternalServerError);
+                return new MSota.Responses.TransactionsResponse(
+                    new MSota.Responses.Error
+                    {
+                        szErrorMessage = ex.Message,
+                        szStackTrace = ex.StackTrace,
+                        bErrorFound = true
+                    }, 
+                    lsTransactions, 
+                    lsFactions, 
+                    HttpStatusCode.InternalServerError);
             }
 
         }
