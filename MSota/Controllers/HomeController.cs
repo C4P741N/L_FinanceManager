@@ -49,6 +49,18 @@ namespace MSota.Controllers
             }
             return BadRequest(trRp);
         }
+
+        [HttpPost]
+        [Route("/[controller]/[action]/GetFactionsList")]
+        public ActionResult FactionsList([FromBody] string factionId)
+        {
+            MSota.Responses.FactionsResponse trRp = _factions.GetFactionsList(factionId);
+            if (!trRp._error.bErrorFound)
+            {
+                return Ok(trRp);
+            }
+            return BadRequest(trRp);
+        }
     }
 
     
