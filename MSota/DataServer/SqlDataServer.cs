@@ -26,14 +26,11 @@ namespace MSota.DataServer
         {
             AddStatisticsToDb(x_vprop);
         }
-        public void AddStatisticsToDb(List<IXmlProps> x_vprop)
+        private void AddStatisticsToDb(List<IXmlProps> x_vprop)
         {
-            string szSQL = string.Empty;
-            System.Globalization.CultureInfo dAmountCultureInfo = new CultureInfo("en-GB");
-
             foreach (IXmlProps prop in x_vprop)
             {
-                szSQL = "EXECUTE Ms_DuplicateChecker " //This part gives me joy
+                string szSQL = "EXECUTE Ms_DuplicateChecker " //This part gives me joy
 
                                 + "'" + prop.szCode + "'," + Environment.NewLine
                                 + "'" + prop.szDate + "'," + Environment.NewLine
@@ -92,62 +89,27 @@ namespace MSota.DataServer
 
         public List<TransactionModel> LoadTransactionStatistics(Calendar cal)
         {
-            string szSQL = "SELECT" + Environment.NewLine
-
-                           + "R.[M_RecepientName]               AS RecepientName" + Environment.NewLine
-                           + ",R.[M_UniqueID]                   AS RecepientID" + Environment.NewLine
-                           + ",SUM(T.M_CashAmount)              AS TransactionAmount" + Environment.NewLine
-                           + ",T.[M_Quota]                      As TranactionQuota" + Environment.NewLine
-
-                           + "FROM[Ms_DataCollector].[dbo].[Ms_Recepients] R" + Environment.NewLine
-
-                           + "JOIN[Ms_DataCollector].[dbo].[Ms_Transactions] T" + Environment.NewLine
-                           + "ON R.M_UniqueID = T.M_UniqueID" + Environment.NewLine
-
-                           + " WHERE [M_Date] BETWEEN '" + cal .from + "' AND '" + cal.to + "'" + Environment.NewLine
-                           + "AND T.[M_Quota] != 'AccountDeposit'" + Environment.NewLine
-
-                           + "GROUP BY R.[M_RecepientName], T.[M_Quota], R.[M_UniqueID]"; 
+            string szSQL = "EXECUTE TransactionStatistics" + Environment.NewLine
+                            + " '" + cal.from   + "'," + Environment.NewLine
+                            + " '" + cal.to     + "'";
 
             return _dataAccess.LoadData<TransactionModel>(szSQL);
         } 
 
         public List<FactionsModel> LoadFactionsStatistics(Calendar cal)
         {
-            string szSQL = "SELECT" + Environment.NewLine
-
-                            + " [M_Quota] AS GroupName" + Environment.NewLine
-                            + " , SUM([M_CashAmount]) AS GroupTotal" + Environment.NewLine
-
-
-                            + "  FROM[Ms_DataCollector].[dbo].[Ms_Transactions]" + Environment.NewLine
-
-                            + " WHERE [M_Date] BETWEEN '" + cal.from + "' AND '" + cal.to + "'" + Environment.NewLine
-                            + "AND [M_Quota] != 'AccountDeposit'" + Environment.NewLine
-
-                            + "  GROUP BY[M_TransactionCost],[M_Quota]";
-
+            string szSQL = "EXECUTE FactionsStatistics" + Environment.NewLine
+                            + " '" + cal.from + "'," + Environment.NewLine
+                            + " '" + cal.to + "'";
 
             return _dataAccess.LoadData<FactionsModel>(szSQL);
         }
 
         public List<FactionListModel> LoadFactionsList(string FactionID)
         {
-            //string szSQL = "SELECT" + Environment.NewLine
+            string szSQL = "EXECUTE FactionsList" + " '" + FactionID + "'";
 
-            //                + " [M_Quota] AS GroupName" + Environment.NewLine
-            //                + " , SUM([M_CashAmount]) AS GroupTotal" + Environment.NewLine
-
-
-            //                + "  FROM[Ms_DataCollector].[dbo].[Ms_Transactions]" + Environment.NewLine
-
-            //                + " WHERE [M_Date] BETWEEN '" + cal.from + "' AND '" + cal.to + "'" + Environment.NewLine
-            //                + "AND [M_Quota] != 'AccountDeposit'" + Environment.NewLine
-
-            //                + "  GROUP BY[M_TransactionCost],[M_Quota]";
-
-
-            return null;
+            return _dataAccess.LoadData<FactionListModel>(szSQL);
         }
     }
 }

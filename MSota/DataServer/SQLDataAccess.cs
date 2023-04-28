@@ -16,7 +16,9 @@ namespace MSota.DataServer
         public SQLDataAccess(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _connectionString = _serviceProvider.GetRequiredService<DbContext>().GetService<IConfiguration>().GetConnectionString("SQLConnectionString");
+            _connectionString = _serviceProvider.GetRequiredService<DbContext>()
+                                                .GetService<IConfiguration>()
+                                                .GetConnectionString("SQLConnectionString")?? "wrong assignment of the connection string"; //this was a roller coster
         }
 
         public List<T> LoadData<T>(string sql)
@@ -26,32 +28,6 @@ namespace MSota.DataServer
                 return IDbCn.Query<T>(sql).ToList();
             }
         }
-
-        //public static List<T> LoadData<T>(string strvQuery)
-        //{
-        //    using (var oAdap = new SqlDataAdapter())
-        //    using (var oCon = new SqlConnection(GetConnectionString()))
-        //    using (var oCmd = new SqlCommand(strvQuery, oCon))
-        //    {
-        //        oCmd.Connection = oCon;
-
-        //        oAdap.SelectCommand = oCmd;
-
-        //        //oCon.Open();
-
-        //        //oCmd.ExecuteReader();
-
-        //        return oCon.Query<T>(strvQuery).ToList();
-        //    }
-        //}
-
-        //public static int SaveData<T>(string sql, T data)
-        //{
-        //    using (IDbConnection IDbCn = new SqlConnection(GetConnectionString()))
-        //    {
-        //        return IDbCn.Execute(sql, data);
-        //    }
-        //}
 
         public void SaveData(string strvQuery)
         {

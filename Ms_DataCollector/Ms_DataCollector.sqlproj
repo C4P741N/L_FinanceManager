@@ -72,6 +72,9 @@
     <Build Include="dbo\Tables\Ms_Transactions.sql" />
     <Build Include="dbo\Tables\Ms_Factions.sql" />
     <Build Include="dbo\Programmabiliy\StoredProcedure\FactionsCopier.sql" />
+    <Build Include="dbo\Programmabiliy\StoredProcedure\FactionsList.sql" />
+    <Build Include="dbo\Programmabiliy\StoredProcedure\TransactionStatistics.sql" />
+    <Build Include="dbo\Programmabiliy\StoredProcedure\FactionsStatistics.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Profile\Ms_DataCollector.publish.xml" />

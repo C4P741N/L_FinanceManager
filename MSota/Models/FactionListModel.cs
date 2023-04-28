@@ -2,8 +2,8 @@
 {
     public class FactionListModel
     {
-        public string szName { get; set; }
-        public double dAmount { get; set; }
-        public int nAccNumber { get; set; }
+        public string FullName { get; set; }
+        public string Amount { get; set; }
+        public string AccNumber { get; set; }
     }
 }
