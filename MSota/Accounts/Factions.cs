@@ -21,7 +21,7 @@ namespace MSota.Accounts
             {
                 factionList = _sqlDataServer.LoadFactionsList(factionID);
 
-                return new FactionsResponse(factionList, new MSota.Responses.Error(), System.Net.HttpStatusCode.Accepted);
+                return new FactionsResponse(factionList, new MSota.Responses.Error(), System.Net.HttpStatusCode.Accepted, factionID);
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace MSota.Accounts
                         szStackTrace = ex.StackTrace,
                         bErrorFound = true
                     }, 
-                    System.Net.HttpStatusCode.InternalServerError);
+                    System.Net.HttpStatusCode.InternalServerError, factionID);
             }
         }
     }
