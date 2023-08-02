@@ -5,6 +5,9 @@ using MSota.Accounts;
 using MSota.ExtensibleMarkupAtLarge;
 using MSota.Models;
 using MSota.Responses;
+//using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MSota.Controllers
 {
@@ -39,6 +42,36 @@ namespace MSota.Controllers
 
             return BadRequest(baseResponse);
         }
+
+        [HttpPost]
+        [Route("/[controller]/[action]/PostJsonData")]
+        public ActionResult PostJsonData([FromBody] string jsonData)
+        {
+            try
+            {
+                // Parse the JSON data into a JObject
+                JObject jsonObject = JObject.Parse(jsonData);
+
+                // If you're using Newtonsoft.Json, you can deserialize the JSON data into your class
+                BaseResponse baseResponse = jsonObject.ToObject<BaseResponse>();
+
+                // Call the method with the deserialized object
+                //baseResponse = _XmlExtractor.DBUpdateFromXmlFile(baseResponse);
+
+                if (!baseResponse._error.bErrorFound)
+                {
+                    return Ok(baseResponse);
+                }
+
+                return BadRequest(baseResponse);
+            }
+            catch (JsonException)
+            {
+                // If the JSON data is invalid and cannot be deserialized to BaseResponse, return BadRequest
+                return BadRequest("Invalid JSON format.");
+            }
+        }
+
 
         [HttpPost]
         [Route("/[controller]/[action]/GetTransactionData")]
