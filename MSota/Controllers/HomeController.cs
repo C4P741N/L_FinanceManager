@@ -44,8 +44,8 @@ namespace MSota.Controllers
         }
 
         [HttpPost]
-        [Route("/[controller]/[action]/PostJsonData")]
-        public ActionResult PostJsonData([FromBody] string jsonData)
+        [Route("/[controller]/[action]/postJsonTest")]
+        public ActionResult PostJsonDataTest([FromBody] string jsonData)
         {
             try
             {
@@ -70,6 +70,17 @@ namespace MSota.Controllers
                 // If the JSON data is invalid and cannot be deserialized to BaseResponse, return BadRequest
                 return BadRequest("Invalid JSON format.");
             }
+        }
+
+        [HttpPost]
+        [Route("/[controller]/[action]/postJson")]
+        public ActionResult PostJsonData([FromBody] CustomArrayList jsonData)
+        {
+            if (jsonData == null)
+            {
+                return BadRequest("Invalid JSON data");
+            }
+            return Ok("JSON data received and processed successfully.");
         }
 
 
@@ -98,5 +109,35 @@ namespace MSota.Controllers
         }
     }
 
-    
+    public class SMSMessage
+    {
+        public string ?message { get; set; }
+        public string ?sender { get; set; }
+        public long date { get; set; }
+        public bool read { get; set; }
+        public int type { get; set; }
+        public int thread { get; set; }
+        public string ?service { get; set; }
+    }
+
+    public class SMSMessageData
+    {
+        // Create a dictionary with string as the key and a list of SMSMessage as the value
+        public string ?key { get; set; }
+        //public Dictionary<string, List<SMSMessage>> ?value { get; set; }
+
+        public List<SMSMessage> value { get; set; } = new List<SMSMessage>();
+    }
+
+    public class SMSMessagesBody
+    {
+        //public Dictionary<string, List<SMSMessageData>> ?SMSMessageData { get; set; }
+
+        public List<SMSMessageData> smsMessage { get; set; } = new List<SMSMessageData>();
+    }
+
+    public class CustomArrayList
+    {
+        public List<object> smsMessage { get; set; }
+    }
 }

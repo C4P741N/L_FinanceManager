@@ -38,6 +38,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//builder.WebHost.UseUrls(new[] { "https://0.0.0.0:7176/" });
+
+builder.WebHost.UseUrls("http://*:80", "https://*.443"); //you will be able now access to your application by http://your_local_machine_ip:80 for example http://192.168.1.4:80
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -62,3 +66,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//app.Run("https://*:" + Environment.GetEnvironmentVariable("PORT"));
