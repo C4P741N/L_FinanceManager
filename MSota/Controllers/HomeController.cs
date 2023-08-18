@@ -45,12 +45,12 @@ namespace MSota.Controllers
 
         [HttpPost]
         [Route("/[controller]/[action]/postJsonTest")]
-        public ActionResult PostJsonDataTest([FromBody] string jsonData)
+        public ActionResult PostJsonDataTest([FromBody] JObject jsonData)
         {
             try
             {
                 // Parse the JSON data into a JObject
-                JObject jsonObject = JObject.Parse(jsonData);
+                JObject jsonObject = JObject.Parse("");
 
                 // If you're using Newtonsoft.Json, you can deserialize the JSON data into your class
                 BaseResponse baseResponse = jsonObject.ToObject<BaseResponse>();
@@ -140,4 +140,24 @@ namespace MSota.Controllers
     {
         public List<object> smsMessage { get; set; }
     }
+
+
+    ////
+    public class SmsValue
+    {
+        public string Message { get; set; }
+    }
+
+    public class SmsItem
+    {
+        public string Key { get; set; }
+        public List<SmsValue> Values { get; set; }
+    }
+
+    public class Sms
+    {
+        [JsonProperty(PropertyName = "sms")]
+        public Dictionary<string, SmsItem> SmsItems { get; set; }
+    }
+
 }

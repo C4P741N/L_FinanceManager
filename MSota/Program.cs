@@ -47,8 +47,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+   // app.UseSwaggerUI();
 }
 
 app.UseCors(webApi =>
@@ -68,3 +68,5 @@ app.MapControllers();
 app.Run();
 
 //app.Run("https://*:" + Environment.GetEnvironmentVariable("PORT"));
+
+//https://www.restapitutorial.com/httpstatuscodes.html --> List of Error Codes
