@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using MSota.Accounts;
 using MSota.ExtensibleMarkupAtLarge;
+using MSota.JavaScriptObjectNotation;
 using MSota.Models;
 using MSota.Responses;
 //using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Text.Json.Nodes;
 
 namespace MSota.Controllers
 {
@@ -21,13 +24,15 @@ namespace MSota.Controllers
         private ITransactions _transactions;
         private IXmlExtractor _XmlExtractor;
         private IFactions _factions;
+        private IJsonExtractor _jsonExtractor;
 
-        public HomeController(ILogger<HomeController> logger, ITransactions transactions, IXmlExtractor XmlExtractor, IFactions factions)
+        public HomeController(ILogger<HomeController> logger, ITransactions transactions, IXmlExtractor XmlExtractor, IFactions factions, IJsonExtractor jsonExtractor)
         {
             _logger = logger;
             _transactions = transactions;
             _XmlExtractor = XmlExtractor;
             _factions = factions;
+            _jsonExtractor = jsonExtractor;
         }
 
         [HttpPost]
@@ -44,45 +49,23 @@ namespace MSota.Controllers
         }
 
         [HttpPost]
-        [Route("/[controller]/[action]/postJsonTest")]
-        public ActionResult PostJsonDataTest([FromBody] JObject jsonData)
-        {
-            try
-            {
-                // Parse the JSON data into a JObject
-                JObject jsonObject = JObject.Parse("");
-
-                // If you're using Newtonsoft.Json, you can deserialize the JSON data into your class
-                BaseResponse baseResponse = jsonObject.ToObject<BaseResponse>();
-
-                // Call the method with the deserialized object
-                //baseResponse = _XmlExtractor.DBUpdateFromXmlFile(baseResponse);
-
-                if (!baseResponse._error.bErrorFound)
-                {
-                    return Ok(baseResponse);
-                }
-
-                return BadRequest(baseResponse);
-            }
-            catch (JsonException)
-            {
-                // If the JSON data is invalid and cannot be deserialized to BaseResponse, return BadRequest
-                return BadRequest("Invalid JSON format.");
-            }
-        }
-
-        [HttpPost]
         [Route("/[controller]/[action]/postJson")]
-        public ActionResult PostJsonData([FromBody] CustomArrayList jsonData)
+        public ActionResult PostJsonData([FromBody] string smsMessage)
         {
-            if (jsonData == null)
+            if (smsMessage == null )
             {
-                return BadRequest("Invalid JSON data");
+                return UnprocessableEntity("Invalid data");
             }
-            return Ok("JSON data received and processed successfully.");
-        }
 
+            BaseResponse baseResponse = _jsonExtractor.ExtractBegin(smsMessage);
+
+            if (!baseResponse._error.bErrorFound)
+            {
+                return Ok(baseResponse);
+            }
+
+            return BadRequest(baseResponse);
+        }
 
         [HttpPost]
         [Route("/[controller]/[action]/GetTransactionData")]
@@ -108,56 +91,4 @@ namespace MSota.Controllers
             return BadRequest(frRp);
         }
     }
-
-    public class SMSMessage
-    {
-        public string ?message { get; set; }
-        public string ?sender { get; set; }
-        public long date { get; set; }
-        public bool read { get; set; }
-        public int type { get; set; }
-        public int thread { get; set; }
-        public string ?service { get; set; }
-    }
-
-    public class SMSMessageData
-    {
-        // Create a dictionary with string as the key and a list of SMSMessage as the value
-        public string ?key { get; set; }
-        //public Dictionary<string, List<SMSMessage>> ?value { get; set; }
-
-        public List<SMSMessage> value { get; set; } = new List<SMSMessage>();
-    }
-
-    public class SMSMessagesBody
-    {
-        //public Dictionary<string, List<SMSMessageData>> ?SMSMessageData { get; set; }
-
-        public List<SMSMessageData> smsMessage { get; set; } = new List<SMSMessageData>();
-    }
-
-    public class CustomArrayList
-    {
-        public List<object> smsMessage { get; set; }
-    }
-
-
-    ////
-    public class SmsValue
-    {
-        public string Message { get; set; }
-    }
-
-    public class SmsItem
-    {
-        public string Key { get; set; }
-        public List<SmsValue> Values { get; set; }
-    }
-
-    public class Sms
-    {
-        [JsonProperty(PropertyName = "sms")]
-        public Dictionary<string, SmsItem> SmsItems { get; set; }
-    }
-
 }

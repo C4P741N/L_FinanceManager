@@ -12,6 +12,7 @@ using MSota.ExtensibleMarkupAtLarge;
 using MSota.DataServer;
 using Microsoft.AspNetCore.Builder;
 using MSota.Accounts;
+using MSota.JavaScriptObjectNotation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ builder.Services.AddScoped<IXmlExtractor, XmlExtractor>();
 builder.Services.AddScoped<ISqlDataServer, SqlDataServer>();
 builder.Services.AddScoped<ISQLDataAccess, SQLDataAccess>();
 builder.Services.AddScoped<IFactions, Factions>();
+builder.Services.AddScoped<IJsonExtractor, JsonExtractor>();
+//builder.Services.AddScoped<IJsonProps, JsonProps>();
 
 //SQL connection string
 builder.Services.AddDbContext<DbContext>(x => 
@@ -42,13 +45,18 @@ builder.Services.AddSwaggerGen();
 
 builder.WebHost.UseUrls("http://*:80", "https://*.443"); //you will be able now access to your application by http://your_local_machine_ip:80 for example http://192.168.1.4:80
 
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 2000 * 1024 * 1024; // 20 MB in bytes;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.UseSwagger();
-   // app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseCors(webApi =>

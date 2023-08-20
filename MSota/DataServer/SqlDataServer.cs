@@ -8,6 +8,7 @@ using MSota.BaseFormaters;
 using System.Text.RegularExpressions;
 using MSota.Models;
 using Calendar = MSota.Models.Calendar;
+using MSota.JavaScriptObjectNotation;
 
 namespace MSota.DataServer
 {
@@ -22,6 +23,10 @@ namespace MSota.DataServer
             _fortmater = fortmater;
         }
 
+        public void PostData(List<SMSMessages> js_vprop)
+        {
+            //throw new NotImplementedException();
+        }
         public void PostData(List<IXmlProps> x_vprop)
         {
             AddStatisticsToDb(x_vprop);
@@ -111,5 +116,6 @@ namespace MSota.DataServer
 
             return _dataAccess.LoadData<FactionListModel>(szSQL);
         }
+
     }
 }
