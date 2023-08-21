@@ -18,19 +18,22 @@ namespace MSota.JavaScriptObjectNotation
     {
         public string ?Key { get; set; }
 
-        public List<Values> Values { get; set; } = new List<Values>();
+        public Values value { get; set; } = new Values();
+
+        public List<Values> values { get; set; } = new List<Values>();
     }
 
     public class Values
     {
         public string ?message { get; set; }
         public string ?sender { get; set; }
-        public DateTime date { get; set; }
+        public DateTime readableDate { get; set; }
+        public long lDate { get; set; }
         public string read { get; set; }
         public int type { get; set; }
         public int thread { get; set; }
         public string ?service { get; set; }
-        public SmsProps smsProps { get; set; } = new SmsProps();
+        public SmsProps smsProps { get; set; }
 
     }
 

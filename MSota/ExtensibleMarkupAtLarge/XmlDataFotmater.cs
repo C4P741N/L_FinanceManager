@@ -148,7 +148,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                     break;
 
                 message.szCode = wordsArray[0];
-                message.szRName = _fortmater.GlobalRNameGetter(szBody, status);
+                message.szRName = _fortmater.GlobalRNameGetter(szBody, status, message.szQuota);
                 message.szRAccNo = _fortmater.GlobalAccNoAndPhoneNoGetter(szBody);
                 moneyArray = _fortmater.GlobalCashGetterArray(szBody);
 
@@ -163,7 +163,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 switch (message.szQuota)
                 {
                     case EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount:
-                        message.szRName = _fortmater.GlobalRNameGetter(szBody, status);
+                        message.szRName = _fortmater.GlobalRNameGetter(szBody, status, message.szQuota);
                         break;
                     case EnumsAtLarge.EnumContainer.TransactionQuota.MerchantPayment:
                     case EnumsAtLarge.EnumContainer.TransactionQuota.CustomerTransfer:

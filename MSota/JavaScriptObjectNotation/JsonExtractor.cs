@@ -43,29 +43,33 @@ namespace MSota.JavaScriptObjectNotation
         {
             List<SMSMessages> smsMessages = new List<SMSMessages>();
 
-            SMSMessages sMS = new SMSMessages();
-            Values val = new Values();
-
             JObject json = JObject.Parse(smsStringValue);
 
             foreach (var item in json)
             {
+                SMSMessages sMS = new SMSMessages();
                 sMS.Key = item.Key;
+
+                //List<Values> vals = new List<Values>();
 
                 foreach (var it in item.Value)
                 {
-                    //if (item.Key == "MPESA")
-                    //    _xfts.BeginExtractKcbData(lsMessage);
+                    Values val = new Values();
 
                     val.message = (string)it.SelectToken("message");
                     val.sender = (string)it.SelectToken("sender");
 
                     if (it.SelectToken("date") != null && it.SelectToken("date").Type == JTokenType.Integer)
-                        val.date = _fortmater.DateConvertionFromLong((long)it.SelectToken("date"));
+                        val.readableDate = _fortmater.DateConvertionFromLong((long)it.SelectToken("date"));
                     else
-                        val.date = DateTime.MinValue; // Set a default value or handle the null case differently
+                        val.readableDate = DateTime.MinValue; // Set a default value or handle the null case differently
 
                     val.read = (string)it.SelectToken("read");
+
+                    if (it.SelectToken("date") != null && it.SelectToken("date").Type == JTokenType.Integer)
+                        val.lDate = (long)it.SelectToken("date");
+                    else
+                        val.lDate = 0; // Set a default value or handle the null case differently
 
                     if (it.SelectToken("type") != null && it.SelectToken("type").Type == JTokenType.Integer)
                         val.type = (int)it.SelectToken("type");
@@ -79,18 +83,17 @@ namespace MSota.JavaScriptObjectNotation
 
                     val.service = (string)it.SelectToken("service");
 
-                    if (string.IsNullOrEmpty(val.message) == false)
-                        val.smsProps = _ex_SMS.MessageExtractBegin(sMS.Key,val);
+                    if (!string.IsNullOrEmpty(val.message))
+                        val.smsProps = _ex_SMS.MessageExtractBegin(sMS.Key, val);
 
-                    sMS.Values.Add(val);
+                    sMS.values.Add(val);
                 }
 
                 smsMessages.Add(sMS);
             }
 
-
             return smsMessages;
-
         }
+
     }
 }

@@ -39,7 +39,7 @@ namespace MSota.ExtensibleMarkupAtLarge
         //public string szRDate { get; set; }
         public string szRAccNo { get; set; }
         public string szTransactionCost { get; set; }
-        public EnumsAtLarge.EnumContainer.TransactionQuota szQuota { get; set; }
+        public EnumsAtLarge.EnumContainer.TransactionQuota szQuota { get; set; } = EnumsAtLarge.EnumContainer.TransactionQuota.None;
         public double dFulizaLimit { get; set; }
         public double dFulizaBorrowed { get; set; }
         public double dCharges { get; set; }

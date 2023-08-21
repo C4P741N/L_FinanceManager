@@ -29,35 +29,49 @@ namespace MSota.BaseFormaters
 
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
         }
-        public string GlobalRNameGetter(string szvBody, string[] status)
+        public string GlobalRNameGetter(string szvBody, string[] status, EnumsAtLarge.EnumContainer.TransactionQuota Quota)
         {
             string[] dFin = new string[] { };
             string szOut = string.Empty;
 
-            if (string.IsNullOrEmpty(status[0]))
+            if (string.IsNullOrEmpty(status[0]) && status.Count() == 1)
                 return string.Empty;
 
             var regName = new Regex($@"{status[0]}\s+{status[1]}\s+(\w+\s+\w+)");
 
-            if (status[2] == "withdraw")
-                regName = new Regex(@"(?<=from\s)(.*?)(?=\sNew)");
+            if(status.Count() > 2)
+                if (status[2] == "withdraw")
+                    regName = new Regex(@"(?<=from\s)(.*?)(?=\sNew)");
 
             var rNameBefore = regName.Matches(szvBody);
 
             bool bIsBeforeEmpty = rNameBefore.Count.Equals(0);
 
-            if (bIsBeforeEmpty == true) return string.Empty;
+            if (bIsBeforeEmpty == true) return Quota.ToString();
 
             dFin = BodyToValueArray(szvBody, regName);
 
-            if (status[2] == "withdraw")
-                return szOut = StringToTitleCase(rNameBefore.Select(x => x.ToString()).ToArray()[0]);
+            switch (Quota)
+            {
+                case EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount:
+                    return szOut = StringToTitleCase(rNameBefore.Select(x => x.ToString()).ToArray()[0]);
+                case EnumsAtLarge.EnumContainer.TransactionQuota.MerchantPayment:
+                case EnumsAtLarge.EnumContainer.TransactionQuota.CustomerTransfer:
+                    return szOut = StringToTitleCase(dFin[2] + " " + dFin[3]);
+                case EnumsAtLarge.EnumContainer.TransactionQuota.AccountDeposit:
+                    return szOut = StringToTitleCase(dFin[1] + " " + dFin[2]);
+                case EnumsAtLarge.EnumContainer.TransactionQuota.AirtimePurchase:
+                    return szOut = Quota.ToString();
+            }
+
             if (status[1] == "for")
                 return szOut = StringToTitleCase(dFin[1]);
             if (status[1] == "from")
                 return szOut = StringToTitleCase(dFin[1] + " " + dFin[2]);
             if (status[0] == "sent" || status[0] == "paid")
                 return szOut = StringToTitleCase(dFin[2] + " " + dFin[3]);
+            if (status[2] == "withdraw")
+                return szOut = StringToTitleCase(rNameBefore.Select(x => x.ToString()).ToArray()[0]);
 
             return StringToTitleCase(szOut);
         }

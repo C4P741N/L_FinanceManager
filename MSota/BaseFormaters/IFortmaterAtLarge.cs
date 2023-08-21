@@ -6,7 +6,7 @@ namespace MSota.BaseFormaters
     {
         string ConvertToString(double vValue);
         string ConvertToString(string vValue);
-        public string GlobalRNameGetter(string szvBody, string [] SzStatus);
+        public string GlobalRNameGetter(string szvBody, string [] SzStatus, EnumsAtLarge.EnumContainer.TransactionQuota Quota);
         public string GlobalAccNoAndPhoneNoGetter(string szvBody);
         public double GlobalCashGetter(string szvBody);
         public string [] GlobalCashGetterArray(string szvBody);

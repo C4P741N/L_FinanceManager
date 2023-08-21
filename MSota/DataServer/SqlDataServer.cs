@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using MSota.Models;
 using Calendar = MSota.Models.Calendar;
 using MSota.JavaScriptObjectNotation;
+using System.Diagnostics;
 
 namespace MSota.DataServer
 {
@@ -28,15 +29,15 @@ namespace MSota.DataServer
             AddStatisticsToDb(js_vprop);
         }
         private void AddStatisticsToDb(List<SMSMessages> js_vprop)
-        {
+        {int count = 0;
             foreach (SMSMessages js_v in js_vprop)
             {
-                foreach (var prop in js_v.Values)
+                foreach (var prop in js_v.values)
                 {
                     string szSQL = "EXECUTE Ms_DuplicateChecker " //This part gives me joy
 
                                 + "'" + prop.smsProps.szCode + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szDate + "'," + Environment.NewLine
+                                + "'" + prop.lDate + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szRName + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szRPhoneNo + "'," + Environment.NewLine
                                 //+ "'" + prop.szRecepientDate + "'," + Environment.NewLine
@@ -46,19 +47,19 @@ namespace MSota.DataServer
                                 + "'" + prop.smsProps.szProtocol + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szPayBill_TillNo + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szTransactionCost + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szAddress + "'," + Environment.NewLine
+                                + "'" + prop.sender + "'," + Environment.NewLine//aDDRESSS
                                 + "'" + prop.smsProps.szType + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szSubject + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szBody + "'," + Environment.NewLine
+                                + "'" + prop.message.Replace("'","''") + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szToa + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szSc_toa + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szService_center + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szRead + "'," + Environment.NewLine
+                                + "'" + prop.service + "'," + Environment.NewLine
+                                + "'" + prop.read + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szLocked + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szDate_sent + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szStatus + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szSub_id + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szReadable_date + "'," + Environment.NewLine
+                                + "'" + prop.readableDate + "'," + Environment.NewLine
                                 + "'" + prop.smsProps.szQuota + "'," + Environment.NewLine
                                 + "'" + _fortmater.ConvertToString(prop.smsProps.dFulizaLimit) + "'," + Environment.NewLine
                                 + "'" + _fortmater.ConvertToString(prop.smsProps.dFulizaBorrowed) + "'," + Environment.NewLine
@@ -68,6 +69,14 @@ namespace MSota.DataServer
 
                                 ;
 
+                    count++;
+
+                    if (count == 392)
+                    {
+
+                    }
+
+                    Debug.WriteLine(count);
 
                     _dataAccess.SaveData(szSQL);
                 }
