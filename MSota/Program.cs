@@ -13,6 +13,7 @@ using MSota.DataServer;
 using Microsoft.AspNetCore.Builder;
 using MSota.Accounts;
 using MSota.JavaScriptObjectNotation;
+using MSota.Extractors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +30,9 @@ builder.Services.AddScoped<IXmlExtractor, XmlExtractor>();
 builder.Services.AddScoped<ISqlDataServer, SqlDataServer>();
 builder.Services.AddScoped<ISQLDataAccess, SQLDataAccess>();
 builder.Services.AddScoped<IFactions, Factions>();
+builder.Services.AddScoped<IEx_SMS, Ex_SMS>();
 builder.Services.AddScoped<IJsonExtractor, JsonExtractor>();
-//builder.Services.AddScoped<IJsonProps, JsonProps>();
+
 
 //SQL connection string
 builder.Services.AddDbContext<DbContext>(x => 

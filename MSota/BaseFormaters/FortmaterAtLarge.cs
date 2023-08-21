@@ -34,6 +34,9 @@ namespace MSota.BaseFormaters
             string[] dFin = new string[] { };
             string szOut = string.Empty;
 
+            if (string.IsNullOrEmpty(status[0]))
+                return string.Empty;
+
             var regName = new Regex($@"{status[0]}\s+{status[1]}\s+(\w+\s+\w+)");
 
             if (status[2] == "withdraw")

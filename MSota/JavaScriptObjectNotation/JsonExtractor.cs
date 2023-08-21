@@ -1,8 +1,10 @@
 ﻿using MSota.BaseFormaters;
 using MSota.Controllers;
 using MSota.DataServer;
+using MSota.Extractors;
 using MSota.Responses;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.Net;
 using System.Runtime.InteropServices;
 
@@ -13,10 +15,12 @@ namespace MSota.JavaScriptObjectNotation
         //JsonProps _jsonProps;
         IFortmaterAtLarge _fortmater;
         ISqlDataServer _sqlDataServer;
-        public JsonExtractor(IFortmaterAtLarge fortmater, ISqlDataServer sqlDataServer)
+        IEx_SMS _ex_SMS;
+        public JsonExtractor(IFortmaterAtLarge fortmater, ISqlDataServer sqlDataServer, IEx_SMS ex_SMS)
         {
             _fortmater = fortmater;
             _sqlDataServer = sqlDataServer;
+            _ex_SMS = ex_SMS;
         }
 
         public BaseResponse ExtractBegin(string smsStringValue)
@@ -29,7 +33,7 @@ namespace MSota.JavaScriptObjectNotation
 
                 return new BaseResponse(new Error(), HttpStatusCode.Accepted);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new BaseResponse(new Error(), HttpStatusCode.InternalServerError);
             }
@@ -41,7 +45,6 @@ namespace MSota.JavaScriptObjectNotation
 
             SMSMessages sMS = new SMSMessages();
             Values val = new Values();
-
 
             JObject json = JObject.Parse(smsStringValue);
 
@@ -75,6 +78,9 @@ namespace MSota.JavaScriptObjectNotation
                         val.thread = 0; // Set a default value or handle the null case differently
 
                     val.service = (string)it.SelectToken("service");
+
+                    if (string.IsNullOrEmpty(val.message) == false)
+                        val.smsProps = _ex_SMS.MessageExtractBegin(sMS.Key,val);
 
                     sMS.Values.Add(val);
                 }

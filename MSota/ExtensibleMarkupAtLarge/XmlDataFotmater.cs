@@ -31,7 +31,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 {
                     message.szRAccNo = _fortmater.GetAccountNumber(szBody);
                     message.szRName = _fortmater.RNameCreatorFromAccNo(message.szRAccNo);
-                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountWithdraw;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount;
 
                     if (szBody.Contains("Pay Bill"))
                     {
@@ -127,7 +127,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 if (szBody.Contains("PMWithdraw") || 
                     szBody.Contains("AMWithdraw"))
                 {
-                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountWithdraw;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount;
                     szID = "withdraw";
 
                     status[0] = "";
@@ -136,7 +136,7 @@ namespace MSota.ExtensibleMarkupAtLarge
                 }
                 if (szBody.Contains("Fuliza"))
                 {
-                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountLoan;
+                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.LoanDebit;
                     szID = "borrowed";
 
                     status[0] = "Confirmed";
@@ -162,7 +162,7 @@ namespace MSota.ExtensibleMarkupAtLarge
 
                 switch (message.szQuota)
                 {
-                    case EnumsAtLarge.EnumContainer.TransactionQuota.AccountWithdraw:
+                    case EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount:
                         message.szRName = _fortmater.GlobalRNameGetter(szBody, status);
                         break;
                     case EnumsAtLarge.EnumContainer.TransactionQuota.MerchantPayment:
@@ -172,13 +172,13 @@ namespace MSota.ExtensibleMarkupAtLarge
                     case EnumsAtLarge.EnumContainer.TransactionQuota.AirtimePurchase:
                             message.szRName = message.szQuota.ToString();
                         break;
-                    case EnumsAtLarge.EnumContainer.TransactionQuota.AccountLoan:
+                    case EnumsAtLarge.EnumContainer.TransactionQuota.LoanDebit:
                         message.szRName = message.szQuota.ToString();
                         message.dBalance = _fortmater.CashConverter(moneyArray[2]);
 
                         if (szBody.Contains("charged"))
                         {
-                            message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountLoanPayment;
+                            message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.LoanCredit;
                             message.szRName = message.szQuota.ToString();
                         }
                         

@@ -25,7 +25,54 @@ namespace MSota.DataServer
 
         public void PostData(List<SMSMessages> js_vprop)
         {
-            //throw new NotImplementedException();
+            AddStatisticsToDb(js_vprop);
+        }
+        private void AddStatisticsToDb(List<SMSMessages> js_vprop)
+        {
+            foreach (SMSMessages js_v in js_vprop)
+            {
+                foreach (var prop in js_v.Values)
+                {
+                    string szSQL = "EXECUTE Ms_DuplicateChecker " //This part gives me joy
+
+                                + "'" + prop.smsProps.szCode + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szDate + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szRName + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szRPhoneNo + "'," + Environment.NewLine
+                                //+ "'" + prop.szRecepientDate + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szRAccNo + "'," + Environment.NewLine
+                                + "'" + _fortmater.ConvertToString(prop.smsProps.dCashAmount) + "'," + Environment.NewLine
+                                + "'" + _fortmater.ConvertToString(prop.smsProps.dBalance) + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szProtocol + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szPayBill_TillNo + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szTransactionCost + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szAddress + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szType + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szSubject + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szBody + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szToa + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szSc_toa + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szService_center + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szRead + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szLocked + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szDate_sent + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szStatus + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szSub_id + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szReadable_date + "'," + Environment.NewLine
+                                + "'" + prop.smsProps.szQuota + "'," + Environment.NewLine
+                                + "'" + _fortmater.ConvertToString(prop.smsProps.dFulizaLimit) + "'," + Environment.NewLine
+                                + "'" + _fortmater.ConvertToString(prop.smsProps.dFulizaBorrowed) + "'," + Environment.NewLine
+                                + "'" + _fortmater.ConvertToString(prop.smsProps.dCharges) + "'," + Environment.NewLine
+                                + "'" + _fortmater.ConvertToString(prop.smsProps.dFulizaAmount) + "',"
+                                + "'" + prop.smsProps.szUniqueKey + "'"
+
+                                ;
+
+
+                    _dataAccess.SaveData(szSQL);
+                }
+            }
+            _CopyAndSaveCollectionsToRecepientsAndTransactions();
         }
         public void PostData(List<IXmlProps> x_vprop)
         {

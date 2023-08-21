@@ -31,38 +31,39 @@ namespace MSota.JavaScriptObjectNotation
         public int thread { get; set; }
         public string ?service { get; set; }
         public SmsProps smsProps { get; set; } = new SmsProps();
+
     }
 
     public class SmsProps
     {
-        double dBalance { get; set; }
-        double dCashAmount { get; set; }
-        double dCharges { get; set; }
-        double dFulizaAmount { get; set; }
-        double dFulizaBorrowed { get; set; }
-        double dFulizaLimit { get; set; }
-        string szAddress { get; set; }
-        string szBody { get; set; }
-        string szCode { get; set; }
-        string szDate { get; set; }
-        string szDate_sent { get; set; }
-        string szLocked { get; set; }
-        string szPayBill_TillNo { get; set; }
-        string szProtocol { get; set; }
-        EnumsAtLarge.EnumContainer.TransactionQuota szQuota { get; set; }
-        string szRAccNo { get; set; }
-        string szRead { get; set; }
-        string szReadable_date { get; set; }
-        string szRName { get; set; }
-        string szRPhoneNo { get; set; }
-        string szSc_toa { get; set; }
-        string szService_center { get; set; }
-        string szStatus { get; set; }
-        string szSub_id { get; set; }
-        string szSubject { get; set; }
-        string szToa { get; set; }
-        string szTransactionCost { get; set; }
-        string szType { get; set; }
-        string szUniqueKey { get; set; }
+        public double dBalance { get; set; }
+        public double dCashAmount { get; set; }
+        public double dCharges { get; set; }
+        public double dFulizaAmount { get; set; }
+        public double dFulizaBorrowed { get; set; }
+        public double dFulizaLimit { get; set; }
+        public string szAddress { get; set; }
+        public string szBody { get; set; }
+        public string szCode { get; set; }
+        public string szDate { get; set; }
+        public string szDate_sent { get; set; }
+        public string szLocked { get; set; }
+        public string szPayBill_TillNo { get; set; }
+        public string szProtocol { get; set; }
+        public EnumsAtLarge.EnumContainer.TransactionQuota szQuota { get; set; }
+        public string szRAccNo { get; set; }
+        public string szRead { get; set; }
+        public string szReadable_date { get; set; }
+        public string szRName { get; set; }
+        public string szRPhoneNo { get; set; }
+        public string szSc_toa { get; set; }
+        public string szService_center { get; set; }
+        public string szStatus { get; set; }
+        public string szSub_id { get; set; }
+        public string szSubject { get; set; }
+        public string szToa { get; set; }
+        public string szTransactionCost { get; set; }
+        public string szType { get; set; }
+        public string szUniqueKey { get; set; }
     }
 }
