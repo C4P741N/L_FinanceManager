@@ -57,7 +57,7 @@ namespace MSota.Controllers
                 return UnprocessableEntity("Invalid data");
             }
 
-            BaseResponse baseResponse = _jsonExtractor.ExtractBegin(smsMessage);
+            BaseResponse baseResponse = _jsonExtractor.UpdateFromJson(smsMessage);
 
             if (!baseResponse._error.bErrorFound)
             {

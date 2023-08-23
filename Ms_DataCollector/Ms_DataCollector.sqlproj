@@ -76,6 +76,7 @@
     <Build Include="dbo\Programmabiliy\StoredProcedure\TransactionStatistics.sql" />
     <Build Include="dbo\Programmabiliy\StoredProcedure\FactionsStatistics.sql" />
     <Build Include="dbo\Tables\Ms_Collection_II.sql" />
+    <Build Include="dbo\Programmabiliy\StoredProcedure\Ms_DuplicateChecker_Json.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Profile\Ms_DataCollector.publish.xml" />

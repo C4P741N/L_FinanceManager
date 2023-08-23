@@ -15,79 +15,49 @@ namespace MSota.Extractors
             _fortmater = fortmater;
         }
 
-        public SmsProps MessageExtractBegin(string szKey, Values sms)
+        public JsonSmsProps MessageExtractBegin(JsonBodyProps vals)
         {
-            switch (szKey)
+            switch (vals.DocType)
             {
                 case "KCB":
-                    return _ExtractBodyForKCB(sms);
+                    return _ExtractBodyForKCB(vals);
                 case "MPESA":
-                    return _ExtractBodyForMPESA(sms);
+                    return _ExtractBodyForMPESA(vals);
             }
 
-            return sms.smsProps;
+            return vals.smsProps;
         }
 
-        private SmsProps _ExtractBodyForKCB(Values sms)
+        private JsonSmsProps _ExtractBodyForKCB(JsonBodyProps sms)
         {
-            string szBody = sms.message;
-
-            SmsProps message = sms.smsProps;
-
-            while (true)
-            {
-                message.dCashAmount = _fortmater.GlobalCashGetter(szBody);
-                message.szCode = _fortmater.GetMpesaCode(szBody);
-
-                if (szBody.Contains("sent to"))
-                {
-                    message.szRAccNo = _fortmater.GetAccountNumber(szBody);
-                    message.szRName = _fortmater.RNameCreatorFromAccNo(message.szRAccNo);
-                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount;
-
-                    if (szBody.Contains("Pay Bill"))
-                    {
-                        message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.PayBillPayment;
-                        message.szPayBill_TillNo = _fortmater.GetPayBillNo(szBody);
-                    }
-
-                    break;
-                }
-                if (szBody.Contains("has transfered"))
-                {
-                    message.szQuota = EnumsAtLarge.EnumContainer.TransactionQuota.AccountDeposit;
-                    message.szRName = _fortmater.GetKCBContactName(szBody);
-                }
-
-                break;
-            }
+            JsonSmsProps message = sms.smsProps;
 
             return message;
         }
 
-        private SmsProps _ExtractBodyForMPESA(Values sms)
+        private JsonSmsProps _ExtractBodyForMPESA(JsonBodyProps sms)
         {
-            string szBody = sms.message;
+            string szBody = sms.Body;
             string[] status = new string[3];
             string[] moneyArray = new string[] { "", "", "", "" };
             string[] wordsArray = szBody.Split(' ');
-            SmsProps message = null;
+            JsonSmsProps message = null;
 
             message = ProcessTransaction(szBody, ref status);
 
-            if (message.szQuota == EnumsAtLarge.EnumContainer.TransactionQuota.None ||
-                message.szQuota == EnumsAtLarge.EnumContainer.TransactionQuota.InvalidTransaction)
+            if (message.Quota == EnumsAtLarge.EnumContainer.TransactionQuota.None ||
+                message.Quota == EnumsAtLarge.EnumContainer.TransactionQuota.InvalidTransaction)
                 return message;
 
-            message.szCode = wordsArray[0];
-            message.szRName = _fortmater.GlobalRNameGetter(szBody, status, message.szQuota);
-            message.szRAccNo = _fortmater.GlobalAccNoAndPhoneNoGetter(szBody);
+            message.TranId = wordsArray[0];
+            message.Recepient = _fortmater.GlobalRNameGetter(szBody, status, message.Quota);
+            message.AccNo = _fortmater.GlobalAccNoAndPhoneNoGetter(szBody);
             moneyArray = _fortmater.GlobalCashGetterArray(szBody);
 
-            if (string.IsNullOrEmpty(message.szRName))
-                message.szRName = "Null";
+            if (string.IsNullOrEmpty(message.Recepient))
+                message.Recepient = "Null";
 
-            switch (message.szQuota)
+            switch (message.Quota)
             {
                 case EnumsAtLarge.EnumContainer.TransactionQuota.AccountDeposit:
                 case EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount:
@@ -96,29 +66,29 @@ namespace MSota.Extractors
                 case EnumsAtLarge.EnumContainer.TransactionQuota.AirtimePurchase:
 
                     if(moneyArray.Count() > 2)
-                        message.dCharges = _fortmater.CashConverter(moneyArray[2]);
+                        message.Charges = _fortmater.CashConverter(moneyArray[2]);
                     
-                    message.dCashAmount = _fortmater.CashConverter(moneyArray[0]);
-                    message.dBalance = _fortmater.CashConverter(moneyArray[1]);
+                    message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
+                    message.Balance = _fortmater.CashConverter(moneyArray[1]);
                     break;
                 case EnumsAtLarge.EnumContainer.TransactionQuota.LoanDebit:
-                    message.dFulizaBorrowed = _fortmater.CashConverter(moneyArray[0]);
-                    message.dCharges = _fortmater.CashConverter(moneyArray[1]);
-                    message.dFulizaAmount = _fortmater.CashConverter(moneyArray[2]);
+                    message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
+                    message.Charges = _fortmater.CashConverter(moneyArray[1]);
+                    message.Balance = _fortmater.CashConverter(moneyArray[2]);
                     break;
                 case EnumsAtLarge.EnumContainer.TransactionQuota.LoanCredit:
-                    message.dFulizaBorrowed = _fortmater.CashConverter(moneyArray[0]);
-                    message.dBalance = _fortmater.CashConverter(moneyArray[2]);
+                    message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
+                    message.Balance = _fortmater.CashConverter(moneyArray[2]);
                     break;
             }
 
             return message;
         }
 
-        public SmsProps ProcessTransaction(string szBody,
+        public JsonSmsProps ProcessTransaction(string szBody,
                                             ref string[] srtatus)
         {
-            SmsProps message = new SmsProps();
+            JsonSmsProps message = new JsonSmsProps();
             string[] status = new string[3];
 
             Dictionary<string, (EnumsAtLarge.EnumContainer.TransactionQuota, string[])> keywordMappings = new Dictionary<string, (EnumsAtLarge.EnumContainer.TransactionQuota, string[])>
@@ -150,13 +120,13 @@ namespace MSota.Extractors
             {
                 if (szBody.Contains(keywordMapping.Key))
                 {
-                    message.szQuota = keywordMapping.Value.Item1;
+                    message.Quota = keywordMapping.Value.Item1;
                     status = keywordMapping.Value.Item2;
                     break;
                 }
             }
             srtatus = status;
-            message.szRName = message.szQuota.ToString();
+            message.Recepient = message.Quota.ToString();
             return message;
         }
     }

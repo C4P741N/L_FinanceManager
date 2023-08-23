@@ -10,6 +10,7 @@ using MSota.Models;
 using Calendar = MSota.Models.Calendar;
 using MSota.JavaScriptObjectNotation;
 using System.Diagnostics;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace MSota.DataServer
 {
@@ -24,65 +25,34 @@ namespace MSota.DataServer
             _fortmater = fortmater;
         }
 
-        public void PostData(List<SMSMessages> js_vprop)
+        public void PostData(JsonBodyProps props)
         {
-            AddStatisticsToDb(js_vprop);
+            AddStatisticsToDb(props);
         }
-        private void AddStatisticsToDb(List<SMSMessages> js_vprop)
-        {int count = 0;
-            foreach (SMSMessages js_v in js_vprop)
-            {
-                foreach (var prop in js_v.values)
-                {
-                    string szSQL = "EXECUTE Ms_DuplicateChecker " //This part gives me joy
+        private void AddStatisticsToDb(JsonBodyProps props)
+        {
 
-                                + "'" + prop.smsProps.szCode + "'," + Environment.NewLine
-                                + "'" + prop.lDate + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szRName + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szRPhoneNo + "'," + Environment.NewLine
-                                //+ "'" + prop.szRecepientDate + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szRAccNo + "'," + Environment.NewLine
-                                + "'" + _fortmater.ConvertToString(prop.smsProps.dCashAmount) + "'," + Environment.NewLine
-                                + "'" + _fortmater.ConvertToString(prop.smsProps.dBalance) + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szProtocol + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szPayBill_TillNo + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szTransactionCost + "'," + Environment.NewLine
-                                + "'" + prop.sender + "'," + Environment.NewLine//aDDRESSS
-                                + "'" + prop.smsProps.szType + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szSubject + "'," + Environment.NewLine
-                                + "'" + prop.message.Replace("'","''") + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szToa + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szSc_toa + "'," + Environment.NewLine
-                                + "'" + prop.service + "'," + Environment.NewLine
-                                + "'" + prop.read + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szLocked + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szDate_sent + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szStatus + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szSub_id + "'," + Environment.NewLine
-                                + "'" + prop.readableDate + "'," + Environment.NewLine
-                                + "'" + prop.smsProps.szQuota + "'," + Environment.NewLine
-                                + "'" + _fortmater.ConvertToString(prop.smsProps.dFulizaLimit) + "'," + Environment.NewLine
-                                + "'" + _fortmater.ConvertToString(prop.smsProps.dFulizaBorrowed) + "'," + Environment.NewLine
-                                + "'" + _fortmater.ConvertToString(prop.smsProps.dCharges) + "'," + Environment.NewLine
-                                + "'" + _fortmater.ConvertToString(prop.smsProps.dFulizaAmount) + "',"
-                                + "'" + prop.smsProps.szUniqueKey + "'"
+            string szSQL = $@"EXECUTE Ms_DuplicateChecker_Json
+                            '{props.smsProps.DocEntry}',
+                            '{props.smsProps.TranId}',
+                            {props.LongDate},
+                            '{props.DocDateTime}',
+                            '{props.smsProps.Recepient}',
+                            '{props.smsProps.AccNo}',
+                            {props.smsProps.TranAmount},
+                            {props.smsProps.Balance},
+                            {props.smsProps.Charges},
+                            '{props.DocType}',
+                            '{props.Service_center}',
+                            {props.IsRead},
+                            '{props.smsProps.Quota}',
+                            '{props.Body}'";
 
-                                ;
+            _dataAccess.SaveData(szSQL);
 
-                    count++;
-
-                    if (count == 392)
-                    {
-
-                    }
-
-                    Debug.WriteLine(count);
-
-                    _dataAccess.SaveData(szSQL);
-                }
-            }
-            _CopyAndSaveCollectionsToRecepientsAndTransactions();
+            //_CopyAndSaveCollectionsToRecepientsAndTransactions();
         }
+
         public void PostData(List<IXmlProps> x_vprop)
         {
             AddStatisticsToDb(x_vprop);
@@ -133,19 +103,13 @@ namespace MSota.DataServer
 
         private void _CopyAndSaveCollectionsToRecepientsAndTransactions()
         {
-            string szSQL;
+            string[] storedProcedures = { "RecepientsCopier", "TransactionsCopier", "FactionsCopier" };
 
-            szSQL = "EXECUTE RecepientsCopier";
-
-            _dataAccess.SaveData(szSQL);
-
-            szSQL = "EXECUTE TransactionsCopier";
-
-            _dataAccess.SaveData(szSQL);
-
-            szSQL = "EXECUTE FactionsCopier";
-
-            _dataAccess.SaveData(szSQL);
+            foreach (var procedure in storedProcedures)
+            {
+                string szSQL = $"EXECUTE {procedure}";
+                _dataAccess.SaveData(szSQL);
+            }
         }
 
         public List<TransactionModel> LoadTransactionStatistics(Calendar cal)

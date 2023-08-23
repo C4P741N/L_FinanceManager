@@ -23,6 +23,20 @@ namespace MSota.BaseFormaters
 
         //    return AmountBefore;
         //}
+
+        public double CorrectDoubleIf(double vValue)
+        {
+            double dFiValue = 0;
+
+            if (vValue == 0) return dFiValue;
+
+            System.Globalization.CultureInfo dAmountCultureInfo = new CultureInfo("en-GB");
+
+            dFiValue = Convert.ToDouble(vValue, dAmountCultureInfo);
+
+            return dFiValue;
+        }
+
         private string StringToTitleCase(string szName)
         {
             var name = szName.Substring(0, 1).ToUpper() + szName.Substring(1).ToLower();

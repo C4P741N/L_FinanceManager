@@ -4,6 +4,7 @@ namespace MSota.BaseFormaters
 {
     public interface IFortmaterAtLarge
     {
+        double CorrectDoubleIf(double vValue);
         string ConvertToString(double vValue);
         string ConvertToString(string vValue);
         public string GlobalRNameGetter(string szvBody, string [] SzStatus, EnumsAtLarge.EnumContainer.TransactionQuota Quota);
