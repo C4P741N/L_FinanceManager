@@ -16,10 +16,11 @@
             InvalidTransaction  =   9,
         }
 
-        public enum DoubleEntryAccounting
+        public enum TransactionType
         {
-            Credit = 0,//Outgoing
-            Debit = 1,//Incoming
+            None = 'N',
+            Debit = 'D',
+            Credit = 'C'
         }
     }
 }

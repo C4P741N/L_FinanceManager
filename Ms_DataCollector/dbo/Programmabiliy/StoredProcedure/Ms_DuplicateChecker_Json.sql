@@ -13,6 +13,7 @@
 	@Service_center	    nvarchar(250),
 	@IsRead				int,
 	@Quota				nvarchar(250),
+    @TranType           char,
 	@Body				nvarchar(MAX)		
 )
 
@@ -36,7 +37,8 @@ USING
 		  ,@DocType		
 		  ,@Service_center	
 		  ,@IsRead			
-		  ,@Quota			
+		  ,@Quota	
+          ,@TranType
 		  ,@Body			
 		)
 ) 
@@ -55,6 +57,7 @@ X(
          ,[Service_center]
          ,[IsRead]
          ,[Quota]
+         ,[TranType]
          ,[Body]
 )
 
@@ -81,6 +84,7 @@ WHEN NOT MATCHED BY TARGET THEN
          ,[Service_center]
          ,[IsRead]
          ,[Quota]
+         ,[TranType]
          ,[Body]
  )
  --VALUES(X.[Code], X.[M_Date], X.[M_RecepientName], X.[M_PayBill_TillNo]);
@@ -100,7 +104,16 @@ WHEN NOT MATCHED BY TARGET THEN
          ,X.[Service_center]
          ,X.[IsRead]
          ,X.[Quota]
+         ,X.[TranType]
          ,X.[Body]
 	);
 
  END;
+
+BEGIN
+    EXECUTE [RecepientsCopier_II]
+END;
+
+BEGIN
+    EXECUTE [TransactionsCopier_II]
+END;

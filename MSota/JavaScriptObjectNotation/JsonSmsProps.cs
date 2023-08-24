@@ -16,5 +16,6 @@ namespace MSota.JavaScriptObjectNotation
         public double Balance { get; set; }
         public double Charges { get; set; }
         public EnumsAtLarge.EnumContainer.TransactionQuota Quota { get; set; } = EnumsAtLarge.EnumContainer.TransactionQuota.None;
+        public EnumsAtLarge.EnumContainer.TransactionType TranType { get; set; } = EnumsAtLarge.EnumContainer.TransactionType.None;
     }
 }

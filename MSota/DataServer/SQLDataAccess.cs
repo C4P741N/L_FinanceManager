@@ -69,6 +69,7 @@ namespace MSota.DataServer
                 oCmd.Parameters.AddWithValue("@Service_center", props.Service_center);
                 oCmd.Parameters.AddWithValue("@IsRead", props.IsRead);
                 oCmd.Parameters.AddWithValue("@Quota", props.smsProps.Quota.ToString());
+                oCmd.Parameters.AddWithValue("@TranType", (char)props.smsProps.TranType);
                 oCmd.Parameters.AddWithValue("@Body", props.Body?.Replace("'", "''"));
 
                 oAdap.InsertCommand = oCmd;
