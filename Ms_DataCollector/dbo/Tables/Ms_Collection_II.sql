@@ -3,7 +3,7 @@
 		DocNum				INT NOT NULL IDENTITY (1, 1),
         DocEntry			VARCHAR(255) NOT NULL,
 		TranId			    VARCHAR(255) NULL,
-	    LongDate			    INT NOT NULL,
+	    LongDate			BIGINT NOT NULL,
         DocDateTime		    DATETIME NOT NULL,
 		Recepient		    VARCHAR(255) NOT NULL,
         AccNo	            varchar(255),

@@ -49,7 +49,10 @@ namespace MSota.BaseFormaters
             string szOut = string.Empty;
 
             if (string.IsNullOrEmpty(status[0]) && status.Count() == 1)
-                return string.Empty;
+                return Quota.ToString();
+
+            if (string.IsNullOrEmpty(status[0]) && string.IsNullOrEmpty(status[1]) && string.IsNullOrEmpty(status[2]))
+                return Quota.ToString();
 
             var regName = new Regex($@"{status[0]}\s+{status[1]}\s+(\w+\s+\w+)");
 

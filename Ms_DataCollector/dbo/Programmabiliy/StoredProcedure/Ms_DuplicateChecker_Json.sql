@@ -2,7 +2,7 @@
 (
 	@DocEntry			nvarchar(250),
 	@TranId			    nvarchar(250),
-	@LongDate			int,
+	@LongDate			numeric(18, 0),
 	@DocDateTime		datetime,
 	@Recepient		    nvarchar(250),
 	@AccNo	            nvarchar(250),
@@ -11,9 +11,9 @@
 	@Charges		    float(53),
 	@DocType		    nvarchar(250),
 	@Service_center	    nvarchar(250),
-	@IsRead				INT,
+	@IsRead				int,
 	@Quota				nvarchar(250),
-	@Body				varchar(MAX)		
+	@Body				nvarchar(MAX)		
 )
 
 AS

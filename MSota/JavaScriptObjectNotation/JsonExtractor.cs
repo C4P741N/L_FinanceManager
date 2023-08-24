@@ -28,7 +28,7 @@ namespace MSota.JavaScriptObjectNotation
         {
             try
             {
-                HttpStatusCode status = _BeginUpdate(smsStringValue);
+                HttpStatusCode status = _BeginAndPostUpdate(smsStringValue);
 
                 return new BaseResponse(new Error(), status);
             }
@@ -38,7 +38,7 @@ namespace MSota.JavaScriptObjectNotation
             }
         }
 
-        private HttpStatusCode _BeginUpdate(string smsStringValue)
+        private HttpStatusCode _BeginAndPostUpdate(string smsStringValue)
         {
             JObject json = JObject.Parse(smsStringValue);
 

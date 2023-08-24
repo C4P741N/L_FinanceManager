@@ -4,6 +4,10 @@ using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Identity.Client;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.IO;
+using MSota.JavaScriptObjectNotation;
 
 namespace MSota.DataServer
 {
@@ -43,5 +47,35 @@ namespace MSota.DataServer
                 oCmd.ExecuteNonQuery();
             }
         }
+
+        public void SaveJsonDataOverStoredProcedure(JsonBodyProps props)
+        {
+            using (var oAdap = new SqlDataAdapter())
+            using (var oCon = new SqlConnection(_connectionString))
+            using (var oCmd = new SqlCommand("Ms_DuplicateChecker_Json", oCon))
+            {
+                oCmd.CommandType = CommandType.StoredProcedure;
+
+                oCmd.Parameters.AddWithValue("@DocEntry", props.smsProps.DocEntry);
+                oCmd.Parameters.AddWithValue("@TranId", props.smsProps.TranId);
+                oCmd.Parameters.AddWithValue("@LongDate", props.LongDate);
+                oCmd.Parameters.AddWithValue("@DocDateTime", props.DocDateTime);
+                oCmd.Parameters.AddWithValue("@Recepient", props.smsProps.Recepient?.Replace("'", "''"));
+                oCmd.Parameters.AddWithValue("@AccNo", props.smsProps.AccNo);
+                oCmd.Parameters.AddWithValue("@TranAmount", props.smsProps.TranAmount);
+                oCmd.Parameters.AddWithValue("@Balance", props.smsProps.Balance);
+                oCmd.Parameters.AddWithValue("@Charges", props.smsProps.Charges);
+                oCmd.Parameters.AddWithValue("@DocType", props.DocType);
+                oCmd.Parameters.AddWithValue("@Service_center", props.Service_center);
+                oCmd.Parameters.AddWithValue("@IsRead", props.IsRead);
+                oCmd.Parameters.AddWithValue("@Quota", props.smsProps.Quota.ToString());
+                oCmd.Parameters.AddWithValue("@Body", props.Body?.Replace("'", "''"));
+
+                oAdap.InsertCommand = oCmd;
+
+                oCon.Open();
+                oCmd.ExecuteNonQuery();
+            }
+        }
     }
-}
+    }

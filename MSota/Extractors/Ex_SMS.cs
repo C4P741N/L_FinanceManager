@@ -49,35 +49,40 @@ namespace MSota.Extractors
                 message.Quota == EnumsAtLarge.EnumContainer.TransactionQuota.InvalidTransaction)
                 return message;
 
+            message.DocEntry = _fortmater.GetUniqueKey();
+
             message.TranId = wordsArray[0];
             message.Recepient = _fortmater.GlobalRNameGetter(szBody, status, message.Quota);
             message.AccNo = _fortmater.GlobalAccNoAndPhoneNoGetter(szBody);
             moneyArray = _fortmater.GlobalCashGetterArray(szBody);
 
-            if (string.IsNullOrEmpty(message.Recepient))
-                message.Recepient = "Null";
-
             switch (message.Quota)
             {
                 case EnumsAtLarge.EnumContainer.TransactionQuota.AccountDeposit:
+
+                    message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
+                    message.Balance = _fortmater.CashConverter(moneyArray[1]);
+                    break;
                 case EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount:
                 case EnumsAtLarge.EnumContainer.TransactionQuota.MerchantPayment:
                 case EnumsAtLarge.EnumContainer.TransactionQuota.CustomerTransfer:
                 case EnumsAtLarge.EnumContainer.TransactionQuota.AirtimePurchase:
 
                     if(moneyArray.Count() > 2)
-                        message.Charges = _fortmater.CashConverter(moneyArray[2]);
+                        message.Charges = -_fortmater.CashConverter(moneyArray[2]);
                     
-                    message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
+                    message.TranAmount = -_fortmater.CashConverter(moneyArray[0]);
                     message.Balance = _fortmater.CashConverter(moneyArray[1]);
                     break;
                 case EnumsAtLarge.EnumContainer.TransactionQuota.LoanDebit:
+
                     message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
-                    message.Charges = _fortmater.CashConverter(moneyArray[1]);
+                    message.Charges = -_fortmater.CashConverter(moneyArray[1]);
                     message.Balance = _fortmater.CashConverter(moneyArray[2]);
                     break;
                 case EnumsAtLarge.EnumContainer.TransactionQuota.LoanCredit:
-                    message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
+
+                    message.TranAmount = -_fortmater.CashConverter(moneyArray[0]);
                     message.Balance = _fortmater.CashConverter(moneyArray[2]);
                     break;
             }
@@ -113,7 +118,8 @@ namespace MSota.Extractors
                 {"PMWithdraw",                                                  (EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount,      new string[3] {"", "from", "withdraw"})},
                 {"AMWithdraw",                                                  (EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount,      new string[3] {"", "from", "withdraw"})},
                 {"Interest charged",                                            (EnumsAtLarge.EnumContainer.TransactionQuota.LoanDebit,            new string[3] {"Confirmed", "from", "outstanding"})},
-                {"to fully pay your outstanding Fuliza",                        (EnumsAtLarge.EnumContainer.TransactionQuota.LoanCredit,           new string[3] {"Confirmed", "from", "outstanding"})},
+                {"pay your outstanding Fuliza",                                 (EnumsAtLarge.EnumContainer.TransactionQuota.LoanCredit,           new string[3] {"Confirmed", "from", "outstanding"})},
+                {"Reversal of transaction",                                     (EnumsAtLarge.EnumContainer.TransactionQuota.AccountDeposit,       new string[3])},
             };
 
             foreach (var keywordMapping in keywordMappings)

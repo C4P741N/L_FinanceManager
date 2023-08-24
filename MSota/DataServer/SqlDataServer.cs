@@ -28,27 +28,13 @@ namespace MSota.DataServer
         public void PostData(JsonBodyProps props)
         {
             AddStatisticsToDb(props);
+
+
         }
         private void AddStatisticsToDb(JsonBodyProps props)
         {
 
-            string szSQL = $@"EXECUTE Ms_DuplicateChecker_Json
-                            '{props.smsProps.DocEntry}',
-                            '{props.smsProps.TranId}',
-                            {props.LongDate},
-                            '{props.DocDateTime}',
-                            '{props.smsProps.Recepient}',
-                            '{props.smsProps.AccNo}',
-                            {props.smsProps.TranAmount},
-                            {props.smsProps.Balance},
-                            {props.smsProps.Charges},
-                            '{props.DocType}',
-                            '{props.Service_center}',
-                            {props.IsRead},
-                            '{props.smsProps.Quota}',
-                            '{props.Body}'";
-
-            _dataAccess.SaveData(szSQL);
+            _dataAccess.SaveJsonDataOverStoredProcedure(props);
 
             //_CopyAndSaveCollectionsToRecepientsAndTransactions();
         }
