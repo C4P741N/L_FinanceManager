@@ -45,11 +45,11 @@ namespace MSota.Extractors
 
             message = ProcessTransaction(szBody, ref status);
 
+            message.DocEntry = _fortmater.GetUniqueKey();
+
             if (message.Quota == EnumsAtLarge.EnumContainer.TransactionQuota.None ||
                 message.Quota == EnumsAtLarge.EnumContainer.TransactionQuota.InvalidTransaction)
                 return message;
-
-            message.DocEntry = _fortmater.GetUniqueKey();
 
             message.TranId = wordsArray[0];
             message.Recepient = _fortmater.GlobalRNameGetter(szBody, status, message.Quota);
@@ -62,6 +62,7 @@ namespace MSota.Extractors
 
                     message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
                     message.Balance = _fortmater.CashConverter(moneyArray[1]);
+                    message.TranType = EnumsAtLarge.EnumContainer.TransactionType.Debit;
                     break;
                 case EnumsAtLarge.EnumContainer.TransactionQuota.WithdrawnAmount:
                 case EnumsAtLarge.EnumContainer.TransactionQuota.MerchantPayment:
@@ -73,17 +74,20 @@ namespace MSota.Extractors
                     
                     message.TranAmount = -_fortmater.CashConverter(moneyArray[0]);
                     message.Balance = _fortmater.CashConverter(moneyArray[1]);
+                    message.TranType = EnumsAtLarge.EnumContainer.TransactionType.Credit;
                     break;
                 case EnumsAtLarge.EnumContainer.TransactionQuota.LoanDebit:
 
                     message.TranAmount = _fortmater.CashConverter(moneyArray[0]);
                     message.Charges = -_fortmater.CashConverter(moneyArray[1]);
                     message.Balance = _fortmater.CashConverter(moneyArray[2]);
+                    message.TranType = EnumsAtLarge.EnumContainer.TransactionType.Debit;
                     break;
                 case EnumsAtLarge.EnumContainer.TransactionQuota.LoanCredit:
 
                     message.TranAmount = -_fortmater.CashConverter(moneyArray[0]);
                     message.Balance = _fortmater.CashConverter(moneyArray[2]);
+                    message.TranType = EnumsAtLarge.EnumContainer.TransactionType.Credit;
                     break;
             }
 

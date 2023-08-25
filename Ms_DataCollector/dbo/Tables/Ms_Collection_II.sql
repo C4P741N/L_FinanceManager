@@ -14,5 +14,6 @@
         Service_center	    VARCHAR(255),
         IsRead				INT,
         Quota				VARCHAR(255) NOT NULL,
+        TranType 		    CHAR NOT NULL,
         Body				varchar(MAX) NOT NULL
 );

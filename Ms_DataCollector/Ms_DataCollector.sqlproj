@@ -62,6 +62,8 @@
     <Folder Include="dbo\Tables" />
     <Folder Include="Publish Profile" />
     <Folder Include="Home Profile\" />
+    <Folder Include="H_Publish\" />
+    <Folder Include="dbo\Triggers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Programmabiliy\StoredProcedure\DuplicateChecker.sql" />
@@ -77,11 +79,16 @@
     <Build Include="dbo\Programmabiliy\StoredProcedure\FactionsStatistics.sql" />
     <Build Include="dbo\Tables\Ms_Collection_II.sql" />
     <Build Include="dbo\Programmabiliy\StoredProcedure\Ms_DuplicateChecker_Json.sql" />
+    <Build Include="dbo\Tables\Ms_Recepients_II.sql" />
+    <Build Include="dbo\Programmabiliy\StoredProcedure\Ms_Recepients_II.sql" />
+    <Build Include="dbo\Tables\Ms_Transactions_II.sql" />
+    <Build Include="dbo\Programmabiliy\StoredProcedure\TransactionsCopier_II.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Publish Profile\Ms_DataCollector.publish.xml" />
     <None Include="Home Profile\Ms_DataCollector.publish.xml" />
     <None Include="Ms_DataCollector.publish.xml" />
+    <None Include="H_Publish\Ms_DataCollector.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Ms_DataCollector.refactorlog" />
