@@ -28,17 +28,22 @@ namespace MSota.JavaScriptObjectNotation
         {
             try
             {
-                HttpStatusCode status = _BeginAndPostUpdate(smsStringValue);
+                Task<HttpStatusCode> status = _BeginAndPostUpdate(smsStringValue);
+                GC.Collect();
 
-                return new BaseResponse(new Error(), status);
+                return new BaseResponse(new Error(), status.Result);
             }
             catch (Exception ex)
-            {
-                return new BaseResponse(new Error(), HttpStatusCode.InternalServerError);
+            { 
+                return new BaseResponse(new Error
+                {
+                    szErrorMessage = ex.Message,
+                    bErrorFound = true,
+                }, HttpStatusCode.InternalServerError);
             }
         }
 
-        private HttpStatusCode _BeginAndPostUpdate(string smsStringValue)
+        private async Task<HttpStatusCode> _BeginAndPostUpdate(string smsStringValue)
         {
             JObject json = JObject.Parse(smsStringValue);
 
@@ -51,7 +56,7 @@ namespace MSota.JavaScriptObjectNotation
 
                     vals = _ParseJson(vals, token);
 
-                    _sqlDataServer.PostData(vals);
+                    await Task.Run(() => _sqlDataServer.PostData(vals)); // Wrapping the non-async method call
                 }
             }
 

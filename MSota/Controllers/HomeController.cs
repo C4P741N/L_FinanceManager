@@ -10,6 +10,7 @@ using MSota.Responses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Net;
 using System.Text.Json.Nodes;
 
 namespace MSota.Controllers
@@ -52,19 +53,12 @@ namespace MSota.Controllers
         [Route("/[controller]/[action]/postJson")]
         public ActionResult PostJsonData([FromBody] string smsMessage)
         {
-            if (smsMessage == null )
-            {
-                return UnprocessableEntity("Invalid data");
-            }
+            if (smsMessage == null)
+                return StatusCode((int)HttpStatusCode.UnsupportedMediaType);
 
             BaseResponse baseResponse = _jsonExtractor.UpdateFromJson(smsMessage);
-
-            if (!baseResponse._error.bErrorFound)
-            {
-                return Ok(baseResponse);
-            }
-
-            return BadRequest(baseResponse);
+           
+            return StatusCode((int)baseResponse._statusCode);
         }
 
         [HttpPost]

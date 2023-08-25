@@ -28,12 +28,9 @@ namespace MSota.DataServer
         public void PostData(JsonBodyProps props)
         {
             AddStatisticsToDb(props);
-
-
         }
         private void AddStatisticsToDb(JsonBodyProps props)
         {
-
             _dataAccess.SaveJsonDataOverStoredProcedure(props);
 
             //_CopyAndSaveCollectionsToRecepientsAndTransactions();
