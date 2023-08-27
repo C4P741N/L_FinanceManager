@@ -8,5 +8,6 @@
 	Balance			    FLOAT(53) NOT NULL,
     Charges		        FLOAT(53) NOT NULL,
     DocType		        VARCHAR(255),
+    TranType            CHAR NOT NULL,
     Quota				VARCHAR(255) NOT NULL
 )
