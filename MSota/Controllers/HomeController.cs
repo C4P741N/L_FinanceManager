@@ -61,6 +61,20 @@ namespace MSota.Controllers
             return StatusCode((int)baseResponse._statusCode);
         }
 
+        [HttpGet]
+        [Route("/[controller]/[action]/getData/")]
+        public ActionResult GetPostDashboardData()
+        {
+            MSota.Responses.TransactionsResponseII trRp = _transactions.GetAllTransactionsII();
+
+            if (!trRp._error.bErrorFound)
+            {
+                return Ok("Hello world");
+            }
+
+            return StatusCode((int)trRp._statusCode);
+        }
+
         [HttpPost]
         [Route("/[controller]/[action]/GetTransactionData")]
         public ActionResult GetTransactionStatistics([FromBody]Calendar cal)

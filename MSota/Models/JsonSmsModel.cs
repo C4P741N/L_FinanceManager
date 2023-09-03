@@ -4,13 +4,13 @@ using System;
 using System.Data;
 using System.Threading;
 
-namespace MSota.JavaScriptObjectNotation
+namespace MSota.Models
 {
-    public class JsonSmsProps
+    public class JsonSmsModel
     {
         public string? DocEntry { get; set; } = "0";
         public string? TranId { get; set; } = "0";
-		public string? Recepient { get; set; } = "0";
+        public string? Recepient { get; set; } = "0";
         public string? AccNo { get; set; } = "0";
         public double TranAmount { get; set; }
         public double Balance { get; set; }

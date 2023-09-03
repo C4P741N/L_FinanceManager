@@ -8,7 +8,6 @@ using MSota.BaseFormaters;
 using System.Text.RegularExpressions;
 using MSota.Models;
 using Calendar = MSota.Models.Calendar;
-using MSota.JavaScriptObjectNotation;
 using System.Diagnostics;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -25,11 +24,17 @@ namespace MSota.DataServer
             _fortmater = fortmater;
         }
 
-        public void PostData(JsonBodyProps props)
+        public AccountLegerModel LoadAccountLegerSummary()
+        {
+            string szSQL = "EXECUTE GetLegerSummary";
+
+            return _dataAccess.LoadData(szSQL);
+        }
+        public void PostData(JsonBodyModel props)
         {
             AddStatisticsToDb(props);
         }
-        private void AddStatisticsToDb(JsonBodyProps props)
+        private void AddStatisticsToDb(JsonBodyModel props)
         {
             _dataAccess.SaveJsonDataOverStoredProcedure(props);
 

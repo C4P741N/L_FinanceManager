@@ -3,6 +3,7 @@ using MSota.BaseFormaters;
 using MSota.Controllers;
 using MSota.DataServer;
 using MSota.Extractors;
+using MSota.Models;
 using MSota.Responses;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -51,7 +52,7 @@ namespace MSota.JavaScriptObjectNotation
             {
                 foreach (JToken token in item.Value)
                 {
-                    JsonBodyProps vals = new JsonBodyProps();
+                    JsonBodyModel vals = new JsonBodyModel();
                     vals.DocType = item.Key;
 
                     vals = _ParseJson(vals, token);
@@ -63,7 +64,7 @@ namespace MSota.JavaScriptObjectNotation
             return HttpStatusCode.Accepted;
         }
 
-        private JsonBodyProps _ParseJson(JsonBodyProps vals, JToken token)
+        private JsonBodyModel _ParseJson(JsonBodyModel vals, JToken token)
         {
             vals.Body = token.Value<string>("message");
             vals.sender = token.Value<string>("sender");

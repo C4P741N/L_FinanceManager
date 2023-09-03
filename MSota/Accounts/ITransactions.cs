@@ -5,9 +5,9 @@ namespace MSota.Accounts
 {
     public interface ITransactions
     {
+        TransactionsResponseII GetAllTransactionsII();
+        TransactionsResponse GetAllTransactions(Calendar cal);
 
-        MSota.Responses.TransactionsResponse GetAllTransactions(Calendar cal);
-
-        MSota.Responses.TransactionsResponse GetTransaction(TransactionModel tm);
+        TransactionsResponse GetTransaction(TransactionModel tm);
     }
 }

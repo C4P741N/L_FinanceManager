@@ -4,9 +4,9 @@
     DocEntry			VARCHAR(255) NOT NULL PRIMARY KEY,
 	TranId			    VARCHAR(255) NOT NULL,
     DocDateTime		    DATETIME NOT NULL,
-	TranAmount	        FLOAT(53) NOT NULL,
-	Balance			    FLOAT(53) NOT NULL,
-    Charges		        FLOAT(53) NOT NULL,
+	TranAmount	        DECIMAL(20,10) NOT NULL,
+	Balance			    DECIMAL(20,10) NOT NULL,
+    Charges		        DECIMAL(20,10) NOT NULL,
     DocType		        VARCHAR(255),
     TranType            CHAR NOT NULL,
     Quota				VARCHAR(255) NOT NULL

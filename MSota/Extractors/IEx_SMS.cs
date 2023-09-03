@@ -1,9 +1,9 @@
-﻿using MSota.JavaScriptObjectNotation;
+﻿using MSota.Models;
 
 namespace MSota.Extractors
 {
     public interface IEx_SMS
     {
-        JsonSmsProps MessageExtractBegin(JsonBodyProps vals);
+        JsonSmsModel MessageExtractBegin(JsonBodyModel vals);
     }
 }

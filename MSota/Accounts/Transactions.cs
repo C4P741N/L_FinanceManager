@@ -12,10 +12,43 @@ namespace MSota.Accounts
         ISqlDataServer _sqlDataServer;
         List<TransactionModel> lsTransactions = null;
         List<FactionsModel> lsFactions = null;
+        
         public Transactions(ISqlDataServer sqlDataServer)
         {
             _sqlDataServer = sqlDataServer;
         }
+
+        public Responses.TransactionsResponseII GetAllTransactionsII()
+        {
+
+            try
+            {
+                AccountLegerModel accLeger = _sqlDataServer.LoadAccountLegerSummary();
+
+                if (accLeger == null)
+                    return new Responses.TransactionsResponseII(new MSota.Responses.Error { bErrorFound = true }, new AccountLegerModel(), System.Net.HttpStatusCode.NoContent);
+
+                //accLeger.Quota = _sqlDataServer.LoadAccountQuotaSummary();
+
+                return new Responses.TransactionsResponseII(new MSota.Responses.Error(), accLeger, System.Net.HttpStatusCode.Accepted);
+
+            }
+            catch (Exception ex)
+            {
+
+                return new MSota.Responses.TransactionsResponseII(
+                    new MSota.Responses.Error
+                    {
+                        szErrorMessage = ex.Message,
+                        szStackTrace = ex.StackTrace,
+                        bErrorFound = true
+                    },
+                    new AccountLegerModel(),
+                    HttpStatusCode.InternalServerError);
+            }
+
+        }
+
         public Responses.TransactionsResponse GetAllTransactions(Calendar cal)
         {
             lsTransactions = new List<TransactionModel>();

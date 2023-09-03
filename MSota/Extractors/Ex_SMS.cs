@@ -1,6 +1,6 @@
 ﻿using MSota.BaseFormaters;
 using MSota.ExtensibleMarkupAtLarge;
-using MSota.JavaScriptObjectNotation;
+using MSota.Models;
 using System.Diagnostics;
 
 namespace MSota.Extractors
@@ -15,7 +15,7 @@ namespace MSota.Extractors
             _fortmater = fortmater;
         }
 
-        public JsonSmsProps MessageExtractBegin(JsonBodyProps vals)
+        public JsonSmsModel MessageExtractBegin(JsonBodyModel vals)
         {
             switch (vals.DocType)
             {
@@ -28,20 +28,20 @@ namespace MSota.Extractors
             return vals.smsProps;
         }
 
-        private JsonSmsProps _ExtractBodyForKCB(JsonBodyProps sms)
+        private JsonSmsModel _ExtractBodyForKCB(JsonBodyModel sms)
         {
-            JsonSmsProps message = sms.smsProps;
+            JsonSmsModel message = sms.smsProps;
 
             return message;
         }
 
-        private JsonSmsProps _ExtractBodyForMPESA(JsonBodyProps sms)
+        private JsonSmsModel _ExtractBodyForMPESA(JsonBodyModel sms)
         {
             string szBody = sms.Body;
             string[] status = new string[3];
             string[] moneyArray = new string[] { "", "", "", "" };
             string[] wordsArray = szBody.Split(' ');
-            JsonSmsProps message = null;
+            JsonSmsModel message = null;
 
             message = ProcessTransaction(szBody, ref status);
 
@@ -94,10 +94,10 @@ namespace MSota.Extractors
             return message;
         }
 
-        public JsonSmsProps ProcessTransaction(string szBody,
+        public JsonSmsModel ProcessTransaction(string szBody,
                                             ref string[] srtatus)
         {
-            JsonSmsProps message = new JsonSmsProps();
+            JsonSmsModel message = new JsonSmsModel();
             string[] status = new string[3];
 
             Dictionary<string, (EnumsAtLarge.EnumContainer.TransactionQuota, string[])> keywordMappings = new Dictionary<string, (EnumsAtLarge.EnumContainer.TransactionQuota, string[])>

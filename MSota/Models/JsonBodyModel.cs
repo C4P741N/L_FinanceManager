@@ -1,6 +1,6 @@
-﻿namespace MSota.JavaScriptObjectNotation
+﻿namespace MSota.Models
 {
-    public class JsonBodyProps
+    public class JsonBodyModel
     {
         public string? DocType { get; set; }
         public string? Body { get; set; }
@@ -11,6 +11,6 @@
         public int type { get; set; }
         public int thread { get; set; }
         public string? Service_center { get; set; }
-        public JsonSmsProps smsProps { get; set; } = new JsonSmsProps();
+        public JsonSmsModel smsProps { get; set; } = new JsonSmsModel();
     }
 }

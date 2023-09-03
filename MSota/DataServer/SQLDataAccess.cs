@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Identity.Client;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.IO;
-using MSota.JavaScriptObjectNotation;
+using MSota.Models;
 
 namespace MSota.DataServer
 {
@@ -24,6 +24,29 @@ namespace MSota.DataServer
                                                 .GetService<IConfiguration>()
                                                 .GetConnectionString("SQLConnectionString")?? "wrong assignment of the connection string"; //this was a roller coster
         }
+
+        public AccountLegerModel LoadData(string sql)
+        {
+            using (var oCon = new SqlConnection(_connectionString))
+            using (var oCmd = new SqlCommand(sql, oCon))
+            {
+                oCon.Open();
+                using (var reader = oCmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new AccountLegerModel
+                        {
+                            SumCreditAmount = (decimal)reader["Sum_CreditAmount"],
+                            SumDepositAmount = (decimal)reader["Sum_DepositAmount"]
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
 
         public List<T> LoadData<T>(string sql)
         {
@@ -48,7 +71,7 @@ namespace MSota.DataServer
             }
         }
 
-        public void SaveJsonDataOverStoredProcedure(JsonBodyProps props)
+        public void SaveJsonDataOverStoredProcedure(JsonBodyModel props)
         {
             using (var oAdap = new SqlDataAdapter())
             using (var oCon = new SqlConnection(_connectionString))
