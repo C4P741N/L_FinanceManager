@@ -6,7 +6,7 @@ BEGIN
 	SELECT 
 
         SUM([TranAmount]) AS Amount,
-        [Quota] AS Quota
+        [Quota] AS QuotaLabel
 
     FROM [Ms_DataCollector].[dbo].[Ms_Transactions_II]
 

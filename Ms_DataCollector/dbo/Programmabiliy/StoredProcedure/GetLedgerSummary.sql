@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[GetLegerSummary]
+﻿CREATE PROCEDURE [dbo].[GetLedgerSummary]
 
 AS
 BEGIN

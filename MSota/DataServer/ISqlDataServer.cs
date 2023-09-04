@@ -6,6 +6,7 @@ namespace MSota.DataServer
     public interface ISqlDataServer
     {
         AccountLedgerModel LoadAccountLegerSummary();
+        List<QuotaSummaryModel> LoadAccountQuotaSummary();
         void PostData(List<IXmlProps> x_vprop);
         void PostData(JsonBodyModel vals);
         List<TransactionModel> LoadTransactionStatistics(Calendar cal);

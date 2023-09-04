@@ -24,11 +24,16 @@ namespace MSota.DataServer
             _fortmater = fortmater;
         }
 
+        public List<QuotaSummaryModel> LoadAccountQuotaSummary()
+        {
+            string szSQL = "EXECUTE GetQuotaSummary";
+
+            return _dataAccess.LoadData<QuotaSummaryModel>(szSQL);
+        }
+
         public AccountLedgerModel LoadAccountLegerSummary()
         {
-            string szSQL = "EXECUTE GetLegerSummary";
-
-            return _dataAccess.LoadData(szSQL);
+            return _dataAccess.LoadData("EXECUTE GetLegerSummary");
         }
         public void PostData(JsonBodyModel props)
         {
@@ -124,6 +129,5 @@ namespace MSota.DataServer
 
             return _dataAccess.LoadData<FactionListModel>(szSQL);
         }
-
     }
 }

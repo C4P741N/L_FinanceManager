@@ -28,7 +28,7 @@ namespace MSota.Accounts
                 if (accLeger == null)
                     return new Responses.TransactionsResponseII(new MSota.Responses.Error { bErrorFound = true }, new AccountLedgerModel(), System.Net.HttpStatusCode.NoContent);
 
-                //accLeger.Quota = _sqlDataServer.LoadAccountQuotaSummary();
+                accLeger.Quota = _sqlDataServer.LoadAccountQuotaSummary();
 
                 return new Responses.TransactionsResponseII(new MSota.Responses.Error(), accLeger, System.Net.HttpStatusCode.Accepted);
 

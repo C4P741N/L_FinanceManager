@@ -83,7 +83,7 @@
     <Build Include="dbo\Programmabiliy\StoredProcedure\Ms_Recepients_II.sql" />
     <Build Include="dbo\Tables\Ms_Transactions_II.sql" />
     <Build Include="dbo\Programmabiliy\StoredProcedure\TransactionsCopier_II.sql" />
-    <Build Include="dbo\Programmabiliy\StoredProcedure\GetLegerSummary.sql" />
+    <Build Include="dbo\Programmabiliy\StoredProcedure\GetLedgerSummary.sql" />
     <Build Include="dbo\Programmabiliy\StoredProcedure\GetQuotaSummary.sql" />
   </ItemGroup>
   <ItemGroup>
