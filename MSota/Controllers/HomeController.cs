@@ -53,7 +53,7 @@ namespace MSota.Controllers
         [Route("/[controller]/[action]/postJson")]
         public ActionResult PostJsonData([FromBody] string smsMessage)
         {
-            if (smsMessage == null)
+            if (string.IsNullOrEmpty(smsMessage))
                 return StatusCode((int)HttpStatusCode.UnsupportedMediaType);
 
             BaseResponse baseResponse = _jsonExtractor.UpdateFromJson(smsMessage);
@@ -65,14 +65,13 @@ namespace MSota.Controllers
         [Route("/[controller]/[action]/getData/")]
         public ActionResult GetPostDashboardData()
         {
-            MSota.Responses.TransactionsResponseII trRp = _transactions.GetAllTransactionsII();
+            TransactionsResponseII trRp = _transactions.GetAllTransactionsII();
 
-            if (!trRp._error.bErrorFound)
-            {
-                return Ok("Hello world");
-            }
+            if (trRp._error.bErrorFound)
+                return StatusCode((int)trRp._statusCode);
 
-            return StatusCode((int)trRp._statusCode);
+            return Ok(trRp.AccountLedgerJSON());
+            
         }
 
         [HttpPost]

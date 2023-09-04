@@ -25,7 +25,7 @@ namespace MSota.DataServer
                                                 .GetConnectionString("SQLConnectionString")?? "wrong assignment of the connection string"; //this was a roller coster
         }
 
-        public AccountLegerModel LoadData(string sql)
+        public AccountLedgerModel LoadData(string sql)
         {
             using (var oCon = new SqlConnection(_connectionString))
             using (var oCmd = new SqlCommand(sql, oCon))
@@ -35,7 +35,7 @@ namespace MSota.DataServer
                 {
                     if (reader.Read())
                     {
-                        return new AccountLegerModel
+                        return new AccountLedgerModel
                         {
                             SumCreditAmount = (decimal)reader["Sum_CreditAmount"],
                             SumDepositAmount = (decimal)reader["Sum_DepositAmount"]

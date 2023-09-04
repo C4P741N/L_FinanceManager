@@ -1,16 +1,22 @@
 ﻿using MSota.Models;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace MSota.Responses
 {
     public class TransactionsResponseII : BaseResponse
     {
-        public AccountLegerModel _legerModel { get; set; }
+        public AccountLedgerModel _ledgerModel { get; set; }
+
+        public string AccountLedgerJSON()
+        {
+            return JsonConvert.SerializeObject(_ledgerModel);
+        }
         public TransactionsResponseII
-            (Error error, AccountLegerModel legerModel, HttpStatusCode statusCode)
+            (Error error, AccountLedgerModel ledgerModel, HttpStatusCode statusCode)
             : base(error, statusCode)
         {
-            _legerModel = legerModel;
+            _ledgerModel = ledgerModel;
         }
 
         //public TransactionsResponseII

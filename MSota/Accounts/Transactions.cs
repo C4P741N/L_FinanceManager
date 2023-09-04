@@ -23,10 +23,10 @@ namespace MSota.Accounts
 
             try
             {
-                AccountLegerModel accLeger = _sqlDataServer.LoadAccountLegerSummary();
+                AccountLedgerModel accLeger = _sqlDataServer.LoadAccountLegerSummary();
 
                 if (accLeger == null)
-                    return new Responses.TransactionsResponseII(new MSota.Responses.Error { bErrorFound = true }, new AccountLegerModel(), System.Net.HttpStatusCode.NoContent);
+                    return new Responses.TransactionsResponseII(new MSota.Responses.Error { bErrorFound = true }, new AccountLedgerModel(), System.Net.HttpStatusCode.NoContent);
 
                 //accLeger.Quota = _sqlDataServer.LoadAccountQuotaSummary();
 
@@ -43,7 +43,7 @@ namespace MSota.Accounts
                         szStackTrace = ex.StackTrace,
                         bErrorFound = true
                     },
-                    new AccountLegerModel(),
+                    new AccountLedgerModel(),
                     HttpStatusCode.InternalServerError);
             }
 

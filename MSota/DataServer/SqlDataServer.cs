@@ -24,7 +24,7 @@ namespace MSota.DataServer
             _fortmater = fortmater;
         }
 
-        public AccountLegerModel LoadAccountLegerSummary()
+        public AccountLedgerModel LoadAccountLegerSummary()
         {
             string szSQL = "EXECUTE GetLegerSummary";
 
