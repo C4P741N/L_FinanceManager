@@ -33,7 +33,7 @@ namespace MSota.DataServer
 
         public AccountLedgerModel LoadAccountLegerSummary()
         {
-            return _dataAccess.LoadData("EXECUTE GetLegerSummary");
+            return _dataAccess.LoadData("EXECUTE GetLedgerSummary");
         }
         public void PostData(JsonBodyModel props)
         {
