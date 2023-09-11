@@ -25,6 +25,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<MSota.Accounts.ITransactions, MSota.Accounts.Transactions>();
 builder.Services.AddScoped<MSota.BaseFormaters.IFortmaterAtLarge, MSota.BaseFormaters.FortmaterAtLarge>();
 builder.Services.AddScoped<IXmlProps, XmlProps>();
+builder.Services.AddScoped<IJSONConverters, JSONConverters>();
 builder.Services.AddScoped<IXmlDataFotmater, XmlDataFotmater>();
 builder.Services.AddScoped<IXmlExtractor, XmlExtractor>();
 builder.Services.AddScoped<ISqlDataServer, SqlDataServer>();

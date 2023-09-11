@@ -10,25 +10,34 @@ namespace MSota.Accounts
     public class Transactions : ITransactions
     {
         ISqlDataServer _sqlDataServer;
+        IJSONConverters _jSONConverters;
         List<TransactionModel> lsTransactions = null;
         List<FactionsModel> lsFactions = null;
         
-        public Transactions(ISqlDataServer sqlDataServer)
+        public Transactions(ISqlDataServer sqlDataServer, IJSONConverters jSONConverters)
         {
             _sqlDataServer = sqlDataServer;
+            _jSONConverters = jSONConverters;
         }
 
-        public Responses.TransactionsResponseII GetAllTransactionsII()
+        public Responses.TransactionsResponseII GetAllTransactionsII(string dateRangeJson)
         {
 
             try
             {
-                AccountLedgerModel accLeger = _sqlDataServer.LoadAccountLegerSummary();
+                Calendar cals = null;
+
+                Calendar_II cal = _jSONConverters.AccountLedgerDeserializedJSON(dateRangeJson);
+
+                var test = cal.dt_ToDate;
+
+
+                AccountLedgerModel accLeger = _sqlDataServer.LoadAccountLegerSummary(cal);
 
                 if (accLeger == null)
                     return new Responses.TransactionsResponseII(new MSota.Responses.Error { bErrorFound = true }, new AccountLedgerModel(), System.Net.HttpStatusCode.NoContent);
 
-                accLeger.Quota = _sqlDataServer.LoadAccountQuotaSummary();
+                accLeger.Quota = _sqlDataServer.LoadAccountQuotaSummary(cal);
 
                 return new Responses.TransactionsResponseII(new MSota.Responses.Error(), accLeger, System.Net.HttpStatusCode.Accepted);
 

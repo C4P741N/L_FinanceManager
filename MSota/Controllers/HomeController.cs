@@ -63,14 +63,14 @@ namespace MSota.Controllers
 
         [HttpGet]
         [Route("/[controller]/[action]/getData/")]
-        public ActionResult GetPostDashboardData()
+        public ActionResult GetPostDashboardData(string dateRangeJson)
         {
-            TransactionsResponseII trRp = _transactions.GetAllTransactionsII();
+            TransactionsResponseII trRp = _transactions.GetAllTransactionsII(dateRangeJson);
 
             if (trRp._error.bErrorFound)
                 return StatusCode((int)trRp._statusCode);
 
-            return Ok(trRp.AccountLedgerJSON());
+            return Ok(trRp.AccountLedgerSerializedJSON());
             
         }
 

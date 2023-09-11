@@ -24,14 +24,14 @@ namespace MSota.DataServer
             _fortmater = fortmater;
         }
 
-        public List<QuotaSummaryModel> LoadAccountQuotaSummary()
+        public List<QuotaSummaryModel> LoadAccountQuotaSummary(Calendar_II cal)
         {
             string szSQL = "EXECUTE GetQuotaSummary";
 
             return _dataAccess.LoadData<QuotaSummaryModel>(szSQL);
         }
 
-        public AccountLedgerModel LoadAccountLegerSummary()
+        public AccountLedgerModel LoadAccountLegerSummary(Calendar_II cal)
         {
             return _dataAccess.LoadData("EXECUTE GetLedgerSummary");
         }
