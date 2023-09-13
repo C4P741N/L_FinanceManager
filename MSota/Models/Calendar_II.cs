@@ -35,6 +35,25 @@ namespace MSota.Models
             }
         }
 
+        //public bool dt_ToDate
+        //{
+        //    get { return xto_dateTime; }
+        //    set
+        //    {
+        //        DateTime parsedDateTime;
+        //        if (DateTime.TryParseExact(toDate, "ddd MMM dd HH:mm:ss 'GMT'zzz yyyy",
+        //                                   CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDateTime))
+        //        {
+        //            xto_dateTime = parsedDateTime;
+        //        }
+        //        else
+        //        {
+        //            // Handle the case where the conversion fails
+        //            throw new ArgumentException("Invalid date format");
+        //        }
+        //    }
+        //}
+
 
         //public DateTime toDate
         //{
